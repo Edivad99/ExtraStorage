@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "extrastorage:block/block_4096k"
+    }
+  }
+}

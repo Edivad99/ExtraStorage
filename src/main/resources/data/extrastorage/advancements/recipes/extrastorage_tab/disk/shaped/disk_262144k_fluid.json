@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "extrastorage:disk/shaped/disk_262144k_fluid"
+    ]
+  },
+  "criteria": {
+    "has_part": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "extrastorage:storagepart_262144k_fluid"
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "extrastorage:disk/shaped/disk_262144k_fluid"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_part",
+      "has_the_recipe"
+    ]
+  ]
+}

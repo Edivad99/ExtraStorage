@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "extrastorage:disk/shapeless/disk_1048576k_fluid"
+    ]
+  },
+  "criteria": {
+    "has_part": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "extrastorage:storagepart_1048576k_fluid"
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "extrastorage:disk/shapeless/disk_1048576k_fluid"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_part",
+      "has_the_recipe"
+    ]
+  ]
+}

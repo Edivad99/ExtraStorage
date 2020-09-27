@@ -1,0 +1,18 @@
+{
+  "parent": "refinedstorage:block/cube_cutout",
+  "textures": {
+    "particle": "extrastorage:blocks/crafter/base/side",
+    "down": "extrastorage:blocks/crafter/base/side_180",
+    "up": "extrastorage:blocks/crafter/base/side",
+    "north": "extrastorage:blocks/crafter/base/front",
+    "east": "extrastorage:blocks/crafter/base/side_90",
+    "south": "extrastorage:blocks/crafter/base/bottom",
+    "west": "extrastorage:blocks/crafter/base/side_270",
+    "cutout_down": "extrastorage:blocks/crafter/netherite/cutouts/side_connected_180",
+    "cutout_up": "extrastorage:blocks/crafter/netherite/cutouts/side_connected",
+    "cutout_north": "extrastorage:blocks/crafter/netherite/cutouts/front_connected",
+    "cutout_east": "extrastorage:blocks/crafter/netherite/cutouts/side_connected_90",
+    "cutout_south": "extrastorage:blocks/crafter/base/bottom",
+    "cutout_west": "extrastorage:blocks/crafter/netherite/cutouts/side_connected_270"
+  }
+}

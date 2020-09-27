@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "extrastorage:items/disks/262144k_fluid"
+  }
+}

@@ -1,0 +1,52 @@
+{
+  "variants": {
+    "connected=false,direction=north": {
+      "model": "extrastorage:block/crafter/disconnected/north",
+      "uvlock": true
+    },
+    "connected=false,direction=east": {
+      "model": "extrastorage:block/crafter/disconnected/east",
+      "uvlock": true
+    },
+    "connected=false,direction=south": {
+      "model": "extrastorage:block/crafter/disconnected/south",
+      "uvlock": true
+    },
+    "connected=false,direction=west": {
+      "model": "extrastorage:block/crafter/disconnected/west",
+      "uvlock": true
+    },
+    "connected=false,direction=up": {
+      "model": "extrastorage:block/crafter/disconnected/up",
+      "uvlock": true
+    },
+    "connected=false,direction=down": {
+      "model": "extrastorage:block/crafter/disconnected/down",
+      "uvlock": true
+    },
+    "connected=true,direction=north": {
+      "model": "extrastorage:block/crafter/connected/gold/north",
+      "uvlock": true
+    },
+    "connected=true,direction=east": {
+      "model": "extrastorage:block/crafter/connected/gold/east",
+      "uvlock": true
+    },
+    "connected=true,direction=south": {
+      "model": "extrastorage:block/crafter/connected/gold/south",
+      "uvlock": true
+    },
+    "connected=true,direction=west": {
+      "model": "extrastorage:block/crafter/connected/gold/west",
+      "uvlock": true
+    },
+    "connected=true,direction=up": {
+      "model": "extrastorage:block/crafter/connected/gold/up",
+      "uvlock": true
+    },
+    "connected=true,direction=down": {
+      "model": "extrastorage:block/crafter/connected/gold/down",
+      "uvlock": true
+    }
+  }
+}

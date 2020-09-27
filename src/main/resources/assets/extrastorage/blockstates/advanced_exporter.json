@@ -1,0 +1,115 @@
+{
+  "multipart": [
+    {
+      "apply": {
+        "model": "refinedstorage:block/cable_core"
+      }
+    },
+    {
+      "when": {
+        "north": true
+      },
+      "apply": {
+        "model": "refinedstorage:block/cable_extension"
+      }
+    },
+    {
+      "when": {
+        "east": true
+      },
+      "apply": {
+        "model": "refinedstorage:block/cable_extension",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "south": true
+      },
+      "apply": {
+        "model": "refinedstorage:block/cable_extension",
+        "x": 180
+      }
+    },
+    {
+      "when": {
+        "west": true
+      },
+      "apply": {
+        "model": "refinedstorage:block/cable_extension",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "up": true
+      },
+      "apply": {
+        "model": "refinedstorage:block/cable_extension",
+        "x": 270
+      }
+    },
+    {
+      "when": {
+        "down": true
+      },
+      "apply": {
+        "model": "refinedstorage:block/cable_extension",
+        "x": 90
+      }
+    },
+    {
+      "when": {
+        "direction": "north"
+      },
+      "apply": {
+        "model": "extrastorage:block/advanced_exporter"
+      }
+    },
+    {
+      "when": {
+        "direction": "east"
+      },
+      "apply": {
+        "model": "extrastorage:block/advanced_exporter",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "direction": "south"
+      },
+      "apply": {
+        "model": "extrastorage:block/advanced_exporter",
+        "x": 180
+      }
+    },
+    {
+      "when": {
+        "direction": "west"
+      },
+      "apply": {
+        "model": "extrastorage:block/advanced_exporter",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "direction": "up"
+      },
+      "apply": {
+        "model": "extrastorage:block/advanced_exporter",
+        "x": 270
+      }
+    },
+    {
+      "when": {
+        "direction": "down"
+      },
+      "apply": {
+        "model": "extrastorage:block/advanced_exporter",
+        "x": 90
+      }
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "parent": "refinedstorage:block/cube_cutout",
+  "textures": {
+    "particle": "extrastorage:blocks/crafter/base/side",
+    "down": "extrastorage:blocks/crafter/base/side",
+    "up": "extrastorage:blocks/crafter/base/side_180",
+    "north": "extrastorage:blocks/crafter/base/bottom",
+    "east": "extrastorage:blocks/crafter/base/side_270",
+    "south": "extrastorage:blocks/crafter/base/front",
+    "west": "extrastorage:blocks/crafter/base/side_90",
+    "cutout_down": "extrastorage:blocks/crafter/gold/cutouts/side_connected",
+    "cutout_up": "extrastorage:blocks/crafter/gold/cutouts/side_connected_180",
+    "cutout_north": "extrastorage:blocks/crafter/base/bottom",
+    "cutout_east": "extrastorage:blocks/crafter/gold/cutouts/side_connected_270",
+    "cutout_south": "extrastorage:blocks/crafter/gold/cutouts/front_connected",
+    "cutout_west": "extrastorage:blocks/crafter/gold/cutouts/side_connected_90"
+  }
+}

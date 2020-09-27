@@ -1,6 +1,6 @@
 # ExtraStorage
 ![ExtraStorage CI](https://github.com/Edivad99/ExtraStorage/workflows/ExtraStorage%20CI/badge.svg?branch=master)
-[![CurseForge](http://cf.way2muchnoise.eu/full_398349_downloads.svg)](https://www.curseforge.com/minecraft/mc-mods/extrastorage)
+[![CurseForge](http://cf.way2muchnoise.eu/full_410168_downloads.svg)](https://www.curseforge.com/minecraft/mc-mods/extrastorage)
 ## Table of Contents
 
 * [About](#about)

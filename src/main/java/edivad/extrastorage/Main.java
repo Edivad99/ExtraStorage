@@ -7,6 +7,7 @@ import edivad.extrastorage.setup.proxy.Proxy;
 import edivad.extrastorage.setup.proxy.ProxyClient;
 import edivad.extrastorage.setup.ClientSetup;
 import edivad.extrastorage.setup.ModSetup;
+import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
@@ -30,6 +31,8 @@ public class Main
         ESLootFunctions.register();
         // Register the setup method for modloading
         FMLJavaModLoadingContext.get().getModEventBus().addListener(ModSetup::init);
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(ClientSetup::init);
+        DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
+            FMLJavaModLoadingContext.get().getModEventBus().addListener(ClientSetup::init);
+        });
     }
 }

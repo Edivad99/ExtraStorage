@@ -20,6 +20,7 @@ import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.shapes.VoxelShapes;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkHooks;
@@ -99,7 +100,7 @@ public class AdvancedExporter extends CableBlock
         {
             return NetworkUtils.attemptModify(world, pos, hit.getFace(), player, () ->
             {
-                NetworkHooks.openGui((ServerPlayerEntity) player, new PositionalTileContainerProvider(this.getTranslatedName(), (tile, windowId, inventory, p) ->
+                NetworkHooks.openGui((ServerPlayerEntity) player, new PositionalTileContainerProvider(new TranslationTextComponent(this.getTranslationKey()), (tile, windowId, inventory, p) ->
                 {
                     return new AdvancedExporterContainer(windowId, player, (AdvancedExporterTile) tile);
                 }, pos), pos);

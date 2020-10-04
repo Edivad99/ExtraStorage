@@ -4,10 +4,12 @@ import com.refinedmods.refinedstorage.apiimpl.API;
 import com.refinedmods.refinedstorage.render.BakedModelOverrideRegistry;
 import com.refinedmods.refinedstorage.render.model.FullbrightBakedModel;
 import edivad.extrastorage.Main;
+import edivad.extrastorage.blocks.AdvancedImporter;
 import edivad.extrastorage.blocks.CrafterTier;
 import edivad.extrastorage.client.screen.AdvancedCrafterScreen;
 import edivad.extrastorage.client.screen.AdvancedExporterScreen;
 import edivad.extrastorage.client.screen.AdvancedFluidStorageBlockScreen;
+import edivad.extrastorage.client.screen.AdvancedImporterScreen;
 import edivad.extrastorage.client.screen.AdvancedStorageBlockScreen;
 import edivad.extrastorage.container.AdvancedCrafterContainer;
 import edivad.extrastorage.items.fluid.FluidStorageType;
@@ -50,13 +52,15 @@ public class ClientSetup
         }
 
         ScreenManager.registerFactory(Registration.ADVANCED_EXPORTER_CONTAINER.get(), AdvancedExporterScreen::new);
+        ScreenManager.registerFactory(Registration.ADVANCED_IMPORTER_CONTAINER.get(), AdvancedImporterScreen::new);
+
+        RenderTypeLookup.setRenderLayer(Registration.ADVANCED_EXPORTER.get(), RenderType.getCutout());
+        RenderTypeLookup.setRenderLayer(Registration.ADVANCED_IMPORTER.get(), RenderType.getCutout());
 
         for(ItemStorageType type : ItemStorageType.values())
             ScreenManager.registerFactory(Registration.ITEM_STORAGE_CONTAINER.get(type).get(), AdvancedStorageBlockScreen::new);
         for(FluidStorageType type : FluidStorageType.values())
             ScreenManager.registerFactory(Registration.FLUID_STORAGE_CONTAINER.get(type).get(), AdvancedFluidStorageBlockScreen::new);
-
-        RenderTypeLookup.setRenderLayer(Registration.ADVANCED_EXPORTER.get(), RenderType.getCutout());
 
         API.instance().addPatternRenderHandler(pattern ->
         {

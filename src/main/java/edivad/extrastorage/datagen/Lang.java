@@ -43,6 +43,7 @@ public class Lang extends LanguageProvider
         }
 
         add(Registration.ADVANCED_EXPORTER.get(), "Advanced Exporter");
+        add(Registration.ADVANCED_IMPORTER.get(), "Advanced Importer");
         add(Translations.HOLD_SHIFT, "Hold Shift for details");
         add(Translations.SLOT_CRAFTING, "Slots for patterns: %s");
         add(Translations.BASE_SPEED, "Base speed: %sx");

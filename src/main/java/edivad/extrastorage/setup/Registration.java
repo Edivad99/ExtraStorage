@@ -4,10 +4,12 @@ import com.refinedmods.refinedstorage.item.blockitem.BaseBlockItem;
 import edivad.extrastorage.blocks.AdvancedCrafterBlock;
 import edivad.extrastorage.blocks.AdvancedExporter;
 import edivad.extrastorage.blocks.AdvancedFluidStorageBlock;
+import edivad.extrastorage.blocks.AdvancedImporter;
 import edivad.extrastorage.blocks.AdvancedStorageBlock;
 import edivad.extrastorage.container.AdvancedCrafterContainer;
 import edivad.extrastorage.container.AdvancedExporterContainer;
 import edivad.extrastorage.container.AdvancedFluidStorageBlockContainer;
+import edivad.extrastorage.container.AdvancedImporterContainer;
 import edivad.extrastorage.container.AdvancedStorageBlockContainer;
 import edivad.extrastorage.items.AdvancedFluidStorageBlockItem;
 import edivad.extrastorage.items.AdvancedStorageBlockItem;
@@ -19,6 +21,7 @@ import edivad.extrastorage.items.item.ExpandedStorageDiskItem;
 import edivad.extrastorage.tiles.AdvancedCrafterTile;
 import edivad.extrastorage.tiles.AdvancedExporterTile;
 import edivad.extrastorage.tiles.AdvancedFluidStorageBlockTile;
+import edivad.extrastorage.tiles.AdvancedImporterTile;
 import edivad.extrastorage.tiles.AdvancedStorageBlockTile;
 import edivad.extrastorage.blocks.CrafterTier;
 import net.minecraft.block.Block;
@@ -161,6 +164,22 @@ public class Registration {
 
         AdvancedExporterTile tile = (AdvancedExporterTile) te;
         return new AdvancedExporterContainer(windowId, inv.player, tile);
+    }));
+
+    public static final RegistryObject<AdvancedImporter> ADVANCED_IMPORTER = BLOCKS.register("advanced_importer", AdvancedImporter::new);
+    public static final RegistryObject<Item> ADVANCED_IMPORTER_ITEM = ITEMS.register("advanced_importer", () -> new BaseBlockItem(ADVANCED_IMPORTER.get(), globalProperties));
+    public static final RegistryObject<TileEntityType<AdvancedImporterTile>> ADVANCED_IMPORTER_TILE = TILES.register("advanced_importer", () -> TileEntityType.Builder.create(AdvancedImporterTile::new, ADVANCED_IMPORTER.get()).build(null));
+    public static final RegistryObject<ContainerType<AdvancedImporterContainer>> ADVANCED_IMPORTER_CONTAINER = CONTAINERS.register("advanced_importer", () -> IForgeContainerType.create((windowId, inv, data) -> {
+        BlockPos pos = data.readBlockPos();
+        TileEntity te = inv.player.getEntityWorld().getTileEntity(pos);
+        if(!(te instanceof AdvancedImporterTile))
+        {
+            Main.logger.error("Wrong type of tile entity (expected AdvancedImporterTile)!");
+            return null;
+        }
+
+        AdvancedImporterTile tile = (AdvancedImporterTile) te;
+        return new AdvancedImporterContainer(windowId, inv.player, tile);
     }));
 
 //    public static final RegistryObject<AdvancedExporter> TAG_EXPORTER = BLOCKS.register("tag_exporter", AdvancedExporter::new);

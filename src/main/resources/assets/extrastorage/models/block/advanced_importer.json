@@ -1,0 +1,47 @@
+{
+    "parent": "block/block",
+    "textures": {
+        "border": "extrastorage:blocks/cable_part_border"
+    },
+    "elements": [
+        {
+            "name": "Line1",
+            "from": [6, 6, 4],
+            "to": [10, 10, 6],
+            "faces": {
+                "north": {"uv": [1, 2, 5, 6], "texture": "#border"},
+                "east": {"uv": [1, 2, 3, 6], "texture": "#border"},
+                "south": {"uv": [1, 2, 5, 6], "texture": "#border"},
+                "west": {"uv": [1, 2, 3, 6], "texture": "#border"},
+                "up": {"uv": [1, 2, 5, 4], "texture": "#border"},
+                "down": {"uv": [1, 2, 5, 4], "texture": "#border"}
+            }
+        },
+        {
+            "name": "Line2",
+            "from": [5, 5, 2],
+            "to": [11, 11, 4],
+            "faces": {
+                "north": {"uv": [1, 2, 7, 8], "texture": "#border"},
+                "east": {"uv": [1, 2, 3, 8], "texture": "#border"},
+                "south": {"uv": [1, 2, 7, 8], "texture": "#border"},
+                "west": {"uv": [1, 2, 3, 8], "texture": "#border"},
+                "up": {"uv": [1, 2, 7, 4], "texture": "#border"},
+                "down": {"uv": [1, 2, 7, 4], "texture": "#border"}
+            }
+        },
+        {
+            "name": "Line3",
+            "from": [3, 3, 0],
+            "to": [13, 13, 2],
+            "faces": {
+                "north": {"uv": [1, 2, 11, 12], "texture": "#border"},
+                "east": {"uv": [0, 2, 2, 12], "rotation": 180, "texture": "#border"},
+                "south": {"uv": [1, 2, 11, 12], "texture": "#border"},
+                "west": {"uv": [0, 2, 2, 12], "texture": "#border"},
+                "up": {"uv": [0, 0, 10, 2], "texture": "#border"},
+                "down": {"uv": [0, 0, 10, 2], "rotation": 180, "texture": "#border"}
+            }
+        }
+    ]
+}

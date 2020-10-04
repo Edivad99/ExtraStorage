@@ -1,5 +1,6 @@
 {
   "block.extrastorage.advanced_exporter": "Advanced Exporter",
+  "block.extrastorage.advanced_importer": "Advanced Importer",
   "block.extrastorage.block_1024k": "1024k Storage Block",
   "block.extrastorage.block_1048576k_fluid": "1048576k Fluid Storage Block",
   "block.extrastorage.block_16384k": "16384k Storage Block",

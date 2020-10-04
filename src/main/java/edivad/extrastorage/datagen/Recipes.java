@@ -102,6 +102,16 @@ public class Recipes extends RecipeProvider
                 .key('c', RSItems.PROCESSORS.get(ProcessorItem.Type.IMPROVED).get())//
                 .addCriterion("has_part", hasItem(RSBlocks.EXPORTER.get()))//
                 .build(consumer);
+
+        ShapedRecipeBuilder.shapedRecipe(Registration.ADVANCED_IMPORTER.get())//
+                .patternLine(" a ")//
+                .patternLine("cbc")//
+                .patternLine(" a ")//
+                .key('a', Items.REDSTONE_TORCH)//
+                .key('b', RSBlocks.IMPORTER.get())//
+                .key('c', RSItems.PROCESSORS.get(ProcessorItem.Type.IMPROVED).get())//
+                .addCriterion("has_part", hasItem(RSBlocks.IMPORTER.get()))//
+                .build(consumer);
     }
 
     private void partRecipe(Item result, Item previousPart, Consumer<IFinishedRecipe> consumer)

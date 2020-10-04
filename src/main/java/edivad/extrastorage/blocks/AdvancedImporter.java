@@ -7,8 +7,8 @@ import com.refinedmods.refinedstorage.container.factory.PositionalTileContainerP
 import com.refinedmods.refinedstorage.util.BlockUtils;
 import com.refinedmods.refinedstorage.util.CollisionUtils;
 import com.refinedmods.refinedstorage.util.NetworkUtils;
-import edivad.extrastorage.container.AdvancedExporterContainer;
-import edivad.extrastorage.tiles.AdvancedExporterTile;
+import edivad.extrastorage.container.AdvancedImporterContainer;
+import edivad.extrastorage.tiles.AdvancedImporterTile;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -27,34 +27,34 @@ import net.minecraftforge.fml.network.NetworkHooks;
 
 import javax.annotation.Nullable;
 
-public class AdvancedExporter extends CableBlock
+public class AdvancedImporter extends CableBlock
 {
-    private static final VoxelShape LINE_NORTH_1 = makeCuboidShape(6.0, 6.0, 0.0, 10.0, 10.0, 2.0);
-    private static final VoxelShape LINE_NORTH_2 = makeCuboidShape(5.0, 5.0, 2.0, 11.0, 11.0, 4.0);
-    private static final VoxelShape LINE_NORTH_3 = makeCuboidShape(3.0, 3.0, 4.0, 13.0, 13.0, 6.0);
+    private static final VoxelShape LINE_NORTH_1 = makeCuboidShape(6, 6, 4, 10, 10, 6);
+    private static final VoxelShape LINE_NORTH_2 = makeCuboidShape(5, 5, 2, 11, 11, 4);
+    private static final VoxelShape LINE_NORTH_3 = makeCuboidShape(3, 3, 0, 13, 13, 2);
     private static final VoxelShape LINE_NORTH = VoxelShapes.or(LINE_NORTH_1, LINE_NORTH_2, LINE_NORTH_3);
-    private static final VoxelShape LINE_EAST_1 = makeCuboidShape(14.0, 6.0, 6.0, 16.0, 10.0, 10.0);
-    private static final VoxelShape LINE_EAST_2 = makeCuboidShape(12.0, 5.0, 5.0, 14.0, 11.0, 11.0);
-    private static final VoxelShape LINE_EAST_3 = makeCuboidShape(10.0, 3.0, 3.0, 12.0, 13.0, 13.0);
+    private static final VoxelShape LINE_EAST_1 = makeCuboidShape(10, 6, 6, 12, 10, 10);
+    private static final VoxelShape LINE_EAST_2 = makeCuboidShape(12, 5, 5, 14, 11, 11);
+    private static final VoxelShape LINE_EAST_3 = makeCuboidShape(14, 3, 3, 16, 13, 13);
     private static final VoxelShape LINE_EAST = VoxelShapes.or(LINE_EAST_1, LINE_EAST_2, LINE_EAST_3);
-    private static final VoxelShape LINE_SOUTH_1 = makeCuboidShape(6.0, 6.0, 14.0, 10.0, 10.0, 16.0);
-    private static final VoxelShape LINE_SOUTH_2 = makeCuboidShape(5.0, 5.0, 12.0, 11.0, 11.0, 14.0);
-    private static final VoxelShape LINE_SOUTH_3 = makeCuboidShape(3.0, 3.0, 10.0, 13.0, 13.0, 12.0);
+    private static final VoxelShape LINE_SOUTH_1 = makeCuboidShape(6, 6, 10, 10, 10, 12);
+    private static final VoxelShape LINE_SOUTH_2 = makeCuboidShape(5, 5, 12, 11, 11, 14);
+    private static final VoxelShape LINE_SOUTH_3 = makeCuboidShape(3, 3, 14, 13, 13, 16);
     private static final VoxelShape LINE_SOUTH = VoxelShapes.or(LINE_SOUTH_1, LINE_SOUTH_2, LINE_SOUTH_3);
-    private static final VoxelShape LINE_WEST_1 = makeCuboidShape(0.0, 6.0, 6.0, 2.0, 10.0, 10.0);
-    private static final VoxelShape LINE_WEST_2 = makeCuboidShape(2.0, 5.0, 5.0, 4.0, 11.0, 11.0);
-    private static final VoxelShape LINE_WEST_3 = makeCuboidShape(4.0, 3.0, 3.0, 6.0, 13.0, 13.0);
+    private static final VoxelShape LINE_WEST_1 = makeCuboidShape(4, 6, 6, 6, 10, 10);
+    private static final VoxelShape LINE_WEST_2 = makeCuboidShape(2, 5, 5, 4, 11, 11);
+    private static final VoxelShape LINE_WEST_3 = makeCuboidShape(0, 3, 3, 2, 13, 13);
     private static final VoxelShape LINE_WEST = VoxelShapes.or(LINE_WEST_1, LINE_WEST_2, LINE_WEST_3);
-    private static final VoxelShape LINE_UP_1 = makeCuboidShape(6.0, 14.0, 6.0, 10.0, 16.0, 10.0);
-    private static final VoxelShape LINE_UP_2 = makeCuboidShape(5.0, 12.0, 5.0, 11.0, 14.0, 11.0);
-    private static final VoxelShape LINE_UP_3 = makeCuboidShape(3.0, 10.0, 3.0, 13.0, 12.0, 13.0);
+    private static final VoxelShape LINE_UP_1 = makeCuboidShape(6, 10, 6, 10, 12, 10);
+    private static final VoxelShape LINE_UP_2 = makeCuboidShape(5, 12, 5, 11, 14, 11);
+    private static final VoxelShape LINE_UP_3 = makeCuboidShape(3, 14, 3, 13, 16, 13);
     private static final VoxelShape LINE_UP = VoxelShapes.or(LINE_UP_1, LINE_UP_2, LINE_UP_3);
-    private static final VoxelShape LINE_DOWN_1 = makeCuboidShape(6.0, 0.0, 6.0, 10.0, 2.0, 10.0);
-    private static final VoxelShape LINE_DOWN_2 = makeCuboidShape(5.0, 2.0, 5.0, 11.0, 4.0, 11.0);
-    private static final VoxelShape LINE_DOWN_3 = makeCuboidShape(3.0, 4.0, 3.0, 13.0, 6.0, 13.0);
+    private static final VoxelShape LINE_DOWN_1 = makeCuboidShape(6, 4, 6, 10, 6, 10);
+    private static final VoxelShape LINE_DOWN_2 = makeCuboidShape(5, 2, 5, 11, 4, 11);
+    private static final VoxelShape LINE_DOWN_3 = makeCuboidShape(3, 0, 3, 13, 2, 13);
     private static final VoxelShape LINE_DOWN = VoxelShapes.or(LINE_DOWN_1, LINE_DOWN_2, LINE_DOWN_3);
 
-    public AdvancedExporter()
+    public AdvancedImporter()
     {
         super(BlockUtils.DEFAULT_GLASS_PROPERTIES);
     }
@@ -91,7 +91,7 @@ public class AdvancedExporter extends CableBlock
     @Nullable
     public TileEntity createTileEntity(BlockState state, IBlockReader world)
     {
-        return new AdvancedExporterTile();
+        return new AdvancedImporterTile();
     }
 
     public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
@@ -100,7 +100,7 @@ public class AdvancedExporter extends CableBlock
         {
             return NetworkUtils.attemptModify(world, pos, hit.getFace(), player, () ->
             {
-                NetworkHooks.openGui((ServerPlayerEntity) player, new PositionalTileContainerProvider<AdvancedExporterTile>(new TranslationTextComponent(this.getTranslationKey()), (tile, windowId, inventory, p) -> new AdvancedExporterContainer(windowId, player, tile), pos), pos);
+                NetworkHooks.openGui((ServerPlayerEntity) player, new PositionalTileContainerProvider<AdvancedImporterTile>(new TranslationTextComponent(this.getTranslationKey()), (tile, windowId, inventory, p) -> new AdvancedImporterContainer(windowId, player, tile), pos), pos);
             });
         }
         return ActionResultType.SUCCESS;

@@ -10,6 +10,7 @@ import edivad.extrastorage.nodes.AdvancedCrafterNetworkNode;
 import edivad.extrastorage.blocks.CrafterTier;
 import edivad.extrastorage.nodes.AdvancedExporterNetworkNode;
 import edivad.extrastorage.nodes.AdvancedFluidStorageNetworkNode;
+import edivad.extrastorage.nodes.AdvancedImporterNetworkNode;
 import edivad.extrastorage.nodes.AdvancedStorageNetworkNode;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
@@ -36,6 +37,7 @@ public class ModSetup {
             API.instance().getNetworkNodeRegistry().add(new ResourceLocation(Main.MODID, value.getID()), (tag, world, pos) -> readAndReturn(tag, new AdvancedCrafterNetworkNode(world, pos, value)));
 
         API.instance().getNetworkNodeRegistry().add(AdvancedExporterNetworkNode.ID, (tag, world, pos) -> readAndReturn(tag, new AdvancedExporterNetworkNode(world, pos)));
+        API.instance().getNetworkNodeRegistry().add(AdvancedImporterNetworkNode.ID, (tag, world, pos) -> readAndReturn(tag, new AdvancedImporterNetworkNode(world, pos)));
 
         for(ItemStorageType value : ItemStorageType.values())
             API.instance().getNetworkNodeRegistry().add(new ResourceLocation(Main.MODID, "block_" + value.getName()), (tag, world, pos) -> readAndReturn(tag, new AdvancedStorageNetworkNode(world, pos, value)));

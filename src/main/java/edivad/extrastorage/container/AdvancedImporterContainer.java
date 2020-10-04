@@ -25,8 +25,6 @@ public class AdvancedImporterContainer extends BaseContainer
         for (int i = 0; i < 4; i++)
             addSlot(new SlotItemHandler(tile.getNode().getUpgrades(), i, 187, 6 + (i * 18)));
 
-        boolean hasRegulator = tile.getNode().getUpgrades().hasUpgrade(UpgradeItem.Type.REGULATOR);
-
         for (int i = 0; i < 2; i++)
         {
             for (int j = 0; j < 9; j++)
@@ -37,14 +35,12 @@ public class AdvancedImporterContainer extends BaseContainer
 
                 addSlot(new FilterSlot(
                         tile.getNode().getItemFilters(),
-                        index, x, y,
-                        hasRegulator ? FilterSlot.FILTER_ALLOW_SIZE : 0
+                        index, x, y
                 ).setEnableHandler(() -> tile.getNode().getType() == IType.ITEMS));
 
                 addSlot(new FluidFilterSlot(
                         tile.getNode().getFluidFilters(),
-                        index, x, y,
-                        hasRegulator ? FluidFilterSlot.FILTER_ALLOW_SIZE : 0
+                        index, x, y
                 ).setEnableHandler(() -> tile.getNode().getType() == IType.FLUIDS));
             }
         }

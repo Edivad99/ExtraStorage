@@ -6,7 +6,7 @@ import com.refinedmods.refinedstorage.tile.config.IType;
 import com.refinedmods.refinedstorage.tile.data.TileDataManager;
 import com.refinedmods.refinedstorage.tile.data.TileDataParameter;
 import edivad.extrastorage.setup.Registration;
-import edivad.extrastorage.tiles.node.AdvancedExporterNetworkNode;
+import edivad.extrastorage.nodes.AdvancedExporterNetworkNode;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 

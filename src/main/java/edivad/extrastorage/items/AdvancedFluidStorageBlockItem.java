@@ -12,7 +12,7 @@ import edivad.extrastorage.blocks.AdvancedFluidStorageBlock;
 import edivad.extrastorage.items.fluid.ExpandedStorageDiskFluid;
 import edivad.extrastorage.items.fluid.FluidStorageType;
 import edivad.extrastorage.setup.Registration;
-import edivad.extrastorage.tiles.node.AdvancedFluidStorageNetworkNode;
+import edivad.extrastorage.nodes.AdvancedFluidStorageNetworkNode;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.InventoryHelper;

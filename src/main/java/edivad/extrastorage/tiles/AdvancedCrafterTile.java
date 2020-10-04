@@ -5,7 +5,7 @@ import com.refinedmods.refinedstorage.tile.NetworkNodeTile;
 import com.refinedmods.refinedstorage.tile.data.TileDataParameter;
 import edivad.extrastorage.blocks.CrafterTier;
 import edivad.extrastorage.setup.Registration;
-import edivad.extrastorage.tiles.node.AdvancedCrafterNetworkNode;
+import edivad.extrastorage.nodes.AdvancedCrafterNetworkNode;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;

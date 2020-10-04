@@ -1,4 +1,4 @@
-package edivad.extrastorage.tiles.node;
+package edivad.extrastorage.nodes;
 
 import com.refinedmods.refinedstorage.api.storage.IStorage;
 import com.refinedmods.refinedstorage.api.storage.disk.IStorageDisk;

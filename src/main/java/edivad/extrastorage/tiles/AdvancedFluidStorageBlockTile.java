@@ -11,7 +11,7 @@ import com.refinedmods.refinedstorage.tile.data.TileDataManager;
 import com.refinedmods.refinedstorage.tile.data.TileDataParameter;
 import edivad.extrastorage.items.fluid.FluidStorageType;
 import edivad.extrastorage.setup.Registration;
-import edivad.extrastorage.tiles.node.AdvancedFluidStorageNetworkNode;
+import edivad.extrastorage.nodes.AdvancedFluidStorageNetworkNode;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 

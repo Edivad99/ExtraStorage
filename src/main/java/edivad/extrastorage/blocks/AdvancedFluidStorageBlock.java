@@ -7,7 +7,7 @@ import com.refinedmods.refinedstorage.util.NetworkUtils;
 import edivad.extrastorage.container.AdvancedFluidStorageBlockContainer;
 import edivad.extrastorage.items.fluid.FluidStorageType;
 import edivad.extrastorage.tiles.AdvancedFluidStorageBlockTile;
-import edivad.extrastorage.tiles.node.AdvancedFluidStorageNetworkNode;
+import edivad.extrastorage.nodes.AdvancedFluidStorageNetworkNode;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;

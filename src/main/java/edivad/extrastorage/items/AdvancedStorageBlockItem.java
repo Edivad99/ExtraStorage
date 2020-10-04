@@ -10,7 +10,7 @@ import edivad.extrastorage.blocks.AdvancedStorageBlock;
 import edivad.extrastorage.items.item.ExpandedStorageDiskItem;
 import edivad.extrastorage.items.item.ItemStorageType;
 import edivad.extrastorage.setup.Registration;
-import edivad.extrastorage.tiles.node.AdvancedStorageNetworkNode;
+import edivad.extrastorage.nodes.AdvancedStorageNetworkNode;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.InventoryHelper;

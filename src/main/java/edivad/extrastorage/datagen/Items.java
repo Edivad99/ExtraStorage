@@ -23,15 +23,15 @@ public class Items extends ItemModelProvider
     {
         for(ItemStorageType type : ItemStorageType.values())
         {
-            singleTexture(Registration.ITEM_STORAGE_PART.get(type).get().getRegistryName().getPath(), mcLoc("item/generated"), "layer0", modLoc(String.format("items/parts/{0}", type.getName())));
-            singleTexture(Registration.ITEM_DISK.get(type).get().getRegistryName().getPath(), mcLoc("item/generated"), "layer0", modLoc(String.format("items/disks/{0}", type.getName())));
+            singleTexture(Registration.ITEM_STORAGE_PART.get(type).get().getRegistryName().getPath(), mcLoc("item/generated"), "layer0", modLoc("items/parts/" + type.getName()));
+            singleTexture(Registration.ITEM_DISK.get(type).get().getRegistryName().getPath(), mcLoc("item/generated"), "layer0", modLoc("items/disks/" + type.getName()));
             parentedBlock(Registration.ITEM_STORAGE_BLOCK.get(type).get());
         }
 
         for(FluidStorageType type : FluidStorageType.values())
         {
-            singleTexture(Registration.FLUID_STORAGE_PART.get(type).get().getRegistryName().getPath(), mcLoc("item/generated"), "layer0", modLoc(String.format("items/parts/{0}_fluid", type.getName())));
-            singleTexture(Registration.FLUID_DISK.get(type).get().getRegistryName().getPath(), mcLoc("item/generated"), "layer0", modLoc(String.format("items/disks/{0}_fluid", type.getName())));
+            singleTexture(Registration.FLUID_STORAGE_PART.get(type).get().getRegistryName().getPath(), mcLoc("item/generated"), "layer0", modLoc("items/parts/" + type.getName() + "_fluid"));
+            singleTexture(Registration.FLUID_DISK.get(type).get().getRegistryName().getPath(), mcLoc("item/generated"), "layer0", modLoc("items/disks/" + type.getName() + "_fluid"));
             parentedBlock(Registration.FLUID_STORAGE_BLOCK.get(type).get());
         }
     }

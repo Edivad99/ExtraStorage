@@ -19,8 +19,8 @@ public class BlockStates extends BlockStateProvider
     protected void registerStatesAndModels()
     {
         for(ItemStorageType type : ItemStorageType.values())
-            simpleBlock(Registration.ITEM_STORAGE_BLOCK.get(type).get(), models().cubeAll("block_" + type.getName(), modLoc(String.format("blocks/storage/{0}_storage_block", type.getName()))));
+            simpleBlock(Registration.ITEM_STORAGE_BLOCK.get(type).get(), models().cubeAll("block_" + type.getName(), modLoc("blocks/storage/" + type.getName() + "_storage_block")));
         for(FluidStorageType type : FluidStorageType.values())
-            simpleBlock(Registration.FLUID_STORAGE_BLOCK.get(type).get(), models().cubeAll("block_" + type.getName() + "_fluid", modLoc(String.format("blocks/storage/{0}_fluid_storage_block", type.getName()))));
+            simpleBlock(Registration.FLUID_STORAGE_BLOCK.get(type).get(), models().cubeAll("block_" + type.getName() + "_fluid", modLoc("blocks/storage/" + type.getName() + "_fluid_storage_block")));
     }
 }

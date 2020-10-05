@@ -4,7 +4,6 @@ import com.refinedmods.refinedstorage.tile.NetworkNodeTile;
 import com.refinedmods.refinedstorage.tile.config.IComparable;
 import com.refinedmods.refinedstorage.tile.config.IType;
 import com.refinedmods.refinedstorage.tile.config.IWhitelistBlacklist;
-import com.refinedmods.refinedstorage.tile.data.TileDataManager;
 import com.refinedmods.refinedstorage.tile.data.TileDataParameter;
 import edivad.extrastorage.nodes.AdvancedImporterNetworkNode;
 import edivad.extrastorage.setup.Registration;
@@ -20,11 +19,10 @@ public class AdvancedImporterTile extends NetworkNodeTile<AdvancedImporterNetwor
     public AdvancedImporterTile()
     {
         super(Registration.ADVANCED_IMPORTER_TILE.get());
+
         dataManager.addWatchedParameter(COMPARE);
         dataManager.addWatchedParameter(WHITELIST_BLACKLIST);
         dataManager.addWatchedParameter(TYPE);
-
-        this.getDataManager().getParameters().forEach(TileDataManager::registerParameter);
     }
 
     @Override

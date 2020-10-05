@@ -7,7 +7,6 @@ import com.refinedmods.refinedstorage.tile.config.IComparable;
 import com.refinedmods.refinedstorage.tile.config.IPrioritizable;
 import com.refinedmods.refinedstorage.tile.config.IWhitelistBlacklist;
 import com.refinedmods.refinedstorage.tile.data.RSSerializers;
-import com.refinedmods.refinedstorage.tile.data.TileDataManager;
 import com.refinedmods.refinedstorage.tile.data.TileDataParameter;
 import edivad.extrastorage.items.item.ItemStorageType;
 import edivad.extrastorage.setup.Registration;
@@ -36,7 +35,6 @@ public class AdvancedStorageBlockTile extends NetworkNodeTile<AdvancedStorageNet
         dataManager.addWatchedParameter(WHITELIST_BLACKLIST);
         dataManager.addWatchedParameter(STORED);
         dataManager.addWatchedParameter(ACCESS_TYPE);
-        this.getDataManager().getParameters().forEach(TileDataManager::registerParameter);
     }
 
     public ItemStorageType getItemStorageType()

@@ -3,7 +3,6 @@ package edivad.extrastorage.tiles;
 import com.refinedmods.refinedstorage.tile.NetworkNodeTile;
 import com.refinedmods.refinedstorage.tile.config.IComparable;
 import com.refinedmods.refinedstorage.tile.config.IType;
-import com.refinedmods.refinedstorage.tile.data.TileDataManager;
 import com.refinedmods.refinedstorage.tile.data.TileDataParameter;
 import edivad.extrastorage.setup.Registration;
 import edivad.extrastorage.nodes.AdvancedExporterNetworkNode;
@@ -18,10 +17,9 @@ public class AdvancedExporterTile extends NetworkNodeTile<AdvancedExporterNetwor
     public AdvancedExporterTile()
     {
         super(Registration.ADVANCED_EXPORTER_TILE.get());
+
         dataManager.addWatchedParameter(COMPARE);
         dataManager.addWatchedParameter(TYPE);
-
-        this.getDataManager().getParameters().forEach(TileDataManager::registerParameter);
     }
 
     @Override

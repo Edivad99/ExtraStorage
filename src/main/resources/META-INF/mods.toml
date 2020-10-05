@@ -54,5 +54,5 @@ description="Extra Storage adds new blocks to Refined Storage"
     modId="refinedstorage"
     mandatory=true
     versionRange="[1.9.6,)"
-    ordering="NONE"
+    ordering="AFTER"
     side="BOTH"

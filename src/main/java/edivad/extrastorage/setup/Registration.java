@@ -104,8 +104,7 @@ public class Registration {
                     Main.logger.error("Wrong type of tile entity (expected AdvancedStorageBlockTile)!");
                     return null;
                 }
-                AdvancedStorageBlockTile tile = (AdvancedStorageBlockTile) te;
-                return new AdvancedStorageBlockContainer(windowId, inv.player, tile);
+                return new AdvancedStorageBlockContainer(windowId, inv.player, (AdvancedStorageBlockTile) te);
             })));
         }
 
@@ -125,8 +124,7 @@ public class Registration {
                     Main.logger.error("Wrong type of tile entity (expected AdvancedFluidStorageBlockTile)!");
                     return null;
                 }
-                AdvancedFluidStorageBlockTile tile = (AdvancedFluidStorageBlockTile) te;
-                return new AdvancedFluidStorageBlockContainer(windowId, inv.player, tile);
+                return new AdvancedFluidStorageBlockContainer(windowId, inv.player, (AdvancedFluidStorageBlockTile) te);
             })));
         }
 
@@ -144,8 +142,7 @@ public class Registration {
                     Main.logger.error("Wrong type of tile entity (expected AdvancedCrafterTile)!");
                     return null;
                 }
-                AdvancedCrafterTile tile = (AdvancedCrafterTile) te;
-                return new AdvancedCrafterContainer(windowId, inv.player, tile);
+                return new AdvancedCrafterContainer(windowId, inv.player, (AdvancedCrafterTile) te);
             })));
         }
     }
@@ -161,9 +158,7 @@ public class Registration {
             Main.logger.error("Wrong type of tile entity (expected AdvancedExporterTile)!");
             return null;
         }
-
-        AdvancedExporterTile tile = (AdvancedExporterTile) te;
-        return new AdvancedExporterContainer(windowId, inv.player, tile);
+        return new AdvancedExporterContainer(windowId, inv.player, (AdvancedExporterTile) te);
     }));
 
     public static final RegistryObject<AdvancedImporter> ADVANCED_IMPORTER = BLOCKS.register("advanced_importer", AdvancedImporter::new);
@@ -177,9 +172,7 @@ public class Registration {
             Main.logger.error("Wrong type of tile entity (expected AdvancedImporterTile)!");
             return null;
         }
-
-        AdvancedImporterTile tile = (AdvancedImporterTile) te;
-        return new AdvancedImporterContainer(windowId, inv.player, tile);
+        return new AdvancedImporterContainer(windowId, inv.player, (AdvancedImporterTile) te);
     }));
 
 //    public static final RegistryObject<AdvancedExporter> TAG_EXPORTER = BLOCKS.register("tag_exporter", AdvancedExporter::new);

@@ -1,7 +1,6 @@
 package edivad.extrastorage.tiles;
 
 import com.refinedmods.refinedstorage.tile.NetworkNodeTile;
-import com.refinedmods.refinedstorage.tile.data.TileDataManager;
 import com.refinedmods.refinedstorage.tile.data.TileDataParameter;
 import edivad.extrastorage.blocks.CrafterTier;
 import edivad.extrastorage.client.screen.dataparameter.AdvancedCrafterTileDataParameterClientListener;
@@ -31,11 +30,10 @@ public class AdvancedCrafterTile extends NetworkNodeTile<AdvancedCrafterNetworkN
     {
         super(Registration.CRAFTER_TILE.get(tier).get());
 
+        this.tier = tier;
+
         dataManager.addWatchedParameter(MODE);
         dataManager.addParameter(HAS_ROOT);
-
-        this.tier = tier;
-        this.getDataManager().getParameters().forEach(TileDataManager::registerParameter);
     }
 
     @Override

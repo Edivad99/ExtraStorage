@@ -3,6 +3,7 @@ package edivad.extrastorage.setup;
 import com.refinedmods.refinedstorage.api.network.node.INetworkNode;
 import com.refinedmods.refinedstorage.apiimpl.API;
 import com.refinedmods.refinedstorage.apiimpl.network.node.NetworkNode;
+import com.refinedmods.refinedstorage.tile.data.TileDataManager;
 import edivad.extrastorage.Main;
 import edivad.extrastorage.items.fluid.FluidStorageType;
 import edivad.extrastorage.items.item.ItemStorageType;
@@ -33,16 +34,28 @@ public class ModSetup {
 
     public static void init(final FMLCommonSetupEvent event)
     {
-        for(CrafterTier value : CrafterTier.values())
-            API.instance().getNetworkNodeRegistry().add(new ResourceLocation(Main.MODID, value.getID()), (tag, world, pos) -> readAndReturn(tag, new AdvancedCrafterNetworkNode(world, pos, value)));
+        for(CrafterTier tier : CrafterTier.values())
+        {
+            API.instance().getNetworkNodeRegistry().add(new ResourceLocation(Main.MODID, tier.getID()), (tag, world, pos) -> readAndReturn(tag, new AdvancedCrafterNetworkNode(world, pos, tier)));
+            Registration.CRAFTER_TILE.get(tier).get().create().getDataManager().getParameters().forEach(TileDataManager::registerParameter);
+        }
 
         API.instance().getNetworkNodeRegistry().add(AdvancedExporterNetworkNode.ID, (tag, world, pos) -> readAndReturn(tag, new AdvancedExporterNetworkNode(world, pos)));
         API.instance().getNetworkNodeRegistry().add(AdvancedImporterNetworkNode.ID, (tag, world, pos) -> readAndReturn(tag, new AdvancedImporterNetworkNode(world, pos)));
 
-        for(ItemStorageType value : ItemStorageType.values())
-            API.instance().getNetworkNodeRegistry().add(new ResourceLocation(Main.MODID, "block_" + value.getName()), (tag, world, pos) -> readAndReturn(tag, new AdvancedStorageNetworkNode(world, pos, value)));
-        for(FluidStorageType value : FluidStorageType.values())
-            API.instance().getNetworkNodeRegistry().add(new ResourceLocation(Main.MODID, "block_" + value.getName() + "_fluid"), (tag, world, pos) -> readAndReturn(tag, new AdvancedFluidStorageNetworkNode(world, pos, value)));
+        for(ItemStorageType type : ItemStorageType.values())
+        {
+            API.instance().getNetworkNodeRegistry().add(new ResourceLocation(Main.MODID, "block_" + type.getName()), (tag, world, pos) -> readAndReturn(tag, new AdvancedStorageNetworkNode(world, pos, type)));
+            Registration.ITEM_STORAGE_TILE.get(type).get().create().getDataManager().getParameters().forEach(TileDataManager::registerParameter);
+        }
+        for(FluidStorageType type : FluidStorageType.values())
+        {
+            API.instance().getNetworkNodeRegistry().add(new ResourceLocation(Main.MODID, "block_" + type.getName() + "_fluid"), (tag, world, pos) -> readAndReturn(tag, new AdvancedFluidStorageNetworkNode(world, pos, type)));
+            Registration.FLUID_STORAGE_TILE.get(type).get().create().getDataManager().getParameters().forEach(TileDataManager::registerParameter);
+        }
+
+        Registration.ADVANCED_EXPORTER_TILE.get().create().getDataManager().getParameters().forEach(TileDataManager::registerParameter);
+        Registration.ADVANCED_IMPORTER_TILE.get().create().getDataManager().getParameters().forEach(TileDataManager::registerParameter);
     }
 
     private static INetworkNode readAndReturn(CompoundNBT tag, NetworkNode node) {

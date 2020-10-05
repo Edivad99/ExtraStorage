@@ -1,9 +1,10 @@
 package edivad.extrastorage.tiles;
 
-import com.refinedmods.refinedstorage.screen.CrafterTileDataParameterClientListener;
 import com.refinedmods.refinedstorage.tile.NetworkNodeTile;
+import com.refinedmods.refinedstorage.tile.data.TileDataManager;
 import com.refinedmods.refinedstorage.tile.data.TileDataParameter;
 import edivad.extrastorage.blocks.CrafterTier;
+import edivad.extrastorage.client.screen.dataparameter.AdvancedCrafterTileDataParameterClientListener;
 import edivad.extrastorage.setup.Registration;
 import edivad.extrastorage.nodes.AdvancedCrafterNetworkNode;
 import net.minecraft.network.datasync.DataSerializers;
@@ -21,7 +22,7 @@ import javax.annotation.Nullable;
 public class AdvancedCrafterTile extends NetworkNodeTile<AdvancedCrafterNetworkNode>
 {
     public static final TileDataParameter<Integer, AdvancedCrafterTile> MODE = new TileDataParameter<>(DataSerializers.VARINT, AdvancedCrafterNetworkNode.CrafterMode.IGNORE.ordinal(), t -> t.getNode().getMode().ordinal(), (t, v) -> t.getNode().setMode(AdvancedCrafterNetworkNode.CrafterMode.getById(v)));
-    private static final TileDataParameter<Boolean, AdvancedCrafterTile> HAS_ROOT = new TileDataParameter<>(DataSerializers.BOOLEAN, false, t -> t.getNode().getRootContainerNotSelf().isPresent(), null, (t, v) -> new CrafterTileDataParameterClientListener().onChanged(t, v));
+    private static final TileDataParameter<Boolean, AdvancedCrafterTile> HAS_ROOT = new TileDataParameter<>(DataSerializers.BOOLEAN, false, t -> t.getNode().getRootContainerNotSelf().isPresent(), null, (t, v) -> new AdvancedCrafterTileDataParameterClientListener().onChanged(t, v));
 
     private final LazyOptional<IItemHandler> patternsCapability = LazyOptional.of(() -> getNode().getPatternItems());
     private final CrafterTier tier;
@@ -34,6 +35,7 @@ public class AdvancedCrafterTile extends NetworkNodeTile<AdvancedCrafterNetworkN
         dataManager.addParameter(HAS_ROOT);
 
         this.tier = tier;
+        this.getDataManager().getParameters().forEach(TileDataManager::registerParameter);
     }
 
     @Override

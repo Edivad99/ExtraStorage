@@ -59,7 +59,7 @@ public class AdvancedImporterNetworkNode extends NetworkNode implements ICompara
     @Override
     public int getEnergyUsage()
     {
-        return 2 * (RS.SERVER_CONFIG.getImporter().getUsage() + upgrades.getEnergyUsage());
+        return 4 * (RS.SERVER_CONFIG.getImporter().getUsage() + upgrades.getEnergyUsage());
     }
 
     @Override

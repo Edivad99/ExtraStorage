@@ -91,7 +91,7 @@ public class AdvancedExporterNetworkNode extends NetworkNode implements ICompara
     @Override
     public int getEnergyUsage()
     {
-        return 2 * (RS.SERVER_CONFIG.getExporter().getUsage() + upgrades.getEnergyUsage());
+        return 4 * (RS.SERVER_CONFIG.getExporter().getUsage() + upgrades.getEnergyUsage());
     }
 
     @Override

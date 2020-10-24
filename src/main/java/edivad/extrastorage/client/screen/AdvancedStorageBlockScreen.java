@@ -1,6 +1,7 @@
 package edivad.extrastorage.client.screen;
 
 import com.refinedmods.refinedstorage.screen.StorageScreen;
+import com.refinedmods.refinedstorage.screen.StorageScreenTileDataParameters;
 import edivad.extrastorage.container.AdvancedStorageBlockContainer;
 import edivad.extrastorage.tiles.AdvancedStorageBlockTile;
 import net.minecraft.entity.player.PlayerInventory;
@@ -15,12 +16,13 @@ public class AdvancedStorageBlockScreen extends StorageScreen<AdvancedStorageBlo
                 inventory,
                 title,
                 "gui/storage.png",
-                null,
-                AdvancedStorageBlockTile.REDSTONE_MODE,
-                AdvancedStorageBlockTile.COMPARE,
-                AdvancedStorageBlockTile.WHITELIST_BLACKLIST,
-                AdvancedStorageBlockTile.PRIORITY,
-                AdvancedStorageBlockTile.ACCESS_TYPE,
+                new StorageScreenTileDataParameters(null,
+                    AdvancedStorageBlockTile.REDSTONE_MODE,
+                    AdvancedStorageBlockTile.COMPARE,
+                    AdvancedStorageBlockTile.WHITELIST_BLACKLIST,
+                    AdvancedStorageBlockTile.PRIORITY,
+                    AdvancedStorageBlockTile.ACCESS_TYPE
+                ),
                 AdvancedStorageBlockTile.STORED::getValue,
                 () -> (long) ((AdvancedStorageBlockTile) container.getTile()).getItemStorageType().getCapacity());
     }

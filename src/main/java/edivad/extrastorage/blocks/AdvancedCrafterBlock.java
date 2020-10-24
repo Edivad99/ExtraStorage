@@ -76,7 +76,7 @@ public class AdvancedCrafterBlock extends NetworkNodeBlock
     {
         if (!worldIn.isRemote)
         {
-            return NetworkUtils.attempt(worldIn, pos, hit.getFace(), player, () -> NetworkHooks.openGui(
+            return NetworkUtils.attempt(worldIn, pos, player, () -> NetworkHooks.openGui(
                     (ServerPlayerEntity) player,
                     new PositionalTileContainerProvider<AdvancedCrafterTile>(
                             ((AdvancedCrafterTile) worldIn.getTileEntity(pos)).getNode().getName(),

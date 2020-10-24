@@ -39,10 +39,6 @@ public class ModSetup {
             API.instance().getNetworkNodeRegistry().add(new ResourceLocation(Main.MODID, tier.getID()), (tag, world, pos) -> readAndReturn(tag, new AdvancedCrafterNetworkNode(world, pos, tier)));
             Registration.CRAFTER_TILE.get(tier).get().create().getDataManager().getParameters().forEach(TileDataManager::registerParameter);
         }
-
-        API.instance().getNetworkNodeRegistry().add(AdvancedExporterNetworkNode.ID, (tag, world, pos) -> readAndReturn(tag, new AdvancedExporterNetworkNode(world, pos)));
-        API.instance().getNetworkNodeRegistry().add(AdvancedImporterNetworkNode.ID, (tag, world, pos) -> readAndReturn(tag, new AdvancedImporterNetworkNode(world, pos)));
-
         for(ItemStorageType type : ItemStorageType.values())
         {
             API.instance().getNetworkNodeRegistry().add(new ResourceLocation(Main.MODID, "block_" + type.getName()), (tag, world, pos) -> readAndReturn(tag, new AdvancedStorageNetworkNode(world, pos, type)));
@@ -54,6 +50,8 @@ public class ModSetup {
             Registration.FLUID_STORAGE_TILE.get(type).get().create().getDataManager().getParameters().forEach(TileDataManager::registerParameter);
         }
 
+        API.instance().getNetworkNodeRegistry().add(AdvancedExporterNetworkNode.ID, (tag, world, pos) -> readAndReturn(tag, new AdvancedExporterNetworkNode(world, pos)));
+        API.instance().getNetworkNodeRegistry().add(AdvancedImporterNetworkNode.ID, (tag, world, pos) -> readAndReturn(tag, new AdvancedImporterNetworkNode(world, pos)));
         Registration.ADVANCED_EXPORTER_TILE.get().create().getDataManager().getParameters().forEach(TileDataManager::registerParameter);
         Registration.ADVANCED_IMPORTER_TILE.get().create().getDataManager().getParameters().forEach(TileDataManager::registerParameter);
     }

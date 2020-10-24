@@ -67,7 +67,7 @@ public class AdvancedStorageBlock extends NetworkNodeBlock
     {
         if (!worldIn.isRemote)
         {
-            return NetworkUtils.attemptModify(worldIn, pos, hit.getFace(), player, () -> NetworkHooks.openGui((ServerPlayerEntity) player, new PositionalTileContainerProvider<AdvancedStorageBlockTile>(
+            return NetworkUtils.attemptModify(worldIn, pos, player, () -> NetworkHooks.openGui((ServerPlayerEntity) player, new PositionalTileContainerProvider<AdvancedStorageBlockTile>(
                     ((AdvancedStorageBlockTile) worldIn.getTileEntity(pos)).getNode().getTitle(),
                     (tile, windowId, inventory, p) -> new AdvancedStorageBlockContainer(windowId, player, tile),
                     pos

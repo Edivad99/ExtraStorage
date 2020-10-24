@@ -98,7 +98,7 @@ public class AdvancedExporter extends CableBlock
     {
         if(!world.isRemote && CollisionUtils.isInBounds(this.getLineShape(state), pos, hit.getHitVec()))
         {
-            return NetworkUtils.attemptModify(world, pos, hit.getFace(), player, () ->
+            return NetworkUtils.attemptModify(world, pos, player, () ->
             {
                 NetworkHooks.openGui((ServerPlayerEntity) player, new PositionalTileContainerProvider<AdvancedExporterTile>(new TranslationTextComponent(this.getTranslationKey()), (tile, windowId, inventory, p) -> new AdvancedExporterContainer(windowId, player, tile), pos), pos);
             });

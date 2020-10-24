@@ -53,6 +53,6 @@ description="Extra Storage adds new blocks to Refined Storage"
 [[dependencies.extrastorage]]
     modId="refinedstorage"
     mandatory=true
-    versionRange="[1.9.6,)"
+    versionRange="[1.9.9,)"
     ordering="AFTER"
     side="BOTH"

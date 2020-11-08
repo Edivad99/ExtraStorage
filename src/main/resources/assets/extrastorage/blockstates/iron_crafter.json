@@ -1,52 +1,56 @@
 {
   "variants": {
     "connected=false,direction=north": {
-      "model": "extrastorage:block/crafter/disconnected/north",
-      "uvlock": true
+      "model": "extrastorage:block/crafter/disconnected",
+      "x": 90
     },
     "connected=false,direction=east": {
-      "model": "extrastorage:block/crafter/disconnected/east",
-      "uvlock": true
+      "model": "extrastorage:block/crafter/disconnected",
+      "x": 90,
+      "y": 90
     },
     "connected=false,direction=south": {
-      "model": "extrastorage:block/crafter/disconnected/south",
-      "uvlock": true
+      "model": "extrastorage:block/crafter/disconnected",
+      "x": 90,
+      "y": 180
     },
     "connected=false,direction=west": {
-      "model": "extrastorage:block/crafter/disconnected/west",
-      "uvlock": true
+      "model": "extrastorage:block/crafter/disconnected",
+      "x": 90,
+      "y": 270
     },
     "connected=false,direction=up": {
-      "model": "extrastorage:block/crafter/disconnected/up",
-      "uvlock": true
+      "model": "extrastorage:block/crafter/disconnected"
     },
     "connected=false,direction=down": {
-      "model": "extrastorage:block/crafter/disconnected/down",
-      "uvlock": true
+      "model": "extrastorage:block/crafter/disconnected",
+      "x": 180
     },
     "connected=true,direction=north": {
-      "model": "extrastorage:block/crafter/connected/iron/north",
-      "uvlock": true
+      "model": "extrastorage:block/crafter/iron",
+      "x": 90
     },
     "connected=true,direction=east": {
-      "model": "extrastorage:block/crafter/connected/iron/east",
-      "uvlock": true
+      "model": "extrastorage:block/crafter/iron",
+      "x": 90,
+      "y": 90
     },
     "connected=true,direction=south": {
-      "model": "extrastorage:block/crafter/connected/iron/south",
-      "uvlock": true
+      "model": "extrastorage:block/crafter/iron",
+      "x": 90,
+      "y": 180
     },
     "connected=true,direction=west": {
-      "model": "extrastorage:block/crafter/connected/iron/west",
-      "uvlock": true
+      "model": "extrastorage:block/crafter/iron",
+      "x": 90,
+      "y": 270
     },
     "connected=true,direction=up": {
-      "model": "extrastorage:block/crafter/connected/iron/up",
-      "uvlock": true
+      "model": "extrastorage:block/crafter/iron"
     },
     "connected=true,direction=down": {
-      "model": "extrastorage:block/crafter/connected/iron/down",
-      "uvlock": true
+      "model": "extrastorage:block/crafter/iron",
+      "x": 180
     }
   }
 }

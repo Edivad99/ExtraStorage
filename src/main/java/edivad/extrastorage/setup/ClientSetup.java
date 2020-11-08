@@ -44,10 +44,7 @@ public class ClientSetup
                     base,
                     true,
                     new ResourceLocation(Main.MODID, parent + "side_connected"),
-                    new ResourceLocation(Main.MODID, parent + "side_connected_90"),
-                    new ResourceLocation(Main.MODID, parent + "side_connected_180"),
-                    new ResourceLocation(Main.MODID, parent + "side_connected_270"),
-                    new ResourceLocation(Main.MODID, parent + "front_connected")
+                    new ResourceLocation(Main.MODID, parent + "top_connected")
             ));
         }
 

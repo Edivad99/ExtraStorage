@@ -132,7 +132,7 @@ public class Registration {
         for(CrafterTier tier : CrafterTier.values())
         {
             CRAFTER_BLOCK.put(tier, BLOCKS.register(tier.getID(), () -> new AdvancedCrafterBlock(tier)));
-            CRAFTER.put(tier, ITEMS.register(tier.getID(), () -> new BlockItem(CRAFTER_BLOCK.get(tier).get(), globalProperties)));
+            CRAFTER.put(tier, ITEMS.register(tier.getID(), () -> new BaseBlockItem(CRAFTER_BLOCK.get(tier).get(), globalProperties)));
             CRAFTER_TILE.put(tier, TILES.register(tier.getID(), () -> TileEntityType.Builder.create(() -> new AdvancedCrafterTile(tier), CRAFTER_BLOCK.get(tier).get()).build(null)));
             CRAFTER_CONTAINER.put(tier, CONTAINERS.register(tier.getID(), () -> IForgeContainerType.create((windowId, inv, data) -> {
                 BlockPos pos = data.readBlockPos();

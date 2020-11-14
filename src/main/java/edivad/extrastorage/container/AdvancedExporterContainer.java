@@ -13,12 +13,32 @@ import net.minecraftforge.items.SlotItemHandler;
 public class AdvancedExporterContainer extends BaseContainer
 {
     private final AdvancedExporterTile tile;
+    private boolean hasRegulatorMode;
 
     public AdvancedExporterContainer(int windowId, PlayerEntity player, AdvancedExporterTile tile)
     {
         super(Registration.ADVANCED_EXPORTER_CONTAINER.get(), tile, player, windowId);
         this.tile = tile;
+        this.hasRegulatorMode = hasRegulatorMode();
         initSlots();
+    }
+
+    private boolean hasRegulatorMode()
+    {
+        return tile.getNode().getUpgrades().hasUpgrade(UpgradeItem.Type.REGULATOR);
+    }
+
+    @Override
+    public void detectAndSendChanges()
+    {
+        super.detectAndSendChanges();
+
+        boolean updatedHasRegulatorMode = hasRegulatorMode();
+        if (hasRegulatorMode != updatedHasRegulatorMode)
+        {
+            hasRegulatorMode = updatedHasRegulatorMode;
+            initSlots();
+        }
     }
 
     public void initSlots() {

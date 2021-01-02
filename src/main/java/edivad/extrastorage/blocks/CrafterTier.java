@@ -30,7 +30,13 @@ public enum CrafterTier
 
     public String getID()
     {
-        return this.name().toLowerCase().concat("_crafter");
+        switch (this.ordinal()) {
+            case 0: return "iron_crafter";
+            case 1: return "gold_crafter";
+            case 2: return "diamond_crafter";
+            case 3: return "netherite_crafter";
+            default: throw new RuntimeException("Tier not yet implemented");
+        }
     }
 }
 

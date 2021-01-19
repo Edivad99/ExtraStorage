@@ -13,7 +13,7 @@
       "item": "minecraft:redstone"
     },
     "P": {
-      "item": "extrastorage:storagepart_4096k"
+      "tag": "refinedstorage:parts/items/4096k"
     },
     "E": {
       "item": "refinedstorage:quartz_enriched_iron"

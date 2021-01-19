@@ -1,0 +1,9 @@
+{
+  "replace": false,
+  "values": [
+    "#refinedstorage:storage_blocks/items/256k",
+    "#refinedstorage:storage_blocks/items/1024k",
+    "#refinedstorage:storage_blocks/items/4096k",
+    "#refinedstorage:storage_blocks/items/16384k"
+  ]
+}

@@ -5,7 +5,7 @@
       "item": "refinedstorage:storage_housing"
     },
     {
-      "item": "extrastorage:storagepart_16384k"
+      "tag": "refinedstorage:parts/items/16384k"
     }
   ],
   "result": {

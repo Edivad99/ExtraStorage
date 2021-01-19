@@ -10,7 +10,7 @@
       "tag": "forge:glass"
     },
     "S": {
-      "item": "extrastorage:storagepart_1024k"
+      "tag": "refinedstorage:parts/items/1024k"
     },
     "I": {
       "item": "refinedstorage:quartz_enriched_iron"

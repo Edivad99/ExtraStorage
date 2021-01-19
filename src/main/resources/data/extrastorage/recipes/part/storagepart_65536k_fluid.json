@@ -7,7 +7,7 @@
   ],
   "key": {
     "G": {
-      "item": "extrastorage:storagepart_16384k_fluid"
+      "tag": "refinedstorage:parts/fluids/16384k"
     },
     "D": {
       "item": "refinedstorage:advanced_processor"

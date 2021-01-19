@@ -7,7 +7,7 @@
   ],
   "key": {
     "G": {
-      "item": "extrastorage:storagepart_256k"
+      "tag": "refinedstorage:parts/items/256k"
     },
     "D": {
       "item": "refinedstorage:advanced_processor"

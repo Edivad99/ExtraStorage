@@ -5,7 +5,7 @@
       "item": "refinedstorage:storage_housing"
     },
     {
-      "item": "extrastorage:storagepart_1048576k_fluid"
+      "tag": "refinedstorage:parts/fluids/1048576k"
     }
   ],
   "result": {

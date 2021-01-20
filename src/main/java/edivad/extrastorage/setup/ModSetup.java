@@ -6,6 +6,7 @@ import com.refinedmods.refinedstorage.apiimpl.network.node.NetworkNode;
 import com.refinedmods.refinedstorage.tile.data.TileDataManager;
 import edivad.extrastorage.Main;
 import edivad.extrastorage.compat.CarryOnIntegration;
+import edivad.extrastorage.compat.TOPIntegration;
 import edivad.extrastorage.items.fluid.FluidStorageType;
 import edivad.extrastorage.items.item.ItemStorageType;
 import edivad.extrastorage.nodes.AdvancedCrafterNetworkNode;
@@ -56,7 +57,9 @@ public class ModSetup {
         Registration.ADVANCED_EXPORTER_TILE.get().create().getDataManager().getParameters().forEach(TileDataManager::registerParameter);
         Registration.ADVANCED_IMPORTER_TILE.get().create().getDataManager().getParameters().forEach(TileDataManager::registerParameter);
 
+        //Integrations
         CarryOnIntegration.registerCarryOn();
+        TOPIntegration.registerTOP();
     }
 
     private static INetworkNode readAndReturn(CompoundNBT tag, NetworkNode node) {

@@ -1,0 +1,27 @@
+{
+  "parent": "refinedstorage:autocrafting",
+  "display": {
+    "frame": "challenge",
+    "icon": {
+      "item": "extrastorage:iron_crafter"
+    },
+    "title": {
+      "translate": "advancements.extrastorage.iron_crafter"
+    },
+    "description": {
+      "translate": "advancements.extrastorage.iron_crafter.description"
+    }
+  },
+  "criteria": {
+    "certus": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "extrastorage:iron_crafter"
+          }
+        ]
+      }
+    }
+  }
+}

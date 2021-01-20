@@ -47,5 +47,15 @@ public class Lang extends LanguageProvider
         add(Translations.HOLD_SHIFT, "Hold Shift for details");
         add(Translations.SLOT_CRAFTING, "Slots for patterns: %s");
         add(Translations.BASE_SPEED, "Base speed: %sx");
+
+        //Advancements
+        add("advancements.extrastorage.iron_crafter", "Iron Crafter");
+        add("advancements.extrastorage.iron_crafter.description", "The next generation of crafters!");
+
+        add("advancements.extrastorage.advanced_exporter", "Advanced Exporter");
+        add("advancements.extrastorage.advanced_exporter.description", "A much larger exporter!");
+
+        add("advancements.extrastorage.advanced_importer", "Advanced Importer");
+        add("advancements.extrastorage.advanced_importer.description", "Many more filters!");
     }
 }

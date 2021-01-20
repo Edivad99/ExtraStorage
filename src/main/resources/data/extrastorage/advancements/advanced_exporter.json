@@ -1,0 +1,27 @@
+{
+  "parent": "refinedstorage:exporting",
+  "display": {
+    "frame": "goal",
+    "icon": {
+      "item": "extrastorage:advanced_exporter"
+    },
+    "title": {
+      "translate": "advancements.extrastorage.advanced_exporter"
+    },
+    "description": {
+      "translate": "advancements.extrastorage.advanced_exporter.description"
+    }
+  },
+  "criteria": {
+    "certus": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "extrastorage:advanced_exporter"
+          }
+        ]
+      }
+    }
+  }
+}

@@ -39,7 +39,7 @@ public class TOPIntegration implements IProbeInfoProvider, Function<ITheOneProbe
     public void addProbeInfo(ProbeMode probeMode, IProbeInfo probeInfo, PlayerEntity player, World world, BlockState blockState, IProbeHitData data)
     {
         TileEntity te = world.getTileEntity(data.getPos());
-        int patterns = -1, speed = -1, slots = -1;
+        int patterns = 0, speed = 0, slots = 0;
 
         if(te instanceof AdvancedCrafterTile) {
             AdvancedCrafterTile tile = (AdvancedCrafterTile) te;
@@ -55,7 +55,7 @@ public class TOPIntegration implements IProbeInfoProvider, Function<ITheOneProbe
             speed = node.getMaximumSuccessfulCraftingUpdates();
             slots = 9;
         }
-        if(patterns != -1 && speed != -1 && slots != -1) {
+        if(te instanceof AdvancedCrafterTile || te instanceof CrafterTile) {
             probeInfo.horizontal().text(new StringTextComponent(String.format("Occupied space: %d/%d", patterns, slots)));
             probeInfo.horizontal().text(new StringTextComponent(String.format("Current speed: %dx", speed)));
         }

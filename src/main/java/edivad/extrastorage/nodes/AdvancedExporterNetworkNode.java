@@ -38,8 +38,10 @@ public class AdvancedExporterNetworkNode extends NetworkNode implements ICompara
     private static final String NBT_TYPE = "Type";
     private static final String NBT_FLUID_FILTERS = "FluidFilters";
 
-    private final BaseItemHandler itemFilters = new BaseItemHandler(18).addListener(new NetworkNodeInventoryListener(this));
-    private final FluidInventory fluidFilters = new FluidInventory(18).addListener(new NetworkNodeFluidInventoryListener(this));
+    private static final int SLOTS = 18;
+
+    private final BaseItemHandler itemFilters = new BaseItemHandler(SLOTS).addListener(new NetworkNodeInventoryListener(this));
+    private final FluidInventory fluidFilters = new FluidInventory(SLOTS).addListener(new NetworkNodeFluidInventoryListener(this));
 
     private final UpgradeItemHandler upgrades = (UpgradeItemHandler) new UpgradeItemHandler(4, UpgradeItem.Type.SPEED, UpgradeItem.Type.CRAFTING, UpgradeItem.Type.STACK, UpgradeItem.Type.REGULATOR)
         .addListener(new NetworkNodeInventoryListener(this))
@@ -49,7 +51,7 @@ public class AdvancedExporterNetworkNode extends NetworkNode implements ICompara
             {
                 boolean changed = false;
 
-                for (int i = 0; i < itemFilters.getSlots(); i++)
+                for (int i = 0; i < SLOTS; i++)
                 {
                     ItemStack filterSlot = itemFilters.getStackInSlot(i);
 
@@ -60,7 +62,7 @@ public class AdvancedExporterNetworkNode extends NetworkNode implements ICompara
                     }
                 }
 
-                for (int i = 0; i < fluidFilters.getSlots(); ++i)
+                for (int i = 0; i < SLOTS; ++i)
                 {
                     FluidStack filterSlot = fluidFilters.getFluid(i);
 
@@ -101,9 +103,10 @@ public class AdvancedExporterNetworkNode extends NetworkNode implements ICompara
         if (canUpdate() && ticks % upgrades.getSpeed() == 0 && world.isBlockPresent(pos)) {
             if (type == IType.ITEMS) {
                 IItemHandler handler = WorldUtils.getItemHandler(getFacingTile(), getDirection().getOpposite());
+                final int handlerSlots = handler.getSlots();
 
                 if (handler != null) {
-                    while (filterSlot + 1 < itemFilters.getSlots() && itemFilters.getStackInSlot(filterSlot).isEmpty()) {
+                    while (filterSlot + 1 < SLOTS && itemFilters.getStackInSlot(filterSlot).isEmpty()) {
                         filterSlot++;
                     }
 
@@ -111,7 +114,7 @@ public class AdvancedExporterNetworkNode extends NetworkNode implements ICompara
                     // we waste a tick with doing nothing because it's empty. Hence this check. If we are at the last slot
                     // and it's empty, go back to slot 0.
                     // We also handle if we exceeded the maximum slot in general.
-                    if ((filterSlot == itemFilters.getSlots() - 1 && itemFilters.getStackInSlot(filterSlot).isEmpty()) || (filterSlot >= itemFilters.getSlots())) {
+                    if ((filterSlot == SLOTS - 1 && itemFilters.getStackInSlot(filterSlot).isEmpty()) || (filterSlot >= SLOTS)) {
                         filterSlot = 0;
                     }
 
@@ -123,7 +126,7 @@ public class AdvancedExporterNetworkNode extends NetworkNode implements ICompara
                         if (upgrades.hasUpgrade(UpgradeItem.Type.REGULATOR)) {
                             int found = 0;
 
-                            for (int i = 0; i < handler.getSlots(); i++) {
+                            for (int i = 0; i < handlerSlots; i++) {
                                 ItemStack stackInConnectedHandler = handler.getStackInSlot(i);
 
                                 if (API.instance().getComparer().isEqual(slot, stackInConnectedHandler, compare)) {
@@ -133,7 +136,7 @@ public class AdvancedExporterNetworkNode extends NetworkNode implements ICompara
 
                             int needed = 0;
 
-                            for (int i = 0; i < itemFilters.getSlots(); ++i) {
+                            for (int i = 0; i < SLOTS; ++i) {
                                 if (API.instance().getComparer().isEqualNoQuantity(slot, itemFilters.getStackInSlot(i))) {
                                     needed += itemFilters.getStackInSlot(i).getCount();
                                 }
@@ -206,7 +209,7 @@ public class AdvancedExporterNetworkNode extends NetworkNode implements ICompara
 
                                 int needed = 0;
 
-                                for (int i = 0; i < fluidFilters.getSlots(); ++i) {
+                                for (int i = 0; i < SLOTS; ++i) {
                                     if (API.instance().getComparer().isEqual(stack, fluidFilters.getFluid(i), IComparer.COMPARE_NBT)) {
                                         needed += fluidFilters.getFluid(i).getAmount();
                                     }

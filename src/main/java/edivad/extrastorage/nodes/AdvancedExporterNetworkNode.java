@@ -103,9 +103,9 @@ public class AdvancedExporterNetworkNode extends NetworkNode implements ICompara
         if (canUpdate() && ticks % upgrades.getSpeed() == 0 && world.isBlockPresent(pos)) {
             if (type == IType.ITEMS) {
                 IItemHandler handler = WorldUtils.getItemHandler(getFacingTile(), getDirection().getOpposite());
-                final int handlerSlots = handler.getSlots();
 
                 if (handler != null) {
+                    final int handlerSlots = handler.getSlots();
                     while (filterSlot + 1 < SLOTS && itemFilters.getStackInSlot(filterSlot).isEmpty()) {
                         filterSlot++;
                     }

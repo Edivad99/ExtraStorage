@@ -47,7 +47,7 @@ description="Extra Storage adds new blocks to Refined Storage"
 [[dependencies.extrastorage]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.16.4]"
+    versionRange="[1.16.4,1.17.0)"
     ordering="NONE"
     side="BOTH"
 [[dependencies.extrastorage]]

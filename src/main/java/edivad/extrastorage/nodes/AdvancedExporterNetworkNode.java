@@ -53,22 +53,19 @@ public class AdvancedExporterNetworkNode extends NetworkNode implements ICompara
 
                 for (int i = 0; i < SLOTS; i++)
                 {
-                    ItemStack filterSlot = itemFilters.getStackInSlot(i);
+                    ItemStack filteredItem = itemFilters.getStackInSlot(i);
 
-                    if (filterSlot.getCount() > 1)
+                    if (filteredItem.getCount() > 1)
                     {
-                        filterSlot.setCount(1);
+                        filteredItem.setCount(1);
                         changed = true;
                     }
-                }
 
-                for (int i = 0; i < SLOTS; ++i)
-                {
-                    FluidStack filterSlot = fluidFilters.getFluid(i);
+                    FluidStack filteredFluid = fluidFilters.getFluid(i);
 
-                    if (!filterSlot.isEmpty() && filterSlot.getAmount() != FluidAttributes.BUCKET_VOLUME)
+                    if (!filteredFluid.isEmpty() && filteredFluid.getAmount() != FluidAttributes.BUCKET_VOLUME)
                     {
-                        filterSlot.setAmount(FluidAttributes.BUCKET_VOLUME);
+                        filteredFluid.setAmount(FluidAttributes.BUCKET_VOLUME);
                         changed = true;
                     }
                 }
@@ -117,7 +114,6 @@ public class AdvancedExporterNetworkNode extends NetworkNode implements ICompara
                     if ((filterSlot == SLOTS - 1 && itemFilters.getStackInSlot(filterSlot).isEmpty()) || (filterSlot >= SLOTS)) {
                         filterSlot = 0;
                     }
-
                     ItemStack slot = itemFilters.getStackInSlot(filterSlot);
 
                     if (!slot.isEmpty()) {
@@ -309,7 +305,7 @@ public class AdvancedExporterNetworkNode extends NetworkNode implements ICompara
     @Override
     public IItemHandler getDrops()
     {
-        return upgrades;
+        return getUpgrades();
     }
 
     @Override

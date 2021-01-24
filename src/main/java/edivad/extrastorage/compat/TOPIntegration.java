@@ -1,7 +1,6 @@
 package edivad.extrastorage.compat;
 
 import com.refinedmods.refinedstorage.apiimpl.network.node.CrafterNetworkNode;
-import com.refinedmods.refinedstorage.item.UpgradeItem;
 import com.refinedmods.refinedstorage.tile.CrafterTile;
 import edivad.extrastorage.Main;
 import edivad.extrastorage.blocks.CrafterTier;
@@ -13,20 +12,10 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.InterModComms;
-import net.minecraftforge.fml.ModList;
 
 import java.util.function.Function;
 
 public class TOPIntegration implements IProbeInfoProvider, Function<ITheOneProbe, Void> {
-
-    public static void registerTOP()
-    {
-        if(ModList.get().isLoaded("theoneprobe"))
-        {
-            InterModComms.sendTo("theoneprobe", "getTheOneProbe", TOPIntegration::new);
-        }
-    }
 
     @Override
     public Void apply(ITheOneProbe probe)

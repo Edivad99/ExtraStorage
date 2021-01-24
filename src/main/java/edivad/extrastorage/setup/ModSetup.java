@@ -19,6 +19,8 @@ import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.InterModComms;
+import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 
@@ -59,7 +61,9 @@ public class ModSetup {
 
         //Integrations
         CarryOnIntegration.registerCarryOn();
-        TOPIntegration.registerTOP();
+        if(ModList.get().isLoaded("theoneprobe")) {
+            InterModComms.sendTo("theoneprobe", "getTheOneProbe", TOPIntegration::new);
+        }
     }
 
     private static INetworkNode readAndReturn(CompoundNBT tag, NetworkNode node) {

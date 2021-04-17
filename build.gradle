@@ -6,7 +6,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '3.+', changing: true
+        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '4.1.+', changing: true
     }
 }
 apply plugin: 'net.minecraftforge.gradle'
@@ -19,7 +19,7 @@ version = "${mod_version}"
 group = 'edivad.extrastorage'
 archivesBaseName = "ExtraStorage-${minecraft_version}"
 
-sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
+java.toolchain.languageVersion = JavaLanguageVersion.of(8) // Mojang ships Java 8 to end users, so your mod should target Java 8.
 println('Java: ' + System.getProperty('java.version') + ' JVM: ' + System.getProperty('java.vm.version') + '(' + System.getProperty('java.vendor') + ') Arch: ' + System.getProperty('os.arch'))
 
 minecraft {
@@ -106,7 +106,7 @@ dependencies {
 
     compile fg.deobf("com.refinedmods:refinedstorage:${rs_version}")
 
-    runtimeOnly fg.deobf("tschipp.carryon:carryon-1.16.3:${co_version}")
+    runtimeOnly fg.deobf("tschipp.carryon:carryon-1.16.5:${co_version}")
     compileOnly fg.deobf("mcjty.theoneprobe:TheOneProbe-${top_version}:api")
     runtimeOnly fg.deobf("mcjty.theoneprobe:TheOneProbe-${top_version}")
     runtimeOnly fg.deobf("mezz.jei:jei-${minecraft_version}:${jei_version}")

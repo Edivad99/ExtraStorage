@@ -35,7 +35,9 @@ import net.minecraftforge.items.wrapper.CombinedInvWrapper;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -80,12 +82,13 @@ public class AdvancedCrafterNetworkNode extends NetworkNode implements ICrafting
             if (!reading)
             {
                 if (!world.isRemote)
-                    invalidate();
+                    invalidateSlot(slot);
                 if (network != null)
                     network.getCraftingManager().invalidate();
             }
         });
 
+    private final Map<Integer, ICraftingPattern> slot_to_pattern = new HashMap<>();
     private final List<ICraftingPattern> patterns = new ArrayList<>();
 
     private final UpgradeItemHandler upgrades = (UpgradeItemHandler) new UpgradeItemHandler(4, UpgradeItem.Type.SPEED)
@@ -118,18 +121,31 @@ public class AdvancedCrafterNetworkNode extends NetworkNode implements ICrafting
 
     private void invalidate()
     {
+        slot_to_pattern.clear();
         patterns.clear();
-
+     
         for(int i = 0; i < patternsInventory.getSlots(); ++i)
         {
-            ItemStack patternStack = patternsInventory.getStackInSlot(i);
+            invalidateSlot(i);
+        }
+    }
 
-            if(!patternStack.isEmpty())
+    private void invalidateSlot(int slot)
+    {
+        if (slot_to_pattern.containsKey(slot)) {
+            patterns.remove(slot_to_pattern.remove(slot));
+        }
+        
+        ItemStack patternStack = patternsInventory.getStackInSlot(slot);
+
+        if(!patternStack.isEmpty())
+        {
+            ICraftingPattern pattern = ((ICraftingPatternProvider) patternStack.getItem()).create(world, patternStack, this);
+
+            if(pattern.isValid())
             {
-                ICraftingPattern pattern = ((ICraftingPatternProvider) patternStack.getItem()).create(world, patternStack, this);
-
-                if(pattern.isValid())
-                    patterns.add(pattern);
+                slot_to_pattern.put(slot, pattern);
+                patterns.add(pattern);
             }
         }
     }

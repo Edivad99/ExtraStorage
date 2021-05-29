@@ -2,7 +2,7 @@
   "parent": "minecraft:recipes/root",
   "rewards": {
     "recipes": [
-      "extrastorage:disk/shapeless/disk_16384k_fluid"
+      "extrastorage:storage_block/block_16384k_fluid"
     ]
   },
   "criteria": {
@@ -19,7 +19,7 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "extrastorage:disk/shapeless/disk_16384k_fluid"
+        "recipe": "extrastorage:storage_block/block_16384k_fluid"
       }
     }
   },

@@ -24,22 +24,22 @@ public class StorageBlockLootFunction extends LootFunction
     @Override
     public ItemStack doApply(ItemStack stack, LootContext lootContext)
     {
-        TileEntity tile = (TileEntity)lootContext.get(LootParameters.BLOCK_ENTITY);
+        TileEntity tile = lootContext.get(LootParameters.BLOCK_ENTITY);
         if (tile instanceof AdvancedStorageBlockTile)
         {
-            AdvancedStorageNetworkNode removedNode = (AdvancedStorageNetworkNode)((AdvancedStorageBlockTile)tile).getRemovedNode();
+            AdvancedStorageNetworkNode removedNode = ((AdvancedStorageBlockTile)tile).getRemovedNode();
             if (removedNode == null)
             {
-                removedNode = (AdvancedStorageNetworkNode)((AdvancedStorageBlockTile)tile).getNode();
+                removedNode = ((AdvancedStorageBlockTile)tile).getNode();
             }
 
             stack.getOrCreateTag().putUniqueId(AdvancedStorageNetworkNode.NBT_ID, removedNode.getStorageId());
         }
         else if (tile instanceof AdvancedFluidStorageBlockTile)
         {
-            AdvancedFluidStorageNetworkNode removedNode = (AdvancedFluidStorageNetworkNode)((AdvancedFluidStorageBlockTile)tile).getRemovedNode();
+            AdvancedFluidStorageNetworkNode removedNode = ((AdvancedFluidStorageBlockTile)tile).getRemovedNode();
             if (removedNode == null) {
-                removedNode = (AdvancedFluidStorageNetworkNode)((AdvancedFluidStorageBlockTile)tile).getNode();
+                removedNode = ((AdvancedFluidStorageBlockTile)tile).getNode();
             }
 
             stack.getOrCreateTag().putUniqueId(AdvancedFluidStorageNetworkNode.NBT_ID, removedNode.getStorageId());
@@ -49,7 +49,11 @@ public class StorageBlockLootFunction extends LootFunction
     }
 
     public LootFunctionType getFunctionType() {
-        return ESLootFunctions.STORAGE_BLOCK;
+        return ESLootFunctions.getStorageBlock();
+    }
+
+    public static LootFunction.Builder<?> builder() {
+        return builder(StorageBlockLootFunction::new);
     }
 
     public static class Serializer extends LootFunction.Serializer<StorageBlockLootFunction>

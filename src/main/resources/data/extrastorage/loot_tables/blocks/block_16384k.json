@@ -2,17 +2,16 @@
   "type": "minecraft:block",
   "pools": [
     {
-      "name": "block_16384k",
       "rolls": 1,
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "extrastorage:block_16384k",
           "functions": [
             {
               "function": "extrastorage:storage_block"
             }
-          ]
+          ],
+          "name": "extrastorage:block_16384k"
         }
       ],
       "conditions": [

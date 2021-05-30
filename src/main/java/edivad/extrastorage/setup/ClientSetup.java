@@ -20,14 +20,22 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 public class ClientSetup
 {
     private static final BakedModelOverrideRegistry bakedModelOverrideRegistry = new BakedModelOverrideRegistry();
 
-    public static void init(FMLClientSetupEvent event)
+    public ClientSetup() {
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::init);
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onModelBake);
+    }
+
+    public void init(FMLClientSetupEvent event)
     {
         //Version checker
         MinecraftForge.EVENT_BUS.register(EventHandler.INSTANCE);
@@ -75,4 +83,18 @@ public class ClientSetup
             return false;
         });
     }
+
+    @SubscribeEvent
+    public void onModelBake(ModelBakeEvent e) {
+        FullbrightBakedModel.invalidateCache();
+
+        for (ResourceLocation id : e.getModelRegistry().keySet()) {
+            BakedModelOverrideRegistry.BakedModelOverrideFactory factory = this.bakedModelOverrideRegistry.get(new ResourceLocation(id.getNamespace(), id.getPath()));
+
+            if (factory != null) {
+                e.getModelRegistry().put(id, factory.create(e.getModelRegistry().get(id), e.getModelRegistry()));
+            }
+        }
+    }
+
 }

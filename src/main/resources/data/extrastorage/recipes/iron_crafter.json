@@ -10,7 +10,7 @@
       "item": "minecraft:iron_ingot"
     },
     "b": {
-      "item": "refinedstorage:crafter"
+      "tag": "refinedstorage:crafter"
     },
     "c": {
       "item": "refinedstorage:improved_processor"

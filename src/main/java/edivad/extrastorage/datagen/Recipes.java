@@ -18,6 +18,7 @@ import net.minecraft.item.DyeColor;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
 import net.minecraft.tags.ITag;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.Tags;
 
@@ -59,7 +60,7 @@ public class Recipes extends RecipeProvider
                 .patternLine("cbc")//
                 .patternLine("a a")//
                 .key('a', Items.IRON_INGOT)//
-                .key('b', RSBlocks.CRAFTER.get(DyeColor.LIGHT_BLUE).get())//
+                .key('b', ItemTags.makeWrapperTag("refinedstorage:crafter"))//
                 .key('c', RSItems.PROCESSORS.get(ProcessorItem.Type.IMPROVED).get())//
                 .addCriterion("has_part", hasItem(RSBlocks.CRAFTER.get(DyeColor.LIGHT_BLUE).get()))//
                 .build(consumer);

@@ -27,7 +27,7 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 @Mod.EventBusSubscriber(modid = Main.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class ModSetup {
 
-    public static final ItemGroup rebornStorageTab = new ItemGroup(Main.MODID + "_tab") {
+    public static final ItemGroup extraStorageTab = new ItemGroup(Main.MODID + "_tab") {
 
         @Override
         public ItemStack createIcon()

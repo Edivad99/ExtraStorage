@@ -9,11 +9,11 @@ import com.refinedmods.refinedstorage.render.Styles;
 import edivad.extrastorage.blocks.AdvancedStorageBlock;
 import edivad.extrastorage.items.item.ExpandedStorageDiskItem;
 import edivad.extrastorage.items.item.ItemStorageType;
-import edivad.extrastorage.setup.Registration;
 import edivad.extrastorage.nodes.AdvancedStorageNetworkNode;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.InventoryHelper;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.ActionResultType;
@@ -34,9 +34,9 @@ public class AdvancedStorageBlockItem extends BaseBlockItem
 {
     private final ItemStorageType type;
 
-    public AdvancedStorageBlockItem(AdvancedStorageBlock block)
+    public AdvancedStorageBlockItem(AdvancedStorageBlock block, Item.Properties builder)
     {
-        super(block, Registration.globalProperties);
+        super(block, builder);
         this.type = block.getType();
     }
 

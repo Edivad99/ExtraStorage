@@ -11,11 +11,11 @@ import com.refinedmods.refinedstorage.render.Styles;
 import edivad.extrastorage.blocks.AdvancedFluidStorageBlock;
 import edivad.extrastorage.items.fluid.ExpandedStorageDiskFluid;
 import edivad.extrastorage.items.fluid.FluidStorageType;
-import edivad.extrastorage.setup.Registration;
 import edivad.extrastorage.nodes.AdvancedFluidStorageNetworkNode;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.InventoryHelper;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.util.ActionResult;
@@ -39,9 +39,9 @@ public class AdvancedFluidStorageBlockItem extends BaseBlockItem
 {
     private final FluidStorageType type;
 
-    public AdvancedFluidStorageBlockItem(AdvancedFluidStorageBlock block)
+    public AdvancedFluidStorageBlockItem(AdvancedFluidStorageBlock block, Item.Properties builder)
     {
-        super(block, Registration.globalProperties);
+        super(block, builder);
         this.type = block.getType();
     }
 

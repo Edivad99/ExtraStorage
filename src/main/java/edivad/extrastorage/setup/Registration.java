@@ -26,7 +26,6 @@ import edivad.extrastorage.tiles.AdvancedStorageBlockTile;
 import edivad.extrastorage.blocks.CrafterTier;
 import net.minecraft.block.Block;
 import net.minecraft.inventory.container.ContainerType;
-import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
@@ -67,7 +66,7 @@ public class Registration {
     public static final Map<CrafterTier, RegistryObject<TileEntityType<AdvancedCrafterTile>>> CRAFTER_TILE = new HashMap<>();
     public static final Map<CrafterTier, RegistryObject<ContainerType<AdvancedCrafterContainer>>> CRAFTER_CONTAINER = new HashMap<>();
 
-    public static Item.Properties globalProperties = new Item.Properties().group(ModSetup.rebornStorageTab).maxStackSize(64);
+    private static Item.Properties globalProperties = new Item.Properties().group(ModSetup.extraStorageTab).maxStackSize(64);
 
     public static void init()
     {
@@ -94,7 +93,7 @@ public class Registration {
             String name = "block_" + type.getName();
 
             ITEM_STORAGE_BLOCK.put(type, BLOCKS.register(name, () -> new AdvancedStorageBlock(type)));
-            ITEM_STORAGE.put(type, ITEMS.register(name, () -> new AdvancedStorageBlockItem(ITEM_STORAGE_BLOCK.get(type).get())));
+            ITEM_STORAGE.put(type, ITEMS.register(name, () -> new AdvancedStorageBlockItem(ITEM_STORAGE_BLOCK.get(type).get(), globalProperties)));
             ITEM_STORAGE_TILE.put(type, TILES.register(name, () -> TileEntityType.Builder.create(() -> new AdvancedStorageBlockTile(type), ITEM_STORAGE_BLOCK.get(type).get()).build(null)));
             ITEM_STORAGE_CONTAINER.put(type, CONTAINERS.register(name, () -> IForgeContainerType.create((windowId, inv, data) -> {
                 BlockPos pos = data.readBlockPos();
@@ -114,7 +113,7 @@ public class Registration {
             String name = "block_" + type.getName() + "_fluid";
 
             FLUID_STORAGE_BLOCK.put(type, BLOCKS.register(name, () -> new AdvancedFluidStorageBlock(type)));
-            FLUID_STORAGE.put(type, ITEMS.register(name, () -> new AdvancedFluidStorageBlockItem(FLUID_STORAGE_BLOCK.get(type).get())));
+            FLUID_STORAGE.put(type, ITEMS.register(name, () -> new AdvancedFluidStorageBlockItem(FLUID_STORAGE_BLOCK.get(type).get(), globalProperties)));
             FLUID_STORAGE_TILE.put(type, TILES.register(name, () -> TileEntityType.Builder.create(() -> new AdvancedFluidStorageBlockTile(type), FLUID_STORAGE_BLOCK.get(type).get()).build(null)));
             FLUID_STORAGE_CONTAINER.put(type, CONTAINERS.register(name, () -> IForgeContainerType.create((windowId, inv, data) -> {
                 BlockPos pos = data.readBlockPos();
@@ -174,20 +173,4 @@ public class Registration {
         }
         return new AdvancedImporterContainer(windowId, inv.player, (AdvancedImporterTile) te);
     }));
-
-//    public static final RegistryObject<AdvancedExporter> TAG_EXPORTER = BLOCKS.register("tag_exporter", AdvancedExporter::new);
-//    public static final RegistryObject<Item> TAG_EXPORTER_ITEM = ITEMS.register("tag_exporter", () -> new BlockItem(TAG_EXPORTER.get(), globalProperties));
-//    public static final RegistryObject<TileEntityType<TagExporterTile>> TAG_EXPORTER_TILE = TILES.register("tag_exporter", () -> TileEntityType.Builder.create(TagExporterTile::new, TAG_EXPORTER.get()).build(null));
-//    public static final RegistryObject<ContainerType<TagExporterContainer>> TAG_EXPORTER_CONTAINER = CONTAINERS.register("tag_exporter", () -> IForgeContainerType.create((windowId, inv, data) -> {
-//        BlockPos pos = data.readBlockPos();
-//        TileEntity te = inv.player.getEntityWorld().getTileEntity(pos);
-//        if(!(te instanceof TagExporterTile))
-//        {
-//            Main.logger.error("Wrong type of tile entity (expected TagExporterTile)!");
-//            return null;
-//        }
-//
-//        TagExporterTile tile = (TagExporterTile) te;
-//        return new TagExporterContainer(windowId, inv.player, tile);
-//    }));
 }

@@ -1,19 +1,16 @@
-// For those who want the bleeding edge
 buildscript {
     repositories {
         maven { url = 'https://maven.minecraftforge.net' }
-        jcenter()
         mavenCentral()
     }
     dependencies {
-        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '4.1.+', changing: true
+        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
     }
 }
 apply plugin: 'net.minecraftforge.gradle'
 // Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
-
 
 version = "${mod_version}"
 group = 'edivad.extrastorage'
@@ -104,7 +101,7 @@ repositories {
 dependencies {
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
 
-    compile fg.deobf("com.refinedmods:refinedstorage:${rs_version}")
+    implementation fg.deobf("com.refinedmods:refinedstorage:${rs_version}")
 
     runtimeOnly fg.deobf("tschipp.carryon:carryon-1.16.5:${co_version}")
     compileOnly fg.deobf("mcjty.theoneprobe:TheOneProbe-${top_version}:api")

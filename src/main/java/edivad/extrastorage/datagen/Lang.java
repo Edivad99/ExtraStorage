@@ -44,6 +44,8 @@ public class Lang extends LanguageProvider
 
         add(Registration.ADVANCED_EXPORTER.get(), "Advanced Exporter");
         add(Registration.ADVANCED_IMPORTER.get(), "Advanced Importer");
+        add(Registration.RAW_NEURAL_PROCESSOR_ITEM.get(), "Raw Neural Processor");
+        add(Registration.NEURAL_PROCESSOR_ITEM.get(), "Neural Processor");
         add(Translations.HOLD_SHIFT, "Hold Shift for details");
         add(Translations.SLOT_CRAFTING, "Slots for patterns: %s");
         add(Translations.BASE_SPEED, "Base speed: %sx");

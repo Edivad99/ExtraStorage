@@ -1,7 +1,7 @@
 {
   "type": "minecraft:crafting_shaped",
   "pattern": [
-    "a a",
+    "ada",
     "cbc",
     "a a"
   ],
@@ -13,7 +13,10 @@
       "item": "extrastorage:gold_crafter"
     },
     "c": {
-      "item": "refinedstorage:advanced_processor"
+      "item": "extrastorage:neural_processor"
+    },
+    "d": {
+      "item": "minecraft:chest"
     }
   },
   "result": {

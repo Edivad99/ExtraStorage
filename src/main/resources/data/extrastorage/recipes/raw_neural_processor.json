@@ -1,0 +1,31 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "cbd",
+    "bab",
+    "efe"
+  ],
+  "key": {
+    "a": {
+      "item": "minecraft:crafting_table"
+    },
+    "b": {
+      "item": "minecraft:quartz"
+    },
+    "c": {
+      "item": "refinedstorage:raw_advanced_processor"
+    },
+    "d": {
+      "item": "refinedstorage:raw_improved_processor"
+    },
+    "e": {
+      "item": "minecraft:obsidian"
+    },
+    "f": {
+      "item": "refinedstorage:processor_binding"
+    }
+  },
+  "result": {
+    "item": "extrastorage:raw_neural_processor"
+  }
+}

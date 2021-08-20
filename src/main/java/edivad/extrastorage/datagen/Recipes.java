@@ -9,6 +9,7 @@ import edivad.extrastorage.items.fluid.FluidStorageType;
 import edivad.extrastorage.items.item.ItemStorageType;
 import edivad.extrastorage.setup.Registration;
 import net.minecraft.block.Blocks;
+import net.minecraft.data.CookingRecipeBuilder;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.IFinishedRecipe;
 import net.minecraft.data.RecipeProvider;
@@ -17,6 +18,7 @@ import net.minecraft.data.ShapelessRecipeBuilder;
 import net.minecraft.item.DyeColor;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.tags.ITag;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.util.ResourceLocation;
@@ -56,42 +58,45 @@ public class Recipes extends RecipeProvider
         }
 
         ShapedRecipeBuilder.shapedRecipe(Registration.CRAFTER.get(CrafterTier.IRON).get())//
-                .patternLine("a a")//
-                .patternLine("cbc")//
+                .patternLine("aca")//
+                .patternLine(" b ")//
                 .patternLine("a a")//
                 .key('a', Items.IRON_INGOT)//
                 .key('b', ItemTags.makeWrapperTag("refinedstorage:crafter"))//
-                .key('c', RSItems.PROCESSORS.get(ProcessorItem.Type.IMPROVED).get())//
+                .key('c', Items.CHEST)//
                 .addCriterion("has_part", hasItem(RSBlocks.CRAFTER.get(DyeColor.LIGHT_BLUE).get()))//
                 .build(consumer);
 
         ShapedRecipeBuilder.shapedRecipe(Registration.CRAFTER.get(CrafterTier.GOLD).get())//
-                .patternLine("a a")//
+                .patternLine("ada")//
                 .patternLine("cbc")//
                 .patternLine("a a")//
                 .key('a', Blocks.GOLD_BLOCK)//
                 .key('b', Registration.CRAFTER.get(CrafterTier.IRON).get())//
-                .key('c', RSItems.PROCESSORS.get(ProcessorItem.Type.ADVANCED).get())//
+                .key('c', Registration.NEURAL_PROCESSOR_ITEM.get())//
+                .key('d', Items.CHEST)//
                 .addCriterion("has_part", hasItem(Registration.CRAFTER.get(CrafterTier.IRON).get()))//
                 .build(consumer);
 
         ShapedRecipeBuilder.shapedRecipe(Registration.CRAFTER.get(CrafterTier.DIAMOND).get())//
-                .patternLine("a a")//
+                .patternLine("ada")//
                 .patternLine("cbc")//
                 .patternLine("a a")//
                 .key('a', Blocks.DIAMOND_BLOCK)//
                 .key('b', Registration.CRAFTER.get(CrafterTier.GOLD).get())//
-                .key('c', RSItems.PROCESSORS.get(ProcessorItem.Type.ADVANCED).get())//
+                .key('c', Registration.NEURAL_PROCESSOR_ITEM.get())//
+                .key('d', Items.CHEST)//
                 .addCriterion("has_part", hasItem(Registration.CRAFTER.get(CrafterTier.GOLD).get()))//
                 .build(consumer);
 
         ShapedRecipeBuilder.shapedRecipe(Registration.CRAFTER.get(CrafterTier.NETHERITE).get())//
-                .patternLine("a a")//
+                .patternLine("ada")//
                 .patternLine("cbc")//
                 .patternLine("a a")//
                 .key('a', Blocks.NETHERITE_BLOCK)//
                 .key('b', Registration.CRAFTER.get(CrafterTier.DIAMOND).get())//
-                .key('c', RSItems.PROCESSORS.get(ProcessorItem.Type.ADVANCED).get())//
+                .key('c', Registration.NEURAL_PROCESSOR_ITEM.get())//
+                .key('d', Items.CHEST)//
                 .addCriterion("has_part", hasItem(Registration.CRAFTER.get(CrafterTier.DIAMOND).get()))//
                 .build(consumer);
 
@@ -114,6 +119,25 @@ public class Recipes extends RecipeProvider
                 .key('c', RSItems.PROCESSORS.get(ProcessorItem.Type.IMPROVED).get())//
                 .addCriterion("has_part", hasItem(RSBlocks.IMPORTER.get()))//
                 .build(consumer);
+
+        ShapedRecipeBuilder.shapedRecipe(Registration.RAW_NEURAL_PROCESSOR_ITEM.get())//
+                .patternLine("cbd")//
+                .patternLine("bab")//
+                .patternLine("efe")//
+                .key('a', Items.CRAFTING_TABLE)//
+                .key('b', Items.QUARTZ)//
+                .key('c', RSItems.PROCESSORS.get(ProcessorItem.Type.RAW_ADVANCED).get())//
+                .key('d', RSItems.PROCESSORS.get(ProcessorItem.Type.RAW_IMPROVED).get())//
+                .key('e', Items.OBSIDIAN)//
+                .key('f', RSItems.PROCESSOR_BINDING.get())//
+                .addCriterion("has_part", hasItem(RSItems.PROCESSORS.get(ProcessorItem.Type.RAW_ADVANCED).get()))//
+                .build(consumer);
+
+        CookingRecipeBuilder.smeltingRecipe(
+                Ingredient.fromItems(Registration.RAW_NEURAL_PROCESSOR_ITEM.get()),//
+                Registration.NEURAL_PROCESSOR_ITEM.get(),//
+                1.25F, 200)
+                .addCriterion("has_part", hasItem(Registration.RAW_NEURAL_PROCESSOR_ITEM.get())).build(consumer);;
     }
 
     private void partRecipe(Item result, ITag.INamedTag<Item> previousPart, Consumer<IFinishedRecipe> consumer)

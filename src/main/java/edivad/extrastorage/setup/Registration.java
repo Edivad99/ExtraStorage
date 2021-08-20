@@ -31,6 +31,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.extensions.IForgeContainerType;
+import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.DeferredRegister;
@@ -66,20 +67,21 @@ public class Registration {
     public static final Map<CrafterTier, RegistryObject<TileEntityType<AdvancedCrafterTile>>> CRAFTER_TILE = new HashMap<>();
     public static final Map<CrafterTier, RegistryObject<ContainerType<AdvancedCrafterContainer>>> CRAFTER_CONTAINER = new HashMap<>();
 
-    private static Item.Properties globalProperties = new Item.Properties().group(ModSetup.extraStorageTab).maxStackSize(64);
+    private static Item.Properties GLOBAL_PROPERTIES = new Item.Properties().group(ModSetup.extraStorageTab).maxStackSize(64);
 
     public static void init()
     {
-        BLOCKS.register(FMLJavaModLoadingContext.get().getModEventBus());
-        ITEMS.register(FMLJavaModLoadingContext.get().getModEventBus());
-        TILES.register(FMLJavaModLoadingContext.get().getModEventBus());
-        CONTAINERS.register(FMLJavaModLoadingContext.get().getModEventBus());
+        IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
+        BLOCKS.register(eventBus);
+        ITEMS.register(eventBus);
+        TILES.register(eventBus);
+        CONTAINERS.register(eventBus);
 
         //StoragePart
         for(ItemStorageType type : ItemStorageType.values())
-            ITEM_STORAGE_PART.put(type, ITEMS.register("storagepart_" + type.getName(), () -> new Item(globalProperties)));
+            ITEM_STORAGE_PART.put(type, ITEMS.register("storagepart_" + type.getName(), () -> new Item(GLOBAL_PROPERTIES)));
         for(FluidStorageType type : FluidStorageType.values())
-            FLUID_STORAGE_PART.put(type, ITEMS.register("storagepart_" + type.getName() + "_fluid", () -> new Item(globalProperties)));
+            FLUID_STORAGE_PART.put(type, ITEMS.register("storagepart_" + type.getName() + "_fluid", () -> new Item(GLOBAL_PROPERTIES)));
 
         //Disk
         for(ItemStorageType type : ItemStorageType.values())
@@ -93,7 +95,7 @@ public class Registration {
             String name = "block_" + type.getName();
 
             ITEM_STORAGE_BLOCK.put(type, BLOCKS.register(name, () -> new AdvancedStorageBlock(type)));
-            ITEM_STORAGE.put(type, ITEMS.register(name, () -> new AdvancedStorageBlockItem(ITEM_STORAGE_BLOCK.get(type).get(), globalProperties)));
+            ITEM_STORAGE.put(type, ITEMS.register(name, () -> new AdvancedStorageBlockItem(ITEM_STORAGE_BLOCK.get(type).get(), GLOBAL_PROPERTIES)));
             ITEM_STORAGE_TILE.put(type, TILES.register(name, () -> TileEntityType.Builder.create(() -> new AdvancedStorageBlockTile(type), ITEM_STORAGE_BLOCK.get(type).get()).build(null)));
             ITEM_STORAGE_CONTAINER.put(type, CONTAINERS.register(name, () -> IForgeContainerType.create((windowId, inv, data) -> {
                 BlockPos pos = data.readBlockPos();
@@ -113,7 +115,7 @@ public class Registration {
             String name = "block_" + type.getName() + "_fluid";
 
             FLUID_STORAGE_BLOCK.put(type, BLOCKS.register(name, () -> new AdvancedFluidStorageBlock(type)));
-            FLUID_STORAGE.put(type, ITEMS.register(name, () -> new AdvancedFluidStorageBlockItem(FLUID_STORAGE_BLOCK.get(type).get(), globalProperties)));
+            FLUID_STORAGE.put(type, ITEMS.register(name, () -> new AdvancedFluidStorageBlockItem(FLUID_STORAGE_BLOCK.get(type).get(), GLOBAL_PROPERTIES)));
             FLUID_STORAGE_TILE.put(type, TILES.register(name, () -> TileEntityType.Builder.create(() -> new AdvancedFluidStorageBlockTile(type), FLUID_STORAGE_BLOCK.get(type).get()).build(null)));
             FLUID_STORAGE_CONTAINER.put(type, CONTAINERS.register(name, () -> IForgeContainerType.create((windowId, inv, data) -> {
                 BlockPos pos = data.readBlockPos();
@@ -131,7 +133,7 @@ public class Registration {
         for(CrafterTier tier : CrafterTier.values())
         {
             CRAFTER_BLOCK.put(tier, BLOCKS.register(tier.getID(), () -> new AdvancedCrafterBlock(tier)));
-            CRAFTER.put(tier, ITEMS.register(tier.getID(), () -> new BaseBlockItem(CRAFTER_BLOCK.get(tier).get(), globalProperties)));
+            CRAFTER.put(tier, ITEMS.register(tier.getID(), () -> new BaseBlockItem(CRAFTER_BLOCK.get(tier).get(), GLOBAL_PROPERTIES)));
             CRAFTER_TILE.put(tier, TILES.register(tier.getID(), () -> TileEntityType.Builder.create(() -> new AdvancedCrafterTile(tier), CRAFTER_BLOCK.get(tier).get()).build(null)));
             CRAFTER_CONTAINER.put(tier, CONTAINERS.register(tier.getID(), () -> IForgeContainerType.create((windowId, inv, data) -> {
                 BlockPos pos = data.readBlockPos();
@@ -147,7 +149,7 @@ public class Registration {
     }
 
     public static final RegistryObject<AdvancedExporter> ADVANCED_EXPORTER = BLOCKS.register("advanced_exporter", AdvancedExporter::new);
-    public static final RegistryObject<Item> ADVANCED_EXPORTER_ITEM = ITEMS.register("advanced_exporter", () -> new BaseBlockItem(ADVANCED_EXPORTER.get(), globalProperties));
+    public static final RegistryObject<Item> ADVANCED_EXPORTER_ITEM = ITEMS.register("advanced_exporter", () -> new BaseBlockItem(ADVANCED_EXPORTER.get(), GLOBAL_PROPERTIES));
     public static final RegistryObject<TileEntityType<AdvancedExporterTile>> ADVANCED_EXPORTER_TILE = TILES.register("advanced_exporter", () -> TileEntityType.Builder.create(AdvancedExporterTile::new, ADVANCED_EXPORTER.get()).build(null));
     public static final RegistryObject<ContainerType<AdvancedExporterContainer>> ADVANCED_EXPORTER_CONTAINER = CONTAINERS.register("advanced_exporter", () -> IForgeContainerType.create((windowId, inv, data) -> {
         BlockPos pos = data.readBlockPos();
@@ -161,7 +163,7 @@ public class Registration {
     }));
 
     public static final RegistryObject<AdvancedImporter> ADVANCED_IMPORTER = BLOCKS.register("advanced_importer", AdvancedImporter::new);
-    public static final RegistryObject<Item> ADVANCED_IMPORTER_ITEM = ITEMS.register("advanced_importer", () -> new BaseBlockItem(ADVANCED_IMPORTER.get(), globalProperties));
+    public static final RegistryObject<Item> ADVANCED_IMPORTER_ITEM = ITEMS.register("advanced_importer", () -> new BaseBlockItem(ADVANCED_IMPORTER.get(), GLOBAL_PROPERTIES));
     public static final RegistryObject<TileEntityType<AdvancedImporterTile>> ADVANCED_IMPORTER_TILE = TILES.register("advanced_importer", () -> TileEntityType.Builder.create(AdvancedImporterTile::new, ADVANCED_IMPORTER.get()).build(null));
     public static final RegistryObject<ContainerType<AdvancedImporterContainer>> ADVANCED_IMPORTER_CONTAINER = CONTAINERS.register("advanced_importer", () -> IForgeContainerType.create((windowId, inv, data) -> {
         BlockPos pos = data.readBlockPos();
@@ -173,4 +175,7 @@ public class Registration {
         }
         return new AdvancedImporterContainer(windowId, inv.player, (AdvancedImporterTile) te);
     }));
+
+    public static final RegistryObject<Item> RAW_NEURAL_PROCESSOR_ITEM = ITEMS.register("raw_neural_processor", () -> new Item(GLOBAL_PROPERTIES));
+    public static final RegistryObject<Item> NEURAL_PROCESSOR_ITEM = ITEMS.register("neural_processor", () -> new Item(GLOBAL_PROPERTIES));
 }

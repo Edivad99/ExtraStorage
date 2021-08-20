@@ -34,6 +34,9 @@ public class Items extends ItemModelProvider
             singleTexture(Registration.FLUID_DISK.get(type).get().getRegistryName().getPath(), mcLoc("item/generated"), "layer0", modLoc("items/disks/" + type.getName() + "_fluid"));
             parentedBlock(Registration.FLUID_STORAGE_BLOCK.get(type).get());
         }
+
+        singleTexture(Registration.RAW_NEURAL_PROCESSOR_ITEM.get().getRegistryName().getPath(), mcLoc("item/generated"), "layer0", modLoc("items/raw_neural_processor"));
+        singleTexture(Registration.NEURAL_PROCESSOR_ITEM.get().getRegistryName().getPath(), mcLoc("item/generated"), "layer0", modLoc("items/neural_processor"));
     }
 
     private void parentedBlock(Block block)

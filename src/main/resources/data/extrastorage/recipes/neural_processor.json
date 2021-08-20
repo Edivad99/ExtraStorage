@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:smelting",
+  "ingredient": {
+    "item": "extrastorage:raw_neural_processor"
+  },
+  "result": "extrastorage:neural_processor",
+  "experience": 1.25,
+  "cookingtime": 200
+}

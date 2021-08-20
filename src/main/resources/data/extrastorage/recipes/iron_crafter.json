@@ -1,8 +1,8 @@
 {
   "type": "minecraft:crafting_shaped",
   "pattern": [
-    "a a",
-    "cbc",
+    "aca",
+    " b ",
     "a a"
   ],
   "key": {
@@ -13,7 +13,7 @@
       "tag": "refinedstorage:crafter"
     },
     "c": {
-      "item": "refinedstorage:improved_processor"
+      "item": "minecraft:chest"
     }
   },
   "result": {

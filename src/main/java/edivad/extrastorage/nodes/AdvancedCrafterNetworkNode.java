@@ -33,6 +33,7 @@ import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.wrapper.CombinedInvWrapper;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -67,26 +68,7 @@ public class AdvancedCrafterNetworkNode extends NetworkNode implements ICrafting
     private static final String NBT_WAS_POWERED = "WasPowered";
     private static final String NBT_TIER = "Tier";
 
-    private final BaseItemHandler patternsInventory = new BaseItemHandler(9)
-        {
-            @Override
-            public int getSlotLimit(int slot)
-            {
-                return 1;
-            }
-        }
-        .addValidator(new PatternItemValidator(world))
-        .addListener(new NetworkNodeInventoryListener(this))
-        .addListener((handler, slot, reading) ->
-        {
-            if (!reading)
-            {
-                if (!world.isRemote)
-                    invalidateSlot(slot);
-                if (network != null)
-                    network.getCraftingManager().invalidate();
-            }
-        });
+    private final BaseItemHandler patternsInventory;
 
     private final Map<Integer, ICraftingPattern> slot_to_pattern = new HashMap<>();
     private final List<ICraftingPattern> patterns = new ArrayList<>();
@@ -114,7 +96,32 @@ public class AdvancedCrafterNetworkNode extends NetworkNode implements ICrafting
     {
         super(world, pos);
         this.tier = tier;
-        this.patternsInventory.setSize(this.tier.getSlots());
+        this.patternsInventory = new BaseItemHandler(this.tier.getSlots())
+            {
+                @Override
+                public int getSlotLimit(int slot) {
+                    return 1;
+                }
+
+                @Nonnull
+                @Override
+                public ItemStack insertItem(int slot, @Nonnull ItemStack stack, boolean simulate) {
+                    if(!stacks.get(slot).isEmpty()) {
+                        return stack;
+                    }
+                    return super.insertItem(slot, stack, simulate);
+                }
+            }
+            .addValidator(new PatternItemValidator(world))
+            .addListener(new NetworkNodeInventoryListener(this))
+            .addListener((handler, slot, reading) -> {
+                if (!reading) {
+                    if (!world.isRemote)
+                        invalidateSlot(slot);
+                    if (network != null)
+                        network.getCraftingManager().invalidate();
+                }
+            });
         DEFAULT_NAME = new TranslationTextComponent("block." + Main.MODID + "." + this.tier.getID());
         ID = new ResourceLocation(Main.MODID, tier.getID());
     }

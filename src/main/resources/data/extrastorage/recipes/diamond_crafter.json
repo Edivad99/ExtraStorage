@@ -16,7 +16,7 @@
       "item": "extrastorage:neural_processor"
     },
     "d": {
-      "item": "minecraft:chest"
+      "tag": "forge:chests/wooden"
     }
   },
   "result": {

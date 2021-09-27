@@ -7,7 +7,7 @@
   ],
   "key": {
     "a": {
-      "item": "minecraft:netherite_block"
+      "tag": "forge:storage_blocks/netherite"
     },
     "b": {
       "item": "extrastorage:diamond_crafter"
@@ -16,7 +16,7 @@
       "item": "extrastorage:neural_processor"
     },
     "d": {
-      "item": "minecraft:chest"
+      "tag": "forge:chests/wooden"
     }
   },
   "result": {

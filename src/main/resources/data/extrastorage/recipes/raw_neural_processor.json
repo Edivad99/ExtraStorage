@@ -7,7 +7,7 @@
   ],
   "key": {
     "a": {
-      "tag": "forge:workbenches"
+      "item": "minecraft:crafting_table"
     },
     "b": {
       "item": "minecraft:quartz"

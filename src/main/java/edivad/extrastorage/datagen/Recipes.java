@@ -61,9 +61,9 @@ public class Recipes extends RecipeProvider
                 .patternLine("aca")//
                 .patternLine(" b ")//
                 .patternLine("a a")//
-                .key('a', Items.IRON_INGOT)//
+                .key('a', ItemTags.makeWrapperTag("forge:ingots/iron"))//
                 .key('b', ItemTags.makeWrapperTag("refinedstorage:crafter"))//
-                .key('c', Items.CHEST)//
+                .key('c', ItemTags.makeWrapperTag("forge:chests/wooden"))//
                 .addCriterion("has_part", hasItem(RSBlocks.CRAFTER.get(DyeColor.LIGHT_BLUE).get()))//
                 .build(consumer);
 
@@ -71,10 +71,10 @@ public class Recipes extends RecipeProvider
                 .patternLine("ada")//
                 .patternLine("cbc")//
                 .patternLine("a a")//
-                .key('a', Blocks.GOLD_BLOCK)//
+                .key('a', ItemTags.makeWrapperTag("forge:storage_blocks/gold"))//
                 .key('b', Registration.CRAFTER.get(CrafterTier.IRON).get())//
                 .key('c', Registration.NEURAL_PROCESSOR_ITEM.get())//
-                .key('d', Items.CHEST)//
+                .key('d', ItemTags.makeWrapperTag("forge:chests/wooden"))//
                 .addCriterion("has_part", hasItem(Registration.CRAFTER.get(CrafterTier.IRON).get()))//
                 .build(consumer);
 
@@ -82,10 +82,10 @@ public class Recipes extends RecipeProvider
                 .patternLine("ada")//
                 .patternLine("cbc")//
                 .patternLine("a a")//
-                .key('a', Blocks.DIAMOND_BLOCK)//
+                .key('a', ItemTags.makeWrapperTag("forge:storage_blocks/diamond"))//
                 .key('b', Registration.CRAFTER.get(CrafterTier.GOLD).get())//
                 .key('c', Registration.NEURAL_PROCESSOR_ITEM.get())//
-                .key('d', Items.CHEST)//
+                .key('d', ItemTags.makeWrapperTag("forge:chests/wooden"))//
                 .addCriterion("has_part", hasItem(Registration.CRAFTER.get(CrafterTier.GOLD).get()))//
                 .build(consumer);
 
@@ -93,10 +93,10 @@ public class Recipes extends RecipeProvider
                 .patternLine("ada")//
                 .patternLine("cbc")//
                 .patternLine("a a")//
-                .key('a', Blocks.NETHERITE_BLOCK)//
+                .key('a', ItemTags.makeWrapperTag("forge:storage_blocks/netherite"))//
                 .key('b', Registration.CRAFTER.get(CrafterTier.DIAMOND).get())//
                 .key('c', Registration.NEURAL_PROCESSOR_ITEM.get())//
-                .key('d', Items.CHEST)//
+                .key('d', ItemTags.makeWrapperTag("forge:chests/wooden"))//
                 .addCriterion("has_part", hasItem(Registration.CRAFTER.get(CrafterTier.DIAMOND).get()))//
                 .build(consumer);
 

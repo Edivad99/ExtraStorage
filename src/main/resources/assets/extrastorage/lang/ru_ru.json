@@ -28,6 +28,7 @@
   "item.extrastorage.disk_4096k": "Диск хранилища 4096к",
   "item.extrastorage.disk_65536k_fluid": "Диск жидкостного хранилища 65536к",
   "item.extrastorage.neural_processor": "Нейронный процессор",
+  "item.extrastorage.raw_neural_processor": "Сырой Нейронный процессор",
   "item.extrastorage.storagepart_1024k": "Часть хранилища 1024к",
   "item.extrastorage.storagepart_1048576k_fluid": "Часть жидкостного хранилища 1048576к",
   "item.extrastorage.storagepart_16384k": "Часть хранилища 16384к",

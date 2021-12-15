@@ -11,7 +11,9 @@
       "conditions": {
         "items": [
           {
-            "item": "extrastorage:gold_crafter"
+            "items": [
+              "extrastorage:gold_crafter"
+            ]
           }
         ]
       }

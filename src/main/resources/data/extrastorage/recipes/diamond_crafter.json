@@ -7,7 +7,7 @@
   ],
   "key": {
     "a": {
-      "item": "minecraft:diamond_block"
+      "tag": "forge:storage_blocks/diamond"
     },
     "b": {
       "item": "extrastorage:gold_crafter"

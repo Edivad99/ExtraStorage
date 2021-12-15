@@ -127,7 +127,7 @@ public class Recipes extends RecipeProvider
                 .define('b', Items.QUARTZ)//
                 .define('c', RSItems.PROCESSORS.get(ProcessorItem.Type.RAW_ADVANCED).get())//
                 .define('d', RSItems.PROCESSORS.get(ProcessorItem.Type.RAW_IMPROVED).get())//
-                .define('e', Items.OBSIDIAN)//
+                .define('e', ItemTags.bind("forge:obsidian"))//
                 .define('f', RSItems.PROCESSOR_BINDING.get())//
                 .unlockedBy("has_part", has(RSItems.PROCESSORS.get(ProcessorItem.Type.RAW_ADVANCED).get()))//
                 .save(consumer);

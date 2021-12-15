@@ -11,7 +11,9 @@
       "conditions": {
         "items": [
           {
-            "item": "extrastorage:raw_neural_processor"
+            "items": [
+              "extrastorage:raw_neural_processor"
+            ]
           }
         ]
       }

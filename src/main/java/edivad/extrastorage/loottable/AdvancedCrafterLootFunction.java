@@ -2,53 +2,52 @@ package edivad.extrastorage.loottable;
 
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
+import edivad.extrastorage.blockentity.AdvancedCrafterBlockEntity;
 import edivad.extrastorage.nodes.AdvancedCrafterNetworkNode;
 import edivad.extrastorage.setup.ESLootFunctions;
-import edivad.extrastorage.tiles.AdvancedCrafterTile;
-import net.minecraft.item.ItemStack;
-import net.minecraft.loot.LootContext;
-import net.minecraft.loot.LootFunction;
-import net.minecraft.loot.LootFunctionType;
-import net.minecraft.loot.LootParameters;
-import net.minecraft.loot.conditions.ILootCondition;
-import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.functions.LootItemConditionalFunction;
+import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
+import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 
+public class AdvancedCrafterLootFunction extends LootItemConditionalFunction {
 
-public class AdvancedCrafterLootFunction extends LootFunction {
-
-    protected AdvancedCrafterLootFunction(ILootCondition[] conditions) {
+    protected AdvancedCrafterLootFunction(LootItemCondition[] conditions) {
         super(conditions);
     }
 
-    @Override
-    protected ItemStack doApply(ItemStack stack, LootContext lootContext)
-    {
-        TileEntity tile = lootContext.get(LootParameters.BLOCK_ENTITY);
+    public static LootItemConditionalFunction.Builder<?> builder() {
+        return simpleBuilder(AdvancedCrafterLootFunction::new);
+    }
 
-        AdvancedCrafterNetworkNode removedNode = ((AdvancedCrafterTile) tile).getRemovedNode();
+    @Override
+    protected ItemStack run(ItemStack stack, LootContext lootContext)
+    {
+        BlockEntity blockEntity = lootContext.getParamOrNull(LootContextParams.BLOCK_ENTITY);
+
+        AdvancedCrafterNetworkNode removedNode = ((AdvancedCrafterBlockEntity) blockEntity).getRemovedNode();
         if (removedNode == null) {
-            removedNode = ((AdvancedCrafterTile) tile).getNode();
+            removedNode = ((AdvancedCrafterBlockEntity) blockEntity).getNode();
         }
 
         if (removedNode.getDisplayName() != null) {
-            stack.setDisplayName(removedNode.getDisplayName());
+            stack.setHoverName(removedNode.getDisplayName());
         }
 
         return stack;
     }
 
-    public LootFunctionType getFunctionType() {
+    public LootItemFunctionType getType() {
         return ESLootFunctions.getCrafter();
     }
 
-    public static LootFunction.Builder<?> builder() {
-        return builder(AdvancedCrafterLootFunction::new);
-    }
-
-    public static class Serializer extends LootFunction.Serializer<AdvancedCrafterLootFunction>
+    public static class Serializer extends LootItemConditionalFunction.Serializer<AdvancedCrafterLootFunction>
     {
         @Override
-        public AdvancedCrafterLootFunction deserialize(JsonObject object, JsonDeserializationContext deserializationContext, ILootCondition[] conditions) {
+        public AdvancedCrafterLootFunction deserialize(JsonObject object, JsonDeserializationContext deserializationContext, LootItemCondition[] conditions) {
             return new AdvancedCrafterLootFunction(conditions);
         }
     }

@@ -3,27 +3,27 @@ package edivad.extrastorage.setup;
 import edivad.extrastorage.Main;
 import edivad.extrastorage.loottable.AdvancedCrafterLootFunction;
 import edivad.extrastorage.loottable.StorageBlockLootFunction;
-import net.minecraft.loot.LootFunctionType;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.registry.Registry;
+import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
 
 public class ESLootFunctions
 {
-    private static LootFunctionType storageBlock;
-    private static LootFunctionType crafter;
+    private static LootItemFunctionType storageBlock;
+    private static LootItemFunctionType crafter;
 
     public static void register()
     {
-        storageBlock = Registry.register(Registry.LOOT_FUNCTION_TYPE, new ResourceLocation(Main.MODID, "storage_block"), new LootFunctionType(new StorageBlockLootFunction.Serializer()));
-        crafter = Registry.register(Registry.LOOT_FUNCTION_TYPE, new ResourceLocation(Main.MODID, "crafter"), new LootFunctionType(new AdvancedCrafterLootFunction.Serializer()));
+        storageBlock = Registry.register(Registry.LOOT_FUNCTION_TYPE, new ResourceLocation(Main.MODID, "storage_block"), new LootItemFunctionType(new StorageBlockLootFunction.Serializer()));
+        crafter = Registry.register(Registry.LOOT_FUNCTION_TYPE, new ResourceLocation(Main.MODID, "crafter"), new LootItemFunctionType(new AdvancedCrafterLootFunction.Serializer()));
     }
 
-    public static LootFunctionType getStorageBlock()
+    public static LootItemFunctionType getStorageBlock()
     {
         return storageBlock;
     }
 
-    public static LootFunctionType getCrafter()
+    public static LootItemFunctionType getCrafter()
     {
         return crafter;
     }

@@ -3,12 +3,12 @@ package edivad.extrastorage.container;
 import com.refinedmods.refinedstorage.container.BaseContainer;
 import com.refinedmods.refinedstorage.container.slot.filter.FluidFilterSlot;
 import edivad.extrastorage.setup.Registration;
-import edivad.extrastorage.tiles.AdvancedFluidStorageBlockTile;
-import net.minecraft.entity.player.PlayerEntity;
+import edivad.extrastorage.blockentity.AdvancedFluidStorageBlockEntity;
+import net.minecraft.world.entity.player.Player;
 
 public class AdvancedFluidStorageBlockContainer extends BaseContainer
 {
-    public AdvancedFluidStorageBlockContainer(int windowId, PlayerEntity player, AdvancedFluidStorageBlockTile tile)
+    public AdvancedFluidStorageBlockContainer(int windowId, Player player, AdvancedFluidStorageBlockEntity tile)
     {
         super(Registration.FLUID_STORAGE_CONTAINER.get(tile.getFluidStorageType()).get(),tile, player, windowId);
 
@@ -18,6 +18,6 @@ public class AdvancedFluidStorageBlockContainer extends BaseContainer
 
         addPlayerInventory(8, 141);
 
-        transferManager.addFluidFilterTransfer(player.inventory, tile.getNode().getFilters());
+        transferManager.addFluidFilterTransfer(player.getInventory(), tile.getNode().getFilters());
     }
 }

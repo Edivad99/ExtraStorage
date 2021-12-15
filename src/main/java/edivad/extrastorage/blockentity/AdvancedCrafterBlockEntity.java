@@ -1,15 +1,16 @@
-package edivad.extrastorage.tiles;
+package edivad.extrastorage.blockentity;
 
 import com.refinedmods.refinedstorage.tile.NetworkNodeTile;
 import com.refinedmods.refinedstorage.tile.data.TileDataParameter;
 import edivad.extrastorage.blocks.CrafterTier;
 import edivad.extrastorage.client.screen.dataparameter.AdvancedCrafterTileDataParameterClientListener;
-import edivad.extrastorage.setup.Registration;
 import edivad.extrastorage.nodes.AdvancedCrafterNetworkNode;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import edivad.extrastorage.setup.Registration;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.CapabilityItemHandler;
@@ -18,17 +19,17 @@ import net.minecraftforge.items.IItemHandler;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class AdvancedCrafterTile extends NetworkNodeTile<AdvancedCrafterNetworkNode>
+public class AdvancedCrafterBlockEntity extends NetworkNodeTile<AdvancedCrafterNetworkNode>
 {
-    public static final TileDataParameter<Integer, AdvancedCrafterTile> MODE = new TileDataParameter<>(DataSerializers.VARINT, AdvancedCrafterNetworkNode.CrafterMode.IGNORE.ordinal(), t -> t.getNode().getMode().ordinal(), (t, v) -> t.getNode().setMode(AdvancedCrafterNetworkNode.CrafterMode.getById(v)));
-    private static final TileDataParameter<Boolean, AdvancedCrafterTile> HAS_ROOT = new TileDataParameter<>(DataSerializers.BOOLEAN, false, t -> t.getNode().getRootContainerNotSelf().isPresent(), null, (t, v) -> new AdvancedCrafterTileDataParameterClientListener().onChanged(t, v));
+    public static final TileDataParameter<Integer, AdvancedCrafterBlockEntity> MODE = new TileDataParameter<>(EntityDataSerializers.INT, AdvancedCrafterNetworkNode.CrafterMode.IGNORE.ordinal(), t -> t.getNode().getMode().ordinal(), (t, v) -> t.getNode().setMode(AdvancedCrafterNetworkNode.CrafterMode.getById(v)));
+    private static final TileDataParameter<Boolean, AdvancedCrafterBlockEntity> HAS_ROOT = new TileDataParameter<>(EntityDataSerializers.BOOLEAN, false, t -> t.getNode().getRootContainerNotSelf().isPresent(), null, (t, v) -> new AdvancedCrafterTileDataParameterClientListener().onChanged(t, v));
 
     private final LazyOptional<IItemHandler> patternsCapability = LazyOptional.of(() -> getNode().getPatternItems());
     private final CrafterTier tier;
 
-    public AdvancedCrafterTile(CrafterTier tier)
+    public AdvancedCrafterBlockEntity(CrafterTier tier, BlockPos pos, BlockState state)
     {
-        super(Registration.CRAFTER_TILE.get(tier).get());
+        super(Registration.CRAFTER_TILE.get(tier).get(), pos, state);
 
         this.tier = tier;
 
@@ -37,9 +38,9 @@ public class AdvancedCrafterTile extends NetworkNodeTile<AdvancedCrafterNetworkN
     }
 
     @Override
-    public AdvancedCrafterNetworkNode createNode(World world, BlockPos blockPos)
+    public AdvancedCrafterNetworkNode createNode(Level level, BlockPos pos)
     {
-        return new AdvancedCrafterNetworkNode(world, blockPos, tier);
+        return new AdvancedCrafterNetworkNode(level, pos, tier);
     }
 
     @Nonnull

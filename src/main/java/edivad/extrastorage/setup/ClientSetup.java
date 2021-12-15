@@ -3,9 +3,7 @@ package edivad.extrastorage.setup;
 import com.refinedmods.refinedstorage.apiimpl.API;
 import com.refinedmods.refinedstorage.render.BakedModelOverrideRegistry;
 import com.refinedmods.refinedstorage.render.model.FullbrightBakedModel;
-import com.refinedmods.refinedstorage.screen.BaseScreen;
 import edivad.extrastorage.Main;
-import edivad.extrastorage.blocks.AdvancedImporter;
 import edivad.extrastorage.blocks.CrafterTier;
 import edivad.extrastorage.client.screen.AdvancedCrafterScreen;
 import edivad.extrastorage.client.screen.AdvancedCrafterScreenQuark;
@@ -13,16 +11,15 @@ import edivad.extrastorage.client.screen.AdvancedExporterScreen;
 import edivad.extrastorage.client.screen.AdvancedFluidStorageBlockScreen;
 import edivad.extrastorage.client.screen.AdvancedImporterScreen;
 import edivad.extrastorage.client.screen.AdvancedStorageBlockScreen;
-import edivad.extrastorage.client.screen.custombutton.AdvancedCrafterModeSideButton;
 import edivad.extrastorage.container.AdvancedCrafterContainer;
 import edivad.extrastorage.items.fluid.FluidStorageType;
 import edivad.extrastorage.items.item.ItemStorageType;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.ScreenManager;
+import net.minecraft.client.gui.screens.MenuScreens;
+import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.RenderTypeLookup;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -50,10 +47,10 @@ public class ClientSetup
         for(CrafterTier tier : CrafterTier.values())
         {
             if(quarkLoaded)
-                ScreenManager.registerFactory(Registration.CRAFTER_CONTAINER.get(tier).get(), AdvancedCrafterScreenQuark::new);
+                MenuScreens.register(Registration.CRAFTER_CONTAINER.get(tier).get(), AdvancedCrafterScreenQuark::new);
             else
-                ScreenManager.registerFactory(Registration.CRAFTER_CONTAINER.get(tier).get(), AdvancedCrafterScreen::new);
-            RenderTypeLookup.setRenderLayer(Registration.CRAFTER_BLOCK.get(tier).get(), RenderType.getCutout());
+                MenuScreens.register(Registration.CRAFTER_CONTAINER.get(tier).get(), AdvancedCrafterScreen::new);
+            ItemBlockRenderTypes.setRenderLayer(Registration.CRAFTER_BLOCK.get(tier).get(), RenderType.cutout());
 
             String name = tier.name().toLowerCase();
             String parent = "blocks/crafter/" + name + "/cutouts/";
@@ -65,27 +62,27 @@ public class ClientSetup
             ));
         }
 
-        ScreenManager.registerFactory(Registration.ADVANCED_EXPORTER_CONTAINER.get(), AdvancedExporterScreen::new);
-        ScreenManager.registerFactory(Registration.ADVANCED_IMPORTER_CONTAINER.get(), AdvancedImporterScreen::new);
+        MenuScreens.register(Registration.ADVANCED_EXPORTER_CONTAINER.get(), AdvancedExporterScreen::new);
+        MenuScreens.register(Registration.ADVANCED_IMPORTER_CONTAINER.get(), AdvancedImporterScreen::new);
 
-        RenderTypeLookup.setRenderLayer(Registration.ADVANCED_EXPORTER.get(), RenderType.getCutout());
-        RenderTypeLookup.setRenderLayer(Registration.ADVANCED_IMPORTER.get(), RenderType.getCutout());
+        ItemBlockRenderTypes.setRenderLayer(Registration.ADVANCED_EXPORTER.get(), RenderType.cutout());
+        ItemBlockRenderTypes.setRenderLayer(Registration.ADVANCED_IMPORTER.get(), RenderType.cutout());
 
         for(ItemStorageType type : ItemStorageType.values())
-            ScreenManager.registerFactory(Registration.ITEM_STORAGE_CONTAINER.get(type).get(), AdvancedStorageBlockScreen::new);
+            MenuScreens.register(Registration.ITEM_STORAGE_CONTAINER.get(type).get(), AdvancedStorageBlockScreen::new);
         for(FluidStorageType type : FluidStorageType.values())
-            ScreenManager.registerFactory(Registration.FLUID_STORAGE_CONTAINER.get(type).get(), AdvancedFluidStorageBlockScreen::new);
+            MenuScreens.register(Registration.FLUID_STORAGE_CONTAINER.get(type).get(), AdvancedFluidStorageBlockScreen::new);
 
         API.instance().addPatternRenderHandler(pattern ->
         {
-            Container container = Minecraft.getInstance().player.openContainer;
+            AbstractContainerMenu container = Minecraft.getInstance().player.containerMenu;
 
             if (container instanceof AdvancedCrafterContainer)
             {
                 AdvancedCrafterContainer actualContainer = (AdvancedCrafterContainer) container;
                 int slots = actualContainer.getTile().getTier().getSlots();
                 for (int i = 0; i < slots; i++)
-                    if (container.getSlot(i).getStack() == pattern)
+                    if (container.getSlot(i).getItem() == pattern)
                         return true;
             }
 

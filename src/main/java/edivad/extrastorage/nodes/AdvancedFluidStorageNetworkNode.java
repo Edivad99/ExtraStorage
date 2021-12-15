@@ -6,15 +6,15 @@ import com.refinedmods.refinedstorage.apiimpl.API;
 import com.refinedmods.refinedstorage.apiimpl.network.node.storage.FluidStorageNetworkNode;
 import com.refinedmods.refinedstorage.apiimpl.network.node.storage.FluidStorageWrapperStorageDisk;
 import edivad.extrastorage.Main;
+import edivad.extrastorage.blockentity.AdvancedFluidStorageBlockEntity;
 import edivad.extrastorage.items.fluid.FluidStorageType;
-import edivad.extrastorage.tiles.AdvancedFluidStorageBlockTile;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.fluids.FluidStack;
 
 import javax.annotation.Nullable;
@@ -30,9 +30,9 @@ public class AdvancedFluidStorageNetworkNode extends FluidStorageNetworkNode
     private final FluidStorageType type;
     private IStorageDisk<FluidStack> storage;
 
-    public AdvancedFluidStorageNetworkNode(World world, BlockPos pos, FluidStorageType type)
+    public AdvancedFluidStorageNetworkNode(Level level, BlockPos pos, FluidStorageType type)
     {
-        super(world, pos, null);
+        super(level, pos, null);
         this.type = type;
     }
 
@@ -45,14 +45,13 @@ public class AdvancedFluidStorageNetworkNode extends FluidStorageNetworkNode
     @Override
     public ResourceLocation getId()
     {
-        switch (type)
-        {
-            case TIER_5: return BLOCK_FLUID_16384K_ID;
-            case TIER_6: return BLOCK_FLUID_65536K_ID;
-            case TIER_7: return BLOCK_FLUID_262144K_ID;
-            case TIER_8: return BLOCK_FLUID_1048576K_ID;
-            default: return null;
-        }
+        return switch(type) {
+            case TIER_5 -> BLOCK_FLUID_16384K_ID;
+            case TIER_6 -> BLOCK_FLUID_65536K_ID;
+            case TIER_7 -> BLOCK_FLUID_262144K_ID;
+            case TIER_8 -> BLOCK_FLUID_1048576K_ID;
+            default -> null;
+        };
     }
 
     @Override
@@ -66,15 +65,15 @@ public class AdvancedFluidStorageNetworkNode extends FluidStorageNetworkNode
     }
 
     @Override
-    public void loadStorage(@Nullable PlayerEntity owner)
+    public void loadStorage(@Nullable Player owner)
     {
-        IStorageDisk disk = API.instance().getStorageDiskManager((ServerWorld) world).get(getStorageId());
+        IStorageDisk disk = API.instance().getStorageDiskManager((ServerLevel) world).get(getStorageId());
 
         if (disk == null)
         {
-            disk = API.instance().createDefaultFluidDisk((ServerWorld) world, type.getCapacity(), owner);
-            API.instance().getStorageDiskManager((ServerWorld) world).set(getStorageId(), disk);
-            API.instance().getStorageDiskManager((ServerWorld) world).markForSaving();
+            disk = API.instance().createDefaultFluidDisk((ServerLevel) world, type.getCapacity(), owner);
+            API.instance().getStorageDiskManager((ServerLevel) world).set(getStorageId(), disk);
+            API.instance().getStorageDiskManager((ServerLevel) world).markForSaving();
         }
 
         this.storage = new FluidStorageWrapperStorageDisk(this, disk);
@@ -86,15 +85,15 @@ public class AdvancedFluidStorageNetworkNode extends FluidStorageNetworkNode
     }
 
     @Override
-    public ITextComponent getTitle()
+    public Component getTitle()
     {
-        return new TranslationTextComponent("block." + Main.MODID + ".block_" + type.getName() + "_fluid");
+        return new TranslatableComponent("block." + Main.MODID + ".block_" + type.getName() + "_fluid");
     }
 
     @Override
     public long getStored()
     {
-        return AdvancedFluidStorageBlockTile.STORED.getValue();
+        return AdvancedFluidStorageBlockEntity.STORED.getValue();
     }
 
     @Override

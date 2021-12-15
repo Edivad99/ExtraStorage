@@ -5,7 +5,7 @@ import edivad.extrastorage.blocks.CrafterTier;
 import edivad.extrastorage.items.fluid.FluidStorageType;
 import edivad.extrastorage.items.item.ItemStorageType;
 import edivad.extrastorage.setup.Registration;
-import net.minecraft.block.Block;
+import net.minecraft.world.level.block.Block;
 import net.minecraftforge.fml.InterModComms;
 import net.minecraftforge.fml.ModList;
 

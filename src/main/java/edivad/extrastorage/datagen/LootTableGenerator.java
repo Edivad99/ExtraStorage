@@ -5,15 +5,21 @@ import com.mojang.datafixers.util.Pair;
 import edivad.extrastorage.loottable.AdvancedCrafterLootFunction;
 import edivad.extrastorage.loottable.StorageBlockLootFunction;
 import edivad.extrastorage.setup.Registration;
-import net.minecraft.block.Block;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.data.LootTableProvider;
-import net.minecraft.data.loot.BlockLootTables;
-import net.minecraft.loot.*;
-import net.minecraft.loot.conditions.SurvivesExplosion;
-import net.minecraft.loot.functions.ILootFunction;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.RegistryObject;
+import net.minecraft.data.loot.BlockLoot;
+import net.minecraft.data.loot.LootTableProvider;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.storage.loot.LootPool;
+import net.minecraft.world.level.storage.loot.LootTable;
+import net.minecraft.world.level.storage.loot.ValidationContext;
+import net.minecraft.world.level.storage.loot.entries.LootItem;
+import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParamSet;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
+import net.minecraft.world.level.storage.loot.predicates.ExplosionCondition;
+import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
+import net.minecraftforge.registries.RegistryObject;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -30,13 +36,13 @@ public class LootTableGenerator extends LootTableProvider {
     }
 
     @Override
-    protected List<Pair<Supplier<Consumer<BiConsumer<ResourceLocation, LootTable.Builder>>>, LootParameterSet>> getTables()
+    protected List<Pair<Supplier<Consumer<BiConsumer<ResourceLocation, LootTable.Builder>>>, LootContextParamSet>> getTables()
     {
-        return ImmutableList.of(Pair.of(ESBlockLootTables::new, LootParameterSets.BLOCK));
+        return ImmutableList.of(Pair.of(ESBlockLootTables::new, LootContextParamSets.BLOCK));
     }
 
     @Override
-    protected void validate(Map<ResourceLocation, LootTable> map, ValidationTracker validationtracker)
+    protected void validate(Map<ResourceLocation, LootTable> map, ValidationContext validationContext)
     {
     }
 
@@ -46,7 +52,7 @@ public class LootTableGenerator extends LootTableProvider {
         return "Extra Storage Loot Tables";
     }
 
-    private static class ESBlockLootTables extends BlockLootTables {
+    private static class ESBlockLootTables extends BlockLoot {
 
         @Override
         protected void addTables()
@@ -54,8 +60,8 @@ public class LootTableGenerator extends LootTableProvider {
             Registration.CRAFTER_BLOCK.values().forEach(block -> genBlockItemLootTableWithFunction(block.get(), AdvancedCrafterLootFunction.builder()));
             Registration.ITEM_STORAGE_BLOCK.values().forEach(block -> genBlockItemLootTableWithFunction(block.get(), StorageBlockLootFunction.builder()));
             Registration.FLUID_STORAGE_BLOCK.values().forEach(block -> genBlockItemLootTableWithFunction(block.get(), StorageBlockLootFunction.builder()));
-            registerDropSelfLootTable(Registration.ADVANCED_EXPORTER.get());
-            registerDropSelfLootTable(Registration.ADVANCED_IMPORTER.get());
+            dropSelf(Registration.ADVANCED_EXPORTER.get());
+            dropSelf(Registration.ADVANCED_IMPORTER.get());
         }
 
         @Override
@@ -69,13 +75,13 @@ public class LootTableGenerator extends LootTableProvider {
             return res;
         }
 
-        private void genBlockItemLootTableWithFunction(Block block, ILootFunction.IBuilder builder) {
-            registerLootTable(block, LootTable.builder().addLootPool(
-                    LootPool.builder()
-                            .rolls(ConstantRange.of(1))
-                            .addEntry(ItemLootEntry.builder(block)
-                                    .acceptFunction(builder))
-                            .acceptCondition(SurvivesExplosion.builder())));
+        private void genBlockItemLootTableWithFunction(Block block, LootItemFunction.Builder builder) {
+            add(block, LootTable.lootTable().withPool(
+                    LootPool.lootPool()
+                            .setRolls(ConstantValue.exactly(1))
+                            .add(LootItem.lootTableItem(block)
+                                    .apply(builder))
+                            .when(ExplosionCondition.survivesExplosion())));
         }
     }
 }

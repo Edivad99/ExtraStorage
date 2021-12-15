@@ -3,8 +3,8 @@ package edivad.extrastorage.items.item;
 import com.refinedmods.refinedstorage.api.storage.StorageType;
 import edivad.extrastorage.items.ExpandedStorageDisk;
 import edivad.extrastorage.setup.Registration;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 
 public class ExpandedStorageDiskItem extends ExpandedStorageDisk
 {

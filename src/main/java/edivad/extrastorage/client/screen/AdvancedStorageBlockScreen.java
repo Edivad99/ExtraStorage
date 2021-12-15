@@ -2,14 +2,14 @@ package edivad.extrastorage.client.screen;
 
 import com.refinedmods.refinedstorage.screen.StorageScreen;
 import com.refinedmods.refinedstorage.screen.StorageScreenTileDataParameters;
+import edivad.extrastorage.blockentity.AdvancedStorageBlockEntity;
 import edivad.extrastorage.container.AdvancedStorageBlockContainer;
-import edivad.extrastorage.tiles.AdvancedStorageBlockTile;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.entity.player.Inventory;
 
 public class AdvancedStorageBlockScreen extends StorageScreen<AdvancedStorageBlockContainer>
 {
-    public AdvancedStorageBlockScreen(AdvancedStorageBlockContainer container, PlayerInventory inventory, ITextComponent title)
+    public AdvancedStorageBlockScreen(AdvancedStorageBlockContainer container, Inventory inventory, Component title)
     {
         super(
                 container,
@@ -17,13 +17,13 @@ public class AdvancedStorageBlockScreen extends StorageScreen<AdvancedStorageBlo
                 title,
                 "gui/storage.png",
                 new StorageScreenTileDataParameters(null,
-                    AdvancedStorageBlockTile.REDSTONE_MODE,
-                    AdvancedStorageBlockTile.COMPARE,
-                    AdvancedStorageBlockTile.WHITELIST_BLACKLIST,
-                    AdvancedStorageBlockTile.PRIORITY,
-                    AdvancedStorageBlockTile.ACCESS_TYPE
+                    AdvancedStorageBlockEntity.REDSTONE_MODE,
+                    AdvancedStorageBlockEntity.COMPARE,
+                    AdvancedStorageBlockEntity.WHITELIST_BLACKLIST,
+                    AdvancedStorageBlockEntity.PRIORITY,
+                    AdvancedStorageBlockEntity.ACCESS_TYPE
                 ),
-                AdvancedStorageBlockTile.STORED::getValue,
-                () -> (long) ((AdvancedStorageBlockTile) container.getTile()).getItemStorageType().getCapacity());
+                AdvancedStorageBlockEntity.STORED::getValue,
+                () -> (long) ((AdvancedStorageBlockEntity) container.getTile()).getItemStorageType().getCapacity());
     }
 }

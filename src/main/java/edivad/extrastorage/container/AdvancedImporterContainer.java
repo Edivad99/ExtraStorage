@@ -3,18 +3,17 @@ package edivad.extrastorage.container;
 import com.refinedmods.refinedstorage.container.BaseContainer;
 import com.refinedmods.refinedstorage.container.slot.filter.FilterSlot;
 import com.refinedmods.refinedstorage.container.slot.filter.FluidFilterSlot;
-import com.refinedmods.refinedstorage.item.UpgradeItem;
 import com.refinedmods.refinedstorage.tile.config.IType;
 import edivad.extrastorage.setup.Registration;
-import edivad.extrastorage.tiles.AdvancedImporterTile;
-import net.minecraft.entity.player.PlayerEntity;
+import edivad.extrastorage.blockentity.AdvancedImporterBlockEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.items.SlotItemHandler;
 
 public class AdvancedImporterContainer extends BaseContainer
 {
-    private final AdvancedImporterTile tile;
+    private final AdvancedImporterBlockEntity tile;
 
-    public AdvancedImporterContainer(int windowId, PlayerEntity player, AdvancedImporterTile tile)
+    public AdvancedImporterContainer(int windowId, Player player, AdvancedImporterBlockEntity tile)
     {
         super(Registration.ADVANCED_IMPORTER_CONTAINER.get(), tile, player, windowId);
         this.tile = tile;
@@ -47,12 +46,12 @@ public class AdvancedImporterContainer extends BaseContainer
 
         addPlayerInventory(8, 73);
 
-        transferManager.addBiTransfer(getPlayer().inventory, tile.getNode().getUpgrades());
-        transferManager.addFilterTransfer(getPlayer().inventory, tile.getNode().getItemFilters(), tile.getNode().getFluidFilters(), tile.getNode()::getType);
+        transferManager.addBiTransfer(getPlayer().getInventory(), tile.getNode().getUpgrades());
+        transferManager.addFilterTransfer(getPlayer().getInventory(), tile.getNode().getItemFilters(), tile.getNode().getFluidFilters(), tile.getNode()::getType);
     }
 
     @Override
-    public AdvancedImporterTile getTile()
+    public AdvancedImporterBlockEntity getTile()
     {
         return tile;
     }

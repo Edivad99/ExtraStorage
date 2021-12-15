@@ -2,64 +2,64 @@ package edivad.extrastorage.loottable;
 
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
-import edivad.extrastorage.setup.ESLootFunctions;
-import edivad.extrastorage.tiles.AdvancedFluidStorageBlockTile;
-import edivad.extrastorage.tiles.AdvancedStorageBlockTile;
+import edivad.extrastorage.blockentity.AdvancedFluidStorageBlockEntity;
+import edivad.extrastorage.blockentity.AdvancedStorageBlockEntity;
 import edivad.extrastorage.nodes.AdvancedFluidStorageNetworkNode;
 import edivad.extrastorage.nodes.AdvancedStorageNetworkNode;
-import net.minecraft.item.ItemStack;
-import net.minecraft.loot.LootContext;
-import net.minecraft.loot.LootFunction;
-import net.minecraft.loot.LootFunctionType;
-import net.minecraft.loot.LootParameters;
-import net.minecraft.loot.conditions.ILootCondition;
-import net.minecraft.tileentity.TileEntity;
+import edivad.extrastorage.setup.ESLootFunctions;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.functions.LootItemConditionalFunction;
+import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
+import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 
-public class StorageBlockLootFunction extends LootFunction
+public class StorageBlockLootFunction extends LootItemConditionalFunction
 {
-    protected StorageBlockLootFunction(ILootCondition[] conditions) {
+    protected StorageBlockLootFunction(LootItemCondition[] conditions) {
         super(conditions);
     }
 
+    public static LootItemConditionalFunction.Builder<?> builder() {
+        return simpleBuilder(StorageBlockLootFunction::new);
+    }
+
     @Override
-    public ItemStack doApply(ItemStack stack, LootContext lootContext)
+    public ItemStack run(ItemStack stack, LootContext lootContext)
     {
-        TileEntity tile = lootContext.get(LootParameters.BLOCK_ENTITY);
-        if (tile instanceof AdvancedStorageBlockTile)
+        BlockEntity blockEntity = lootContext.getParamOrNull(LootContextParams.BLOCK_ENTITY);
+        if (blockEntity instanceof AdvancedStorageBlockEntity itemStorageBlockEntity)
         {
-            AdvancedStorageNetworkNode removedNode = ((AdvancedStorageBlockTile)tile).getRemovedNode();
+            AdvancedStorageNetworkNode removedNode = itemStorageBlockEntity.getRemovedNode();
             if (removedNode == null)
             {
-                removedNode = ((AdvancedStorageBlockTile)tile).getNode();
+                removedNode = itemStorageBlockEntity.getNode();
             }
 
-            stack.getOrCreateTag().putUniqueId(AdvancedStorageNetworkNode.NBT_ID, removedNode.getStorageId());
+            stack.getOrCreateTag().putUUID(AdvancedStorageNetworkNode.NBT_ID, removedNode.getStorageId());
         }
-        else if (tile instanceof AdvancedFluidStorageBlockTile)
+        else if (blockEntity instanceof AdvancedFluidStorageBlockEntity fluidStorageBlockEntity)
         {
-            AdvancedFluidStorageNetworkNode removedNode = ((AdvancedFluidStorageBlockTile)tile).getRemovedNode();
+            AdvancedFluidStorageNetworkNode removedNode = fluidStorageBlockEntity.getRemovedNode();
             if (removedNode == null) {
-                removedNode = ((AdvancedFluidStorageBlockTile)tile).getNode();
+                removedNode = fluidStorageBlockEntity.getNode();
             }
 
-            stack.getOrCreateTag().putUniqueId(AdvancedFluidStorageNetworkNode.NBT_ID, removedNode.getStorageId());
+            stack.getOrCreateTag().putUUID(AdvancedFluidStorageNetworkNode.NBT_ID, removedNode.getStorageId());
         }
 
         return stack;
     }
 
-    public LootFunctionType getFunctionType() {
+    public LootItemFunctionType getType() {
         return ESLootFunctions.getStorageBlock();
     }
 
-    public static LootFunction.Builder<?> builder() {
-        return builder(StorageBlockLootFunction::new);
-    }
-
-    public static class Serializer extends LootFunction.Serializer<StorageBlockLootFunction>
+    public static class Serializer extends LootItemConditionalFunction.Serializer<StorageBlockLootFunction>
     {
         @Override
-        public StorageBlockLootFunction deserialize(JsonObject object, JsonDeserializationContext deserializationContext, ILootCondition[] conditions) {
+        public StorageBlockLootFunction deserialize(JsonObject object, JsonDeserializationContext deserializationContext, LootItemCondition[] conditions) {
             return new StorageBlockLootFunction(conditions);
         }
     }

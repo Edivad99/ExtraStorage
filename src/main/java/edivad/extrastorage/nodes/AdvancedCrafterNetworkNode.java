@@ -17,17 +17,17 @@ import com.refinedmods.refinedstorage.util.StackUtils;
 import com.refinedmods.refinedstorage.util.WorldUtils;
 import edivad.extrastorage.Main;
 import edivad.extrastorage.blocks.CrafterTier;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.INameable;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.Nameable;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
@@ -59,7 +59,7 @@ public class AdvancedCrafterNetworkNode extends NetworkNode implements ICrafting
         }
     }
 
-    private final TranslationTextComponent DEFAULT_NAME;
+    private final Component DEFAULT_NAME;
 
     private static final String NBT_DISPLAY_NAME = "DisplayName";
     private static final String NBT_UUID = "CrafterUuid";
@@ -84,7 +84,7 @@ public class AdvancedCrafterNetworkNode extends NetworkNode implements ICrafting
     private boolean wasPowered;
 
     @Nullable
-    private ITextComponent displayName;
+    private Component displayName;
 
     @Nullable
     private UUID uuid = null;
@@ -92,9 +92,9 @@ public class AdvancedCrafterNetworkNode extends NetworkNode implements ICrafting
     private CrafterTier tier;
     private final ResourceLocation ID;
 
-    public AdvancedCrafterNetworkNode(World world, BlockPos pos, CrafterTier tier)
+    public AdvancedCrafterNetworkNode(Level level, BlockPos pos, CrafterTier tier)
     {
-        super(world, pos);
+        super(level, pos);
         this.tier = tier;
         this.patternsInventory = new BaseItemHandler(this.tier.getSlots())
             {
@@ -112,17 +112,17 @@ public class AdvancedCrafterNetworkNode extends NetworkNode implements ICrafting
                     return super.insertItem(slot, stack, simulate);
                 }
             }
-            .addValidator(new PatternItemValidator(world))
+            .addValidator(new PatternItemValidator(level))
             .addListener(new NetworkNodeInventoryListener(this))
             .addListener((handler, slot, reading) -> {
                 if (!reading) {
-                    if (!world.isRemote)
+                    if (!level.isClientSide)
                         invalidateSlot(slot);
                     if (network != null)
                         network.getCraftingManager().invalidate();
                 }
             });
-        DEFAULT_NAME = new TranslationTextComponent("block." + Main.MODID + "." + this.tier.getID());
+        DEFAULT_NAME = new TranslatableComponent("block." + Main.MODID + "." + this.tier.getID());
         ID = new ResourceLocation(Main.MODID, tier.getID());
     }
 
@@ -174,9 +174,9 @@ public class AdvancedCrafterNetworkNode extends NetworkNode implements ICrafting
         if (ticks == 1)
             invalidate();
 
-        if (mode == CrafterMode.PULSE_INSERTS_NEXT_SET && world.isBlockPresent(pos))
+        if (mode == CrafterMode.PULSE_INSERTS_NEXT_SET && world.isLoaded(pos))
         {
-            if (world.isBlockPowered(pos))
+            if (world.hasNeighborSignal(pos))
             {
                 this.wasPowered = true;
                 markDirty();
@@ -217,7 +217,7 @@ public class AdvancedCrafterNetworkNode extends NetworkNode implements ICrafting
     }
 
     @Override
-    public void read(CompoundNBT tag)
+    public void read(CompoundTag tag)
     {
         super.read(tag);
 
@@ -228,11 +228,11 @@ public class AdvancedCrafterNetworkNode extends NetworkNode implements ICrafting
         StackUtils.readItems(upgrades, 1, tag);
 
         if (tag.contains(NBT_DISPLAY_NAME)) {
-            displayName = ITextComponent.Serializer.getComponentFromJson(tag.getString(NBT_DISPLAY_NAME));
+            displayName = Component.Serializer.fromJson(tag.getString(NBT_DISPLAY_NAME));
         }
 
-        if (tag.hasUniqueId(NBT_UUID)) {
-            uuid = tag.getUniqueId(NBT_UUID);
+        if (tag.hasUUID(NBT_UUID)) {
+            uuid = tag.getUUID(NBT_UUID);
         }
 
         if (tag.contains(NBT_MODE)) {
@@ -259,7 +259,7 @@ public class AdvancedCrafterNetworkNode extends NetworkNode implements ICrafting
     }
 
     @Override
-    public CompoundNBT write(CompoundNBT tag)
+    public CompoundTag write(CompoundTag tag)
     {
         super.write(tag);
 
@@ -267,11 +267,11 @@ public class AdvancedCrafterNetworkNode extends NetworkNode implements ICrafting
         StackUtils.writeItems(upgrades, 1, tag);
 
         if (displayName != null) {
-            tag.putString(NBT_DISPLAY_NAME, ITextComponent.Serializer.toJson(displayName));
+            tag.putString(NBT_DISPLAY_NAME, Component.Serializer.toJson(displayName));
         }
 
         if (uuid != null) {
-            tag.putUniqueId(NBT_UUID, uuid);
+            tag.putUUID(NBT_UUID, uuid);
         }
 
         tag.putInt(NBT_MODE, mode.ordinal());
@@ -331,24 +331,13 @@ public class AdvancedCrafterNetworkNode extends NetworkNode implements ICrafting
 
     @Nullable
     @Override
-    public TileEntity getConnectedTile()
+    public BlockEntity getConnectedTile()
     {
         ICraftingPatternContainer proxy = getRootContainer();
         if(proxy == null)
             return null;
 
         return proxy.getFacingTile();
-    }
-
-    @Nullable
-    @Override
-    public TileEntity getFacingTile()
-    {
-        BlockPos facingPos = pos.offset(getDirection());
-        if (!world.isBlockPresent(facingPos))
-            return null;
-
-        return world.getTileEntity(facingPos);
     }
 
     @Override
@@ -365,29 +354,29 @@ public class AdvancedCrafterNetworkNode extends NetworkNode implements ICrafting
     }
 
     @Override
-    public ITextComponent getName()
+    public Component getName()
     {
         if (displayName != null)
             return displayName;
 
-        TileEntity facing = getConnectedTile();
+        BlockEntity facing = getConnectedTile();
 
-        if (facing instanceof INameable && ((INameable) facing).getName() != null)
-            return ((INameable) facing).getName();
+        if (facing instanceof Nameable face && face.getName() != null)
+            return face.getName();
 
         if (facing != null)
-            return new TranslationTextComponent(world.getBlockState(facing.getPos()).getBlock().getTranslationKey());
+            return new TranslatableComponent(world.getBlockState(facing.getBlockPos()).getBlock().getDescriptionId());
 
         return DEFAULT_NAME;
     }
 
-    public void setDisplayName(ITextComponent displayName)
+    public void setDisplayName(Component displayName)
     {
         this.displayName = displayName;
     }
 
     @Nullable
-    public ITextComponent getDisplayName()
+    public Component getDisplayName()
     {
         return displayName;
     }
@@ -435,7 +424,7 @@ public class AdvancedCrafterNetworkNode extends NetworkNode implements ICrafting
         if (visited)
             return null;
 
-        INetworkNode facing = API.instance().getNetworkNodeManager((ServerWorld) world).getNode(pos.offset(getDirection()));
+        INetworkNode facing = API.instance().getNetworkNodeManager((ServerLevel) world).getNode(pos.relative(getDirection()));
         if (!(facing instanceof ICraftingPatternContainer) || facing.getNetwork() != network)
             return this;
 
@@ -477,9 +466,9 @@ public class AdvancedCrafterNetworkNode extends NetworkNode implements ICrafting
         switch (mode)
         {
             case SIGNAL_LOCKS_AUTOCRAFTING:
-                return world.isBlockPowered(pos);
+                return world.hasNeighborSignal(pos);
             case SIGNAL_UNLOCKS_AUTOCRAFTING:
-                return !world.isBlockPowered(pos);
+                return !world.hasNeighborSignal(pos);
             case PULSE_INSERTS_NEXT_SET:
                 return locked;
             default:

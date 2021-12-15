@@ -6,29 +6,29 @@ import com.refinedmods.refinedstorage.block.NetworkNodeBlock;
 import com.refinedmods.refinedstorage.container.factory.PositionalTileContainerProvider;
 import com.refinedmods.refinedstorage.util.BlockUtils;
 import com.refinedmods.refinedstorage.util.NetworkUtils;
+import edivad.extrastorage.blockentity.AdvancedCrafterBlockEntity;
 import edivad.extrastorage.container.AdvancedCrafterContainer;
-import edivad.extrastorage.tiles.AdvancedCrafterTile;
 import edivad.extrastorage.tools.Translations;
-import net.minecraft.block.BlockState;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
+import net.minecraft.ChatFormatting;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.fml.network.NetworkHooks;
+import net.minecraftforge.network.NetworkHooks;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -51,42 +51,41 @@ public class AdvancedCrafterBlock extends NetworkNodeBlock
 
     @Nullable
     @Override
-    public TileEntity createTileEntity(BlockState state, IBlockReader world)
+    public BlockEntity newBlockEntity(BlockPos pos, BlockState state)
     {
-        return new AdvancedCrafterTile(tier);
+        return new AdvancedCrafterBlockEntity(tier, pos, state);
     }
 
     @Override
-    public void onBlockPlacedBy(World worldIn, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack)
+    public void setPlacedBy(Level level, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack)
     {
-        super.onBlockPlacedBy(worldIn, pos, state, placer, stack);
-        if (!worldIn.isRemote)
-        {
-            TileEntity tile = worldIn.getTileEntity(pos);
+        super.setPlacedBy(level, pos, state, placer, stack);
+        if (!level.isClientSide) {
+            BlockEntity blockEntity = level.getBlockEntity(pos);
 
-            if (tile instanceof AdvancedCrafterTile && stack.hasDisplayName()) {
-                ((AdvancedCrafterTile) tile).getNode().setDisplayName(stack.getDisplayName());
-                ((AdvancedCrafterTile) tile).getNode().markDirty();
+            if (blockEntity instanceof AdvancedCrafterBlockEntity be && stack.hasCustomHoverName()) {
+                be.getNode().setDisplayName(stack.getHoverName());
+                be.getNode().markDirty();
             }
         }
     }
 
     @Override
-    public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit)
+    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit)
     {
-        if (!worldIn.isRemote)
+        if (!level.isClientSide)
         {
-            return NetworkUtils.attempt(worldIn, pos, player, () -> NetworkHooks.openGui(
-                    (ServerPlayerEntity) player,
-                    new PositionalTileContainerProvider<AdvancedCrafterTile>(
-                            ((AdvancedCrafterTile) worldIn.getTileEntity(pos)).getNode().getName(),
+            return NetworkUtils.attempt(level, pos, player, () -> NetworkHooks.openGui(
+                    (ServerPlayer) player,
+                    new PositionalTileContainerProvider<AdvancedCrafterBlockEntity>(
+                            ((AdvancedCrafterBlockEntity) level.getBlockEntity(pos)).getNode().getName(),
                             (tile, windowId, inventory, p) -> new AdvancedCrafterContainer(windowId, player, tile),
                             pos
                     ),
                     pos
             ), Permission.MODIFY, Permission.AUTOCRAFTING);
         }
-        return ActionResultType.SUCCESS;
+        return InteractionResult.SUCCESS;
     }
 
     @Override
@@ -97,16 +96,15 @@ public class AdvancedCrafterBlock extends NetworkNodeBlock
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public void addInformation(ItemStack stack, IBlockReader worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn)
-    {
+    public void appendHoverText(ItemStack stack, BlockGetter blockGetter, List<Component> tooltip, TooltipFlag flag) {
         if(Screen.hasShiftDown())
         {
-            tooltip.add(new TranslationTextComponent(Translations.SLOT_CRAFTING, tier.getSlots()).mergeStyle(TextFormatting.GREEN));
-            tooltip.add(new TranslationTextComponent(Translations.BASE_SPEED, tier.getCraftingSpeed()).mergeStyle(TextFormatting.GREEN));
+            tooltip.add(new TranslatableComponent(Translations.SLOT_CRAFTING, tier.getSlots()).withStyle(ChatFormatting.GREEN));
+            tooltip.add(new TranslatableComponent(Translations.BASE_SPEED, tier.getCraftingSpeed()).withStyle(ChatFormatting.GREEN));
         }
         else
         {
-            tooltip.add(new TranslationTextComponent(Translations.HOLD_SHIFT).mergeStyle(TextFormatting.GRAY));
+            tooltip.add(new TranslatableComponent(Translations.HOLD_SHIFT).withStyle(ChatFormatting.GRAY));
         }
     }
 }

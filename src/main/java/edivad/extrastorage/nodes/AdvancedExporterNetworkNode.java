@@ -17,12 +17,12 @@ import com.refinedmods.refinedstorage.tile.config.IType;
 import com.refinedmods.refinedstorage.util.StackUtils;
 import com.refinedmods.refinedstorage.util.WorldUtils;
 import edivad.extrastorage.Main;
-import edivad.extrastorage.tiles.AdvancedExporterTile;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import edivad.extrastorage.blockentity.AdvancedExporterBlockEntity;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
@@ -82,9 +82,9 @@ public class AdvancedExporterNetworkNode extends NetworkNode implements ICompara
 
     private int filterSlot;
 
-    public AdvancedExporterNetworkNode(World world, BlockPos pos)
+    public AdvancedExporterNetworkNode(Level level, BlockPos pos)
     {
-        super(world, pos);
+        super(level, pos);
     }
 
     @Override
@@ -97,7 +97,7 @@ public class AdvancedExporterNetworkNode extends NetworkNode implements ICompara
     public void update() {
         super.update();
 
-        if (canUpdate() && ticks % upgrades.getSpeed() == 0 && world.isBlockPresent(pos)) {
+        if (canUpdate() && ticks % upgrades.getSpeed() == 0 && world.isLoaded(pos)) {
             if (type == IType.ITEMS) {
                 IItemHandler handler = WorldUtils.getItemHandler(getFacingTile(), getDirection().getOpposite());
 
@@ -256,7 +256,7 @@ public class AdvancedExporterNetworkNode extends NetworkNode implements ICompara
     }
 
     @Override
-    public CompoundNBT write(CompoundNBT tag)
+    public CompoundTag write(CompoundTag tag)
     {
         super.write(tag);
         StackUtils.writeItems(upgrades, 1, tag);
@@ -264,7 +264,7 @@ public class AdvancedExporterNetworkNode extends NetworkNode implements ICompara
     }
 
     @Override
-    public CompoundNBT writeConfiguration(CompoundNBT tag)
+    public CompoundTag writeConfiguration(CompoundTag tag)
     {
         super.writeConfiguration(tag);
         tag.putInt(NBT_COMPARE, compare);
@@ -275,14 +275,14 @@ public class AdvancedExporterNetworkNode extends NetworkNode implements ICompara
     }
 
     @Override
-    public void read(CompoundNBT tag)
+    public void read(CompoundTag tag)
     {
         super.read(tag);
         StackUtils.readItems(upgrades, 1, tag);
     }
 
     @Override
-    public void readConfiguration(CompoundNBT tag)
+    public void readConfiguration(CompoundTag tag)
     {
         super.readConfiguration(tag);
         if (tag.contains(NBT_COMPARE)) {
@@ -311,7 +311,7 @@ public class AdvancedExporterNetworkNode extends NetworkNode implements ICompara
     @Override
     public int getType()
     {
-        return world.isRemote ? AdvancedExporterTile.TYPE.getValue() : type;
+        return world.isClientSide ? AdvancedExporterBlockEntity.TYPE.getValue() : type;
     }
 
     @Override

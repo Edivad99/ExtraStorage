@@ -6,16 +6,16 @@ import com.refinedmods.refinedstorage.container.slot.filter.FluidFilterSlot;
 import com.refinedmods.refinedstorage.item.UpgradeItem;
 import com.refinedmods.refinedstorage.tile.config.IType;
 import edivad.extrastorage.setup.Registration;
-import edivad.extrastorage.tiles.AdvancedExporterTile;
-import net.minecraft.entity.player.PlayerEntity;
+import edivad.extrastorage.blockentity.AdvancedExporterBlockEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.items.SlotItemHandler;
 
 public class AdvancedExporterContainer extends BaseContainer
 {
-    private final AdvancedExporterTile tile;
+    private final AdvancedExporterBlockEntity tile;
     private boolean hasRegulatorMode;
 
-    public AdvancedExporterContainer(int windowId, PlayerEntity player, AdvancedExporterTile tile)
+    public AdvancedExporterContainer(int windowId, Player player, AdvancedExporterBlockEntity tile)
     {
         super(Registration.ADVANCED_EXPORTER_CONTAINER.get(), tile, player, windowId);
         this.tile = tile;
@@ -29,9 +29,9 @@ public class AdvancedExporterContainer extends BaseContainer
     }
 
     @Override
-    public void detectAndSendChanges()
+    public void broadcastChanges()
     {
-        super.detectAndSendChanges();
+        super.broadcastChanges();
 
         boolean updatedHasRegulatorMode = hasRegulatorMode();
         if (hasRegulatorMode != updatedHasRegulatorMode)
@@ -42,8 +42,8 @@ public class AdvancedExporterContainer extends BaseContainer
     }
 
     public void initSlots() {
-        this.inventorySlots.clear();
-        this.inventoryItemStacks.clear();
+        this.slots.clear();
+        this.lastSlots.clear();
 
         this.transferManager.clearTransfers();
 
@@ -76,12 +76,12 @@ public class AdvancedExporterContainer extends BaseContainer
 
         addPlayerInventory(8, 73);
 
-        transferManager.addBiTransfer(getPlayer().inventory, tile.getNode().getUpgrades());
-        transferManager.addFilterTransfer(getPlayer().inventory, tile.getNode().getItemFilters(), tile.getNode().getFluidFilters(), tile.getNode()::getType);
+        transferManager.addBiTransfer(getPlayer().getInventory(), tile.getNode().getUpgrades());
+        transferManager.addFilterTransfer(getPlayer().getInventory(), tile.getNode().getItemFilters(), tile.getNode().getFluidFilters(), tile.getNode()::getType);
     }
 
     @Override
-    public AdvancedExporterTile getTile()
+    public AdvancedExporterBlockEntity getTile()
     {
         return tile;
     }

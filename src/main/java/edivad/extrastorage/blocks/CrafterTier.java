@@ -4,8 +4,8 @@ public enum CrafterTier
 {
     IRON, GOLD, DIAMOND, NETHERITE;
 
-    private int craftingSpeed;
-    private int rowsOfSlots;
+    private final int craftingSpeed;
+    private final int rowsOfSlots;
 
     CrafterTier()
     {
@@ -30,13 +30,13 @@ public enum CrafterTier
 
     public String getID()
     {
-        switch (this.ordinal()) {
-            case 0: return "iron_crafter";
-            case 1: return "gold_crafter";
-            case 2: return "diamond_crafter";
-            case 3: return "netherite_crafter";
-            default: throw new RuntimeException("Tier not yet implemented");
-        }
+        return switch(this.ordinal()) {
+            case 0 -> "iron_crafter";
+            case 1 -> "gold_crafter";
+            case 2 -> "diamond_crafter";
+            case 3 -> "netherite_crafter";
+            default -> throw new RuntimeException("Tier not yet implemented");
+        };
     }
 }
 

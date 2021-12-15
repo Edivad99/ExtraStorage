@@ -5,7 +5,7 @@ import com.refinedmods.refinedstorage.tile.CrafterTile;
 import edivad.extrastorage.Main;
 import edivad.extrastorage.blocks.CrafterTier;
 import edivad.extrastorage.nodes.AdvancedCrafterNetworkNode;
-import edivad.extrastorage.tiles.AdvancedCrafterTile;
+import edivad.extrastorage.blockentity.AdvancedCrafterBlockEntity;
 import mcjty.theoneprobe.api.*;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
@@ -30,8 +30,8 @@ public class TOPIntegration implements IProbeInfoProvider, Function<ITheOneProbe
         TileEntity te = world.getTileEntity(data.getPos());
         int patterns = 0, speed = 0, slots = 0;
 
-        if(te instanceof AdvancedCrafterTile) {
-            AdvancedCrafterTile tile = (AdvancedCrafterTile) te;
+        if(te instanceof AdvancedCrafterBlockEntity) {
+            AdvancedCrafterBlockEntity tile = (AdvancedCrafterBlockEntity) te;
             AdvancedCrafterNetworkNode node = tile.getNode();
             CrafterTier tier = tile.getTier();
             patterns = node.getPatterns().size();
@@ -44,7 +44,7 @@ public class TOPIntegration implements IProbeInfoProvider, Function<ITheOneProbe
             speed = node.getMaximumSuccessfulCraftingUpdates();
             slots = 9;
         }
-        if(te instanceof AdvancedCrafterTile || te instanceof CrafterTile) {
+        if(te instanceof AdvancedCrafterBlockEntity || te instanceof CrafterTile) {
             probeInfo.horizontal().text(new StringTextComponent(String.format("Occupied space: %d/%d", patterns, slots)));
             probeInfo.horizontal().text(new StringTextComponent(String.format("Current speed: %dx", speed)));
         }

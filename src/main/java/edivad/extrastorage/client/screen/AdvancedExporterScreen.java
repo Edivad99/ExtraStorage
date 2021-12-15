@@ -1,6 +1,6 @@
 package edivad.extrastorage.client.screen;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.refinedmods.refinedstorage.item.UpgradeItem;
 import com.refinedmods.refinedstorage.screen.BaseScreen;
 import com.refinedmods.refinedstorage.screen.widget.sidebutton.ExactModeSideButton;
@@ -8,17 +8,17 @@ import com.refinedmods.refinedstorage.screen.widget.sidebutton.RedstoneModeSideB
 import com.refinedmods.refinedstorage.screen.widget.sidebutton.TypeSideButton;
 import com.refinedmods.refinedstorage.util.RenderUtils;
 import edivad.extrastorage.Main;
+import edivad.extrastorage.blockentity.AdvancedExporterBlockEntity;
 import edivad.extrastorage.container.AdvancedExporterContainer;
-import edivad.extrastorage.tiles.AdvancedExporterTile;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.entity.player.Inventory;
 
 public class AdvancedExporterScreen extends BaseScreen<AdvancedExporterContainer>
 {
     private boolean hasRegulatorMode;
 
-    public AdvancedExporterScreen(AdvancedExporterContainer container, PlayerInventory inventory, ITextComponent title)
+    public AdvancedExporterScreen(AdvancedExporterContainer container, Inventory inventory, Component title)
     {
         super(container, 211, 155, inventory, title);
         this.hasRegulatorMode = hasRegulatorMode();
@@ -26,15 +26,15 @@ public class AdvancedExporterScreen extends BaseScreen<AdvancedExporterContainer
 
     private boolean hasRegulatorMode()
     {
-        return container.getTile().getNode().getUpgrades().hasUpgrade(UpgradeItem.Type.REGULATOR);
+        return menu.getTile().getNode().getUpgrades().hasUpgrade(UpgradeItem.Type.REGULATOR);
     }
 
     @Override
     public void onPostInit(int x, int y)
     {
-        addSideButton(new RedstoneModeSideButton(this, AdvancedExporterTile.REDSTONE_MODE));
-        addSideButton(new TypeSideButton(this, AdvancedExporterTile.TYPE));
-        addSideButton(new ExactModeSideButton(this, AdvancedExporterTile.COMPARE));
+        addSideButton(new RedstoneModeSideButton(this, AdvancedExporterBlockEntity.REDSTONE_MODE));
+        addSideButton(new TypeSideButton(this, AdvancedExporterBlockEntity.TYPE));
+        addSideButton(new ExactModeSideButton(this, AdvancedExporterBlockEntity.COMPARE));
     }
 
     @Override
@@ -44,21 +44,21 @@ public class AdvancedExporterScreen extends BaseScreen<AdvancedExporterContainer
         if (hasRegulatorMode != updatedHasRegulatorMode)
         {
             hasRegulatorMode = updatedHasRegulatorMode;
-            container.initSlots();
+            menu.initSlots();
         }
     }
 
     @Override
-    public void renderBackground(MatrixStack matrixStack, int x, int y, int mouseX, int mouseY)
+    public void renderBackground(PoseStack poseStack, int x, int y, int mouseX, int mouseY)
     {
         bindTexture(Main.MODID, "gui/advanced_exporter_importer.png");
-        blit(matrixStack, x, y, 0, 0, xSize, ySize);
+        blit(poseStack, x, y, 0, 0, imageWidth, imageHeight);
     }
 
     @Override
-    public void renderForeground(MatrixStack matrixStack, int i, int i1)
+    public void renderForeground(PoseStack poseStack, int i, int i1)
     {
-        renderString(matrixStack, 7, 7, RenderUtils.shorten(title.getString(), 26));
-        renderString(matrixStack, 7, 60, new TranslationTextComponent("container.inventory").getString());
+        renderString(poseStack, 7, 7, RenderUtils.shorten(title.getString(), 26));
+        renderString(poseStack, 7, 60, new TranslatableComponent("container.inventory").getString());
     }
 }

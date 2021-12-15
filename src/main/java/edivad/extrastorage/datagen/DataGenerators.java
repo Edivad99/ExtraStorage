@@ -4,7 +4,7 @@ import net.minecraft.data.DataGenerator;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.lifecycle.GatherDataEvent;
+import net.minecraftforge.forge.event.lifecycle.GatherDataEvent;
 
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
 public class DataGenerators {
@@ -14,9 +14,9 @@ public class DataGenerators {
         ExistingFileHelper existingFileHelper = event.getExistingFileHelper();
 
         if(event.includeServer()) {
-            Tag.BlockTags blockTagsProvider = new Tag.BlockTags(generator, existingFileHelper);
+            TagGenerator.BlockTags blockTagsProvider = new TagGenerator.BlockTags(generator, existingFileHelper);
             generator.addProvider(blockTagsProvider);
-            generator.addProvider(new Tag.ItemTags(generator, blockTagsProvider, existingFileHelper));
+            generator.addProvider(new TagGenerator.ItemTags(generator, blockTagsProvider, existingFileHelper));
             generator.addProvider(new Recipes(generator));
             generator.addProvider(new Lang(generator));
             generator.addProvider(new LootTableGenerator(generator));

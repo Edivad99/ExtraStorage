@@ -1,11 +1,18 @@
 package edivad.extrastorage.setup;
 
 import com.refinedmods.refinedstorage.item.blockitem.BaseBlockItem;
+import edivad.extrastorage.Main;
+import edivad.extrastorage.blockentity.AdvancedCrafterBlockEntity;
+import edivad.extrastorage.blockentity.AdvancedExporterBlockEntity;
+import edivad.extrastorage.blockentity.AdvancedFluidStorageBlockEntity;
+import edivad.extrastorage.blockentity.AdvancedImporterBlockEntity;
+import edivad.extrastorage.blockentity.AdvancedStorageBlockEntity;
 import edivad.extrastorage.blocks.AdvancedCrafterBlock;
-import edivad.extrastorage.blocks.AdvancedExporter;
+import edivad.extrastorage.blocks.AdvancedExporterBlock;
 import edivad.extrastorage.blocks.AdvancedFluidStorageBlock;
-import edivad.extrastorage.blocks.AdvancedImporter;
+import edivad.extrastorage.blocks.AdvancedImporterBlock;
 import edivad.extrastorage.blocks.AdvancedStorageBlock;
+import edivad.extrastorage.blocks.CrafterTier;
 import edivad.extrastorage.container.AdvancedCrafterContainer;
 import edivad.extrastorage.container.AdvancedExporterContainer;
 import edivad.extrastorage.container.AdvancedFluidStorageBlockContainer;
@@ -13,29 +20,22 @@ import edivad.extrastorage.container.AdvancedImporterContainer;
 import edivad.extrastorage.container.AdvancedStorageBlockContainer;
 import edivad.extrastorage.items.AdvancedFluidStorageBlockItem;
 import edivad.extrastorage.items.AdvancedStorageBlockItem;
-import edivad.extrastorage.items.fluid.FluidStorageType;
 import edivad.extrastorage.items.fluid.ExpandedStorageDiskFluid;
-import edivad.extrastorage.Main;
-import edivad.extrastorage.items.item.ItemStorageType;
+import edivad.extrastorage.items.fluid.FluidStorageType;
 import edivad.extrastorage.items.item.ExpandedStorageDiskItem;
-import edivad.extrastorage.tiles.AdvancedCrafterTile;
-import edivad.extrastorage.tiles.AdvancedExporterTile;
-import edivad.extrastorage.tiles.AdvancedFluidStorageBlockTile;
-import edivad.extrastorage.tiles.AdvancedImporterTile;
-import edivad.extrastorage.tiles.AdvancedStorageBlockTile;
-import edivad.extrastorage.blocks.CrafterTier;
-import net.minecraft.block.Block;
-import net.minecraft.inventory.container.ContainerType;
-import net.minecraft.item.Item;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.math.BlockPos;
-import net.minecraftforge.common.extensions.IForgeContainerType;
+import edivad.extrastorage.items.item.ItemStorageType;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.inventory.MenuType;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraftforge.common.extensions.IForgeMenuType;
 import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegistryObject;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -44,8 +44,8 @@ public class Registration {
 
     private static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, Main.MODID);
     private static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, Main.MODID);
-    private static final DeferredRegister<TileEntityType<?>> TILES = DeferredRegister.create(ForgeRegistries.TILE_ENTITIES, Main.MODID);
-    private static final DeferredRegister<ContainerType<?>> CONTAINERS = DeferredRegister.create(ForgeRegistries.CONTAINERS, Main.MODID);
+    private static final DeferredRegister<BlockEntityType<?>> TILES = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITIES, Main.MODID);
+    private static final DeferredRegister<MenuType<?>> CONTAINERS = DeferredRegister.create(ForgeRegistries.CONTAINERS, Main.MODID);
 
     public static final Map<ItemStorageType, RegistryObject<Item>> ITEM_STORAGE_PART = new HashMap<>();
     public static final Map<FluidStorageType, RegistryObject<Item>> FLUID_STORAGE_PART = new HashMap<>();
@@ -54,20 +54,20 @@ public class Registration {
 
     public static final Map<ItemStorageType, RegistryObject<AdvancedStorageBlock>> ITEM_STORAGE_BLOCK = new HashMap<>();
     public static final Map<ItemStorageType, RegistryObject<Item>> ITEM_STORAGE = new HashMap<>();
-    public static final Map<ItemStorageType, RegistryObject<TileEntityType<AdvancedStorageBlockTile>>> ITEM_STORAGE_TILE = new HashMap<>();
-    public static final Map<ItemStorageType, RegistryObject<ContainerType<AdvancedStorageBlockContainer>>> ITEM_STORAGE_CONTAINER = new HashMap<>();
+    public static final Map<ItemStorageType, RegistryObject<BlockEntityType<AdvancedStorageBlockEntity>>> ITEM_STORAGE_TILE = new HashMap<>();
+    public static final Map<ItemStorageType, RegistryObject<MenuType<AdvancedStorageBlockContainer>>> ITEM_STORAGE_CONTAINER = new HashMap<>();
 
     public static final Map<FluidStorageType, RegistryObject<AdvancedFluidStorageBlock>> FLUID_STORAGE_BLOCK = new HashMap<>();
     public static final Map<FluidStorageType, RegistryObject<Item>> FLUID_STORAGE = new HashMap<>();
-    public static final Map<FluidStorageType, RegistryObject<TileEntityType<AdvancedFluidStorageBlockTile>>> FLUID_STORAGE_TILE = new HashMap<>();
-    public static final Map<FluidStorageType, RegistryObject<ContainerType<AdvancedFluidStorageBlockContainer>>> FLUID_STORAGE_CONTAINER = new HashMap<>();
+    public static final Map<FluidStorageType, RegistryObject<BlockEntityType<AdvancedFluidStorageBlockEntity>>> FLUID_STORAGE_TILE = new HashMap<>();
+    public static final Map<FluidStorageType, RegistryObject<MenuType<AdvancedFluidStorageBlockContainer>>> FLUID_STORAGE_CONTAINER = new HashMap<>();
 
     public static final Map<CrafterTier, RegistryObject<AdvancedCrafterBlock>> CRAFTER_BLOCK = new HashMap<>();
     public static final Map<CrafterTier, RegistryObject<Item>> CRAFTER = new HashMap<>();
-    public static final Map<CrafterTier, RegistryObject<TileEntityType<AdvancedCrafterTile>>> CRAFTER_TILE = new HashMap<>();
-    public static final Map<CrafterTier, RegistryObject<ContainerType<AdvancedCrafterContainer>>> CRAFTER_CONTAINER = new HashMap<>();
+    public static final Map<CrafterTier, RegistryObject<BlockEntityType<AdvancedCrafterBlockEntity>>> CRAFTER_TILE = new HashMap<>();
+    public static final Map<CrafterTier, RegistryObject<MenuType<AdvancedCrafterContainer>>> CRAFTER_CONTAINER = new HashMap<>();
 
-    private static Item.Properties GLOBAL_PROPERTIES = new Item.Properties().group(ModSetup.extraStorageTab).maxStackSize(64);
+    private static Item.Properties GLOBAL_PROPERTIES = new Item.Properties().tab(ModSetup.extraStorageTab).stacksTo(64);
 
     public static void init()
     {
@@ -96,16 +96,16 @@ public class Registration {
 
             ITEM_STORAGE_BLOCK.put(type, BLOCKS.register(name, () -> new AdvancedStorageBlock(type)));
             ITEM_STORAGE.put(type, ITEMS.register(name, () -> new AdvancedStorageBlockItem(ITEM_STORAGE_BLOCK.get(type).get(), GLOBAL_PROPERTIES)));
-            ITEM_STORAGE_TILE.put(type, TILES.register(name, () -> TileEntityType.Builder.create(() -> new AdvancedStorageBlockTile(type), ITEM_STORAGE_BLOCK.get(type).get()).build(null)));
-            ITEM_STORAGE_CONTAINER.put(type, CONTAINERS.register(name, () -> IForgeContainerType.create((windowId, inv, data) -> {
+            ITEM_STORAGE_TILE.put(type, TILES.register(name, () -> BlockEntityType.Builder.of((pos, state) -> new AdvancedStorageBlockEntity(type, pos, state), ITEM_STORAGE_BLOCK.get(type).get()).build(null)));
+            ITEM_STORAGE_CONTAINER.put(type, CONTAINERS.register(name, () -> IForgeMenuType.create((windowId, inv, data) -> {
                 BlockPos pos = data.readBlockPos();
-                TileEntity te = inv.player.getEntityWorld().getTileEntity(pos);
-                if(!(te instanceof AdvancedStorageBlockTile))
+                BlockEntity blockEntity = inv.player.getCommandSenderWorld().getBlockEntity(pos);
+                if(!(blockEntity instanceof AdvancedStorageBlockEntity be))
                 {
-                    Main.logger.error("Wrong type of tile entity (expected AdvancedStorageBlockTile)!");
+                    Main.logger.error("Wrong type of tile entity (expected AdvancedStorageBlockEntity)!");
                     return null;
                 }
-                return new AdvancedStorageBlockContainer(windowId, inv.player, (AdvancedStorageBlockTile) te);
+                return new AdvancedStorageBlockContainer(windowId, inv.player, be);
             })));
         }
 
@@ -116,16 +116,16 @@ public class Registration {
 
             FLUID_STORAGE_BLOCK.put(type, BLOCKS.register(name, () -> new AdvancedFluidStorageBlock(type)));
             FLUID_STORAGE.put(type, ITEMS.register(name, () -> new AdvancedFluidStorageBlockItem(FLUID_STORAGE_BLOCK.get(type).get(), GLOBAL_PROPERTIES)));
-            FLUID_STORAGE_TILE.put(type, TILES.register(name, () -> TileEntityType.Builder.create(() -> new AdvancedFluidStorageBlockTile(type), FLUID_STORAGE_BLOCK.get(type).get()).build(null)));
-            FLUID_STORAGE_CONTAINER.put(type, CONTAINERS.register(name, () -> IForgeContainerType.create((windowId, inv, data) -> {
+            FLUID_STORAGE_TILE.put(type, TILES.register(name, () -> BlockEntityType.Builder.of((pos, state) -> new AdvancedFluidStorageBlockEntity(type, pos, state), FLUID_STORAGE_BLOCK.get(type).get()).build(null)));
+            FLUID_STORAGE_CONTAINER.put(type, CONTAINERS.register(name, () -> IForgeMenuType.create((windowId, inv, data) -> {
                 BlockPos pos = data.readBlockPos();
-                TileEntity te = inv.player.getEntityWorld().getTileEntity(pos);
-                if(!(te instanceof AdvancedFluidStorageBlockTile))
+                BlockEntity blockEntity = inv.player.getCommandSenderWorld().getBlockEntity(pos);
+                if(!(blockEntity instanceof AdvancedFluidStorageBlockEntity be))
                 {
-                    Main.logger.error("Wrong type of tile entity (expected AdvancedFluidStorageBlockTile)!");
+                    Main.logger.error("Wrong type of tile entity (expected AdvancedFluidStorageBlockEntity)!");
                     return null;
                 }
-                return new AdvancedFluidStorageBlockContainer(windowId, inv.player, (AdvancedFluidStorageBlockTile) te);
+                return new AdvancedFluidStorageBlockContainer(windowId, inv.player, be);
             })));
         }
 
@@ -134,46 +134,46 @@ public class Registration {
         {
             CRAFTER_BLOCK.put(tier, BLOCKS.register(tier.getID(), () -> new AdvancedCrafterBlock(tier)));
             CRAFTER.put(tier, ITEMS.register(tier.getID(), () -> new BaseBlockItem(CRAFTER_BLOCK.get(tier).get(), GLOBAL_PROPERTIES)));
-            CRAFTER_TILE.put(tier, TILES.register(tier.getID(), () -> TileEntityType.Builder.create(() -> new AdvancedCrafterTile(tier), CRAFTER_BLOCK.get(tier).get()).build(null)));
-            CRAFTER_CONTAINER.put(tier, CONTAINERS.register(tier.getID(), () -> IForgeContainerType.create((windowId, inv, data) -> {
+            CRAFTER_TILE.put(tier, TILES.register(tier.getID(), () -> BlockEntityType.Builder.of((pos, state) -> new AdvancedCrafterBlockEntity(tier, pos, state), CRAFTER_BLOCK.get(tier).get()).build(null)));
+            CRAFTER_CONTAINER.put(tier, CONTAINERS.register(tier.getID(), () -> IForgeMenuType.create((windowId, inv, data) -> {
                 BlockPos pos = data.readBlockPos();
-                TileEntity te = inv.player.getEntityWorld().getTileEntity(pos);
-                if(!(te instanceof AdvancedCrafterTile))
+                BlockEntity blockEntity = inv.player.getCommandSenderWorld().getBlockEntity(pos);
+                if(!(blockEntity instanceof AdvancedCrafterBlockEntity be))
                 {
-                    Main.logger.error("Wrong type of tile entity (expected AdvancedCrafterTile)!");
+                    Main.logger.error("Wrong type of tile entity (expected AdvancedCrafterBlockEntity)!");
                     return null;
                 }
-                return new AdvancedCrafterContainer(windowId, inv.player, (AdvancedCrafterTile) te);
+                return new AdvancedCrafterContainer(windowId, inv.player, be);
             })));
         }
     }
 
-    public static final RegistryObject<AdvancedExporter> ADVANCED_EXPORTER = BLOCKS.register("advanced_exporter", AdvancedExporter::new);
+    public static final RegistryObject<AdvancedExporterBlock> ADVANCED_EXPORTER = BLOCKS.register("advanced_exporter", AdvancedExporterBlock::new);
     public static final RegistryObject<Item> ADVANCED_EXPORTER_ITEM = ITEMS.register("advanced_exporter", () -> new BaseBlockItem(ADVANCED_EXPORTER.get(), GLOBAL_PROPERTIES));
-    public static final RegistryObject<TileEntityType<AdvancedExporterTile>> ADVANCED_EXPORTER_TILE = TILES.register("advanced_exporter", () -> TileEntityType.Builder.create(AdvancedExporterTile::new, ADVANCED_EXPORTER.get()).build(null));
-    public static final RegistryObject<ContainerType<AdvancedExporterContainer>> ADVANCED_EXPORTER_CONTAINER = CONTAINERS.register("advanced_exporter", () -> IForgeContainerType.create((windowId, inv, data) -> {
+    public static final RegistryObject<BlockEntityType<AdvancedExporterBlockEntity>> ADVANCED_EXPORTER_TILE = TILES.register("advanced_exporter", () -> BlockEntityType.Builder.of(AdvancedExporterBlockEntity::new, ADVANCED_EXPORTER.get()).build(null));
+    public static final RegistryObject<MenuType<AdvancedExporterContainer>> ADVANCED_EXPORTER_CONTAINER = CONTAINERS.register("advanced_exporter", () -> IForgeMenuType.create((windowId, inv, data) -> {
         BlockPos pos = data.readBlockPos();
-        TileEntity te = inv.player.getEntityWorld().getTileEntity(pos);
-        if(!(te instanceof AdvancedExporterTile))
+        BlockEntity blockEntity = inv.player.getCommandSenderWorld().getBlockEntity(pos);
+        if(!(blockEntity instanceof AdvancedExporterBlockEntity be))
         {
-            Main.logger.error("Wrong type of tile entity (expected AdvancedExporterTile)!");
+            Main.logger.error("Wrong type of tile entity (expected AdvancedExporterBlockEntity)!");
             return null;
         }
-        return new AdvancedExporterContainer(windowId, inv.player, (AdvancedExporterTile) te);
+        return new AdvancedExporterContainer(windowId, inv.player, be);
     }));
 
-    public static final RegistryObject<AdvancedImporter> ADVANCED_IMPORTER = BLOCKS.register("advanced_importer", AdvancedImporter::new);
+    public static final RegistryObject<AdvancedImporterBlock> ADVANCED_IMPORTER = BLOCKS.register("advanced_importer", AdvancedImporterBlock::new);
     public static final RegistryObject<Item> ADVANCED_IMPORTER_ITEM = ITEMS.register("advanced_importer", () -> new BaseBlockItem(ADVANCED_IMPORTER.get(), GLOBAL_PROPERTIES));
-    public static final RegistryObject<TileEntityType<AdvancedImporterTile>> ADVANCED_IMPORTER_TILE = TILES.register("advanced_importer", () -> TileEntityType.Builder.create(AdvancedImporterTile::new, ADVANCED_IMPORTER.get()).build(null));
-    public static final RegistryObject<ContainerType<AdvancedImporterContainer>> ADVANCED_IMPORTER_CONTAINER = CONTAINERS.register("advanced_importer", () -> IForgeContainerType.create((windowId, inv, data) -> {
+    public static final RegistryObject<BlockEntityType<AdvancedImporterBlockEntity>> ADVANCED_IMPORTER_TILE = TILES.register("advanced_importer", () -> BlockEntityType.Builder.of(AdvancedImporterBlockEntity::new, ADVANCED_IMPORTER.get()).build(null));
+    public static final RegistryObject<MenuType<AdvancedImporterContainer>> ADVANCED_IMPORTER_CONTAINER = CONTAINERS.register("advanced_importer", () -> IForgeMenuType.create((windowId, inv, data) -> {
         BlockPos pos = data.readBlockPos();
-        TileEntity te = inv.player.getEntityWorld().getTileEntity(pos);
-        if(!(te instanceof AdvancedImporterTile))
+        BlockEntity blockEntity = inv.player.getCommandSenderWorld().getBlockEntity(pos);
+        if(!(blockEntity instanceof AdvancedImporterBlockEntity be))
         {
-            Main.logger.error("Wrong type of tile entity (expected AdvancedImporterTile)!");
+            Main.logger.error("Wrong type of tile entity (expected AdvancedImporterBlockEntity)!");
             return null;
         }
-        return new AdvancedImporterContainer(windowId, inv.player, (AdvancedImporterTile) te);
+        return new AdvancedImporterContainer(windowId, inv.player, be);
     }));
 
     public static final RegistryObject<Item> RAW_NEURAL_PROCESSOR_ITEM = ITEMS.register("raw_neural_processor", () -> new Item(GLOBAL_PROPERTIES));

@@ -1,13 +1,13 @@
 package edivad.extrastorage.client.screen.dataparameter;
 
+import com.refinedmods.refinedstorage.blockentity.data.BlockEntitySynchronizationClientListener;
 import com.refinedmods.refinedstorage.screen.BaseScreen;
-import com.refinedmods.refinedstorage.tile.data.TileDataParameterClientListener;
 import edivad.extrastorage.client.screen.AdvancedCrafterScreen;
 import edivad.extrastorage.client.screen.AdvancedCrafterScreenQuark;
 import edivad.extrastorage.client.screen.custombutton.AdvancedCrafterModeSideButton;
 import net.minecraftforge.fml.ModList;
 
-public class AdvancedCrafterTileDataParameterClientListener implements TileDataParameterClientListener<Boolean>
+public class AdvancedCrafterTileDataParameterClientListener implements BlockEntitySynchronizationClientListener<Boolean>
 {
     @Override
     public void onChanged(boolean initial, Boolean hasRoot)

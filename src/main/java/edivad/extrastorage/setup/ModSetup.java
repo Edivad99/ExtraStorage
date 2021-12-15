@@ -3,7 +3,7 @@ package edivad.extrastorage.setup;
 import com.refinedmods.refinedstorage.api.network.node.INetworkNode;
 import com.refinedmods.refinedstorage.apiimpl.API;
 import com.refinedmods.refinedstorage.apiimpl.network.node.NetworkNode;
-import com.refinedmods.refinedstorage.tile.data.TileDataManager;
+import com.refinedmods.refinedstorage.blockentity.data.BlockEntitySynchronizationManager;
 import edivad.extrastorage.Main;
 import edivad.extrastorage.blocks.CrafterTier;
 import edivad.extrastorage.compat.CarryOnIntegration;
@@ -42,23 +42,23 @@ public class ModSetup {
         for(CrafterTier tier : CrafterTier.values())
         {
             API.instance().getNetworkNodeRegistry().add(new ResourceLocation(Main.MODID, tier.getID()), (tag, world, pos) -> readAndReturn(tag, new AdvancedCrafterNetworkNode(world, pos, tier)));
-            Registration.CRAFTER_TILE.get(tier).get().create(BlockPos.ZERO, null).getDataManager().getParameters().forEach(TileDataManager::registerParameter);
+            Registration.CRAFTER_TILE.get(tier).get().create(BlockPos.ZERO, null).getDataManager().getParameters().forEach(BlockEntitySynchronizationManager::registerParameter);
         }
         for(ItemStorageType type : ItemStorageType.values())
         {
             API.instance().getNetworkNodeRegistry().add(new ResourceLocation(Main.MODID, "block_" + type.getName()), (tag, world, pos) -> readAndReturn(tag, new AdvancedStorageNetworkNode(world, pos, type)));
-            Registration.ITEM_STORAGE_TILE.get(type).get().create(BlockPos.ZERO, null).getDataManager().getParameters().forEach(TileDataManager::registerParameter);
+            Registration.ITEM_STORAGE_TILE.get(type).get().create(BlockPos.ZERO, null).getDataManager().getParameters().forEach(BlockEntitySynchronizationManager::registerParameter);
         }
         for(FluidStorageType type : FluidStorageType.values())
         {
             API.instance().getNetworkNodeRegistry().add(new ResourceLocation(Main.MODID, "block_" + type.getName() + "_fluid"), (tag, world, pos) -> readAndReturn(tag, new AdvancedFluidStorageNetworkNode(world, pos, type)));
-            Registration.FLUID_STORAGE_TILE.get(type).get().create(BlockPos.ZERO, null).getDataManager().getParameters().forEach(TileDataManager::registerParameter);
+            Registration.FLUID_STORAGE_TILE.get(type).get().create(BlockPos.ZERO, null).getDataManager().getParameters().forEach(BlockEntitySynchronizationManager::registerParameter);
         }
 
         API.instance().getNetworkNodeRegistry().add(AdvancedExporterNetworkNode.ID, (tag, world, pos) -> readAndReturn(tag, new AdvancedExporterNetworkNode(world, pos)));
         API.instance().getNetworkNodeRegistry().add(AdvancedImporterNetworkNode.ID, (tag, world, pos) -> readAndReturn(tag, new AdvancedImporterNetworkNode(world, pos)));
-        Registration.ADVANCED_EXPORTER_TILE.get().create(BlockPos.ZERO, null).getDataManager().getParameters().forEach(TileDataManager::registerParameter);
-        Registration.ADVANCED_IMPORTER_TILE.get().create(BlockPos.ZERO, null).getDataManager().getParameters().forEach(TileDataManager::registerParameter);
+        Registration.ADVANCED_EXPORTER_TILE.get().create(BlockPos.ZERO, null).getDataManager().getParameters().forEach(BlockEntitySynchronizationManager::registerParameter);
+        Registration.ADVANCED_IMPORTER_TILE.get().create(BlockPos.ZERO, null).getDataManager().getParameters().forEach(BlockEntitySynchronizationManager::registerParameter);
 
         //Integrations
         CarryOnIntegration.registerCarryOn();

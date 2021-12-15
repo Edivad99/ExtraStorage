@@ -1,17 +1,17 @@
 package edivad.extrastorage.container;
 
-import com.refinedmods.refinedstorage.container.BaseContainer;
+import com.refinedmods.refinedstorage.container.BaseContainerMenu;
 import edivad.extrastorage.setup.Registration;
 import edivad.extrastorage.blockentity.AdvancedCrafterBlockEntity;
 import edivad.extrastorage.blocks.CrafterTier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.items.SlotItemHandler;
 
-public class AdvancedCrafterContainer extends BaseContainer
+public class AdvancedCrafterContainerMenu extends BaseContainerMenu
 {
     private final AdvancedCrafterBlockEntity tile;
 
-    public AdvancedCrafterContainer(int windowId, Player player, AdvancedCrafterBlockEntity crafter)
+    public AdvancedCrafterContainerMenu(int windowId, Player player, AdvancedCrafterBlockEntity crafter)
     {
         super(Registration.CRAFTER_CONTAINER.get(crafter.getTier()).get(), crafter, player, windowId);
         this.tile = crafter;
@@ -36,7 +36,7 @@ public class AdvancedCrafterContainer extends BaseContainer
     }
 
     @Override
-    public AdvancedCrafterBlockEntity getTile()
+    public AdvancedCrafterBlockEntity getBlockEntity()
     {
         return tile;
     }

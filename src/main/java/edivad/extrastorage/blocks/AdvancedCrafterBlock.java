@@ -3,11 +3,11 @@ package edivad.extrastorage.blocks;
 import com.refinedmods.refinedstorage.api.network.security.Permission;
 import com.refinedmods.refinedstorage.block.BlockDirection;
 import com.refinedmods.refinedstorage.block.NetworkNodeBlock;
-import com.refinedmods.refinedstorage.container.factory.PositionalTileContainerProvider;
+import com.refinedmods.refinedstorage.container.factory.BlockEntityMenuProvider;
 import com.refinedmods.refinedstorage.util.BlockUtils;
 import com.refinedmods.refinedstorage.util.NetworkUtils;
 import edivad.extrastorage.blockentity.AdvancedCrafterBlockEntity;
-import edivad.extrastorage.container.AdvancedCrafterContainer;
+import edivad.extrastorage.container.AdvancedCrafterContainerMenu;
 import edivad.extrastorage.tools.Translations;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
@@ -77,9 +77,9 @@ public class AdvancedCrafterBlock extends NetworkNodeBlock
         {
             return NetworkUtils.attempt(level, pos, player, () -> NetworkHooks.openGui(
                     (ServerPlayer) player,
-                    new PositionalTileContainerProvider<AdvancedCrafterBlockEntity>(
+                    new BlockEntityMenuProvider<AdvancedCrafterBlockEntity>(
                             ((AdvancedCrafterBlockEntity) level.getBlockEntity(pos)).getNode().getName(),
-                            (tile, windowId, inventory, p) -> new AdvancedCrafterContainer(windowId, player, tile),
+                            (tile, windowId, inventory, p) -> new AdvancedCrafterContainerMenu(windowId, player, tile),
                             pos
                     ),
                     pos

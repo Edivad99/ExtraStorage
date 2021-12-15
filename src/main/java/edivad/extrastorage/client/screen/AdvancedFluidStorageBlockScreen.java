@@ -1,22 +1,22 @@
 package edivad.extrastorage.client.screen;
 
 import com.refinedmods.refinedstorage.screen.StorageScreen;
-import com.refinedmods.refinedstorage.screen.StorageScreenTileDataParameters;
+import com.refinedmods.refinedstorage.screen.StorageScreenSynchronizationParameters;
 import edivad.extrastorage.blockentity.AdvancedFluidStorageBlockEntity;
-import edivad.extrastorage.container.AdvancedFluidStorageBlockContainer;
+import edivad.extrastorage.container.AdvancedFluidStorageBlockContainerMenu;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
 
-public class AdvancedFluidStorageBlockScreen extends StorageScreen<AdvancedFluidStorageBlockContainer>
+public class AdvancedFluidStorageBlockScreen extends StorageScreen<AdvancedFluidStorageBlockContainerMenu>
 {
-    public AdvancedFluidStorageBlockScreen(AdvancedFluidStorageBlockContainer container, Inventory inventory, Component title)
+    public AdvancedFluidStorageBlockScreen(AdvancedFluidStorageBlockContainerMenu container, Inventory inventory, Component title)
     {
         super(
                 container,
                 inventory,
                 title,
                 "gui/storage.png",
-                new StorageScreenTileDataParameters(null,
+                new StorageScreenSynchronizationParameters(null,
                         AdvancedFluidStorageBlockEntity.REDSTONE_MODE,
                         AdvancedFluidStorageBlockEntity.COMPARE,
                         AdvancedFluidStorageBlockEntity.WHITELIST_BLACKLIST,
@@ -24,6 +24,6 @@ public class AdvancedFluidStorageBlockScreen extends StorageScreen<AdvancedFluid
                         AdvancedFluidStorageBlockEntity.ACCESS_TYPE
                 ),
                 AdvancedFluidStorageBlockEntity.STORED::getValue,
-                () -> (long) ((AdvancedFluidStorageBlockEntity) container.getTile()).getFluidStorageType().getCapacity());
+                () -> (long) ((AdvancedFluidStorageBlockEntity) container.getBlockEntity()).getFluidStorageType().getCapacity());
     }
 }

@@ -1,11 +1,11 @@
 package edivad.extrastorage.blocks;
 
 import com.refinedmods.refinedstorage.block.NetworkNodeBlock;
-import com.refinedmods.refinedstorage.container.factory.PositionalTileContainerProvider;
+import com.refinedmods.refinedstorage.container.factory.BlockEntityMenuProvider;
 import com.refinedmods.refinedstorage.util.BlockUtils;
 import com.refinedmods.refinedstorage.util.NetworkUtils;
 import edivad.extrastorage.blockentity.AdvancedStorageBlockEntity;
-import edivad.extrastorage.container.AdvancedStorageBlockContainer;
+import edivad.extrastorage.container.AdvancedStorageBlockContainerMenu;
 import edivad.extrastorage.items.item.ItemStorageType;
 import edivad.extrastorage.nodes.AdvancedStorageNetworkNode;
 import net.minecraft.core.BlockPos;
@@ -65,9 +65,9 @@ public class AdvancedStorageBlock extends NetworkNodeBlock
     public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit) {
         if (!level.isClientSide)
         {
-            return NetworkUtils.attemptModify(level, pos, player, () -> NetworkHooks.openGui((ServerPlayer) player, new PositionalTileContainerProvider<AdvancedStorageBlockEntity>(
+            return NetworkUtils.attemptModify(level, pos, player, () -> NetworkHooks.openGui((ServerPlayer) player, new BlockEntityMenuProvider<AdvancedStorageBlockEntity>(
                     ((AdvancedStorageBlockEntity) level.getBlockEntity(pos)).getNode().getTitle(),
-                    (tile, windowId, inventory, p) -> new AdvancedStorageBlockContainer(windowId, player, tile),
+                    (tile, windowId, inventory, p) -> new AdvancedStorageBlockContainerMenu(windowId, player, tile),
                     pos
             ), pos));
         }

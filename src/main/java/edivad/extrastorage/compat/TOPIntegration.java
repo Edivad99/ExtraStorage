@@ -1,17 +1,18 @@
 package edivad.extrastorage.compat;
 
 import com.refinedmods.refinedstorage.apiimpl.network.node.CrafterNetworkNode;
-import com.refinedmods.refinedstorage.tile.CrafterTile;
+import com.refinedmods.refinedstorage.blockentity.CrafterBlockEntity;
 import edivad.extrastorage.Main;
 import edivad.extrastorage.blocks.CrafterTier;
 import edivad.extrastorage.nodes.AdvancedCrafterNetworkNode;
 import edivad.extrastorage.blockentity.AdvancedCrafterBlockEntity;
 import mcjty.theoneprobe.api.*;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.world.World;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.function.Function;
 
@@ -25,9 +26,9 @@ public class TOPIntegration implements IProbeInfoProvider, Function<ITheOneProbe
     }
 
     @Override
-    public void addProbeInfo(ProbeMode probeMode, IProbeInfo probeInfo, PlayerEntity player, World world, BlockState blockState, IProbeHitData data)
+    public void addProbeInfo(ProbeMode probeMode, IProbeInfo probeInfo, Player player, Level level, BlockState blockState, IProbeHitData data)
     {
-        TileEntity te = world.getTileEntity(data.getPos());
+        BlockEntity te = level.getBlockEntity(data.getPos());
         int patterns = 0, speed = 0, slots = 0;
 
         if(te instanceof AdvancedCrafterBlockEntity) {
@@ -37,22 +38,21 @@ public class TOPIntegration implements IProbeInfoProvider, Function<ITheOneProbe
             patterns = node.getPatterns().size();
             speed = node.getMaximumSuccessfulCraftingUpdates();
             slots = tier.getSlots();
-        } else if (te instanceof CrafterTile) {
-            CrafterTile tile = (CrafterTile) te;
+        } else if (te instanceof CrafterBlockEntity tile) {
             CrafterNetworkNode node = tile.getNode();
             patterns = node.getPatterns().size();
             speed = node.getMaximumSuccessfulCraftingUpdates();
             slots = 9;
         }
-        if(te instanceof AdvancedCrafterBlockEntity || te instanceof CrafterTile) {
-            probeInfo.horizontal().text(new StringTextComponent(String.format("Occupied space: %d/%d", patterns, slots)));
-            probeInfo.horizontal().text(new StringTextComponent(String.format("Current speed: %dx", speed)));
+        if(te instanceof AdvancedCrafterBlockEntity || te instanceof CrafterBlockEntity) {
+            probeInfo.horizontal().text(new TextComponent(String.format("Occupied space: %d/%d", patterns, slots)));
+            probeInfo.horizontal().text(new TextComponent(String.format("Current speed: %dx", speed)));
         }
     }
 
     @Override
-    public String getID()
+    public ResourceLocation getID()
     {
-        return Main.MODID + ":default";
+        return new ResourceLocation(Main.MODID ,"default");
     }
 }

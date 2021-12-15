@@ -1,21 +1,21 @@
 package edivad.extrastorage.container;
 
-import com.refinedmods.refinedstorage.container.BaseContainer;
+import com.refinedmods.refinedstorage.blockentity.config.IType;
+import com.refinedmods.refinedstorage.container.BaseContainerMenu;
 import com.refinedmods.refinedstorage.container.slot.filter.FilterSlot;
 import com.refinedmods.refinedstorage.container.slot.filter.FluidFilterSlot;
 import com.refinedmods.refinedstorage.item.UpgradeItem;
-import com.refinedmods.refinedstorage.tile.config.IType;
 import edivad.extrastorage.setup.Registration;
 import edivad.extrastorage.blockentity.AdvancedExporterBlockEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.items.SlotItemHandler;
 
-public class AdvancedExporterContainer extends BaseContainer
+public class AdvancedExporterContainerMenu extends BaseContainerMenu
 {
     private final AdvancedExporterBlockEntity tile;
     private boolean hasRegulatorMode;
 
-    public AdvancedExporterContainer(int windowId, Player player, AdvancedExporterBlockEntity tile)
+    public AdvancedExporterContainerMenu(int windowId, Player player, AdvancedExporterBlockEntity tile)
     {
         super(Registration.ADVANCED_EXPORTER_CONTAINER.get(), tile, player, windowId);
         this.tile = tile;
@@ -81,7 +81,7 @@ public class AdvancedExporterContainer extends BaseContainer
     }
 
     @Override
-    public AdvancedExporterBlockEntity getTile()
+    public AdvancedExporterBlockEntity getBlockEntity()
     {
         return tile;
     }

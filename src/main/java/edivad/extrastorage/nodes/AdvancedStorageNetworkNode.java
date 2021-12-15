@@ -67,13 +67,13 @@ public class AdvancedStorageNetworkNode extends StorageNetworkNode
     @Override
     public void loadStorage(@Nullable Player owner)
     {
-        IStorageDisk disk = API.instance().getStorageDiskManager((ServerLevel) world).get(getStorageId());
+        IStorageDisk disk = API.instance().getStorageDiskManager((ServerLevel) level).get(getStorageId());
 
         if (disk == null)
         {
-            disk = API.instance().createDefaultItemDisk((ServerLevel) world, type.getCapacity(), owner);
-            API.instance().getStorageDiskManager((ServerLevel) world).set(getStorageId(), disk);
-            API.instance().getStorageDiskManager((ServerLevel) world).markForSaving();
+            disk = API.instance().createDefaultItemDisk((ServerLevel) level, type.getCapacity(), owner);
+            API.instance().getStorageDiskManager((ServerLevel) level).set(getStorageId(), disk);
+            API.instance().getStorageDiskManager((ServerLevel) level).markForSaving();
         }
 
         this.storage = new ItemStorageWrapperStorageDisk(this, disk);

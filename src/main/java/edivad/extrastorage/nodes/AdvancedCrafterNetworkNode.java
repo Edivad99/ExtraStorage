@@ -147,7 +147,7 @@ public class AdvancedCrafterNetworkNode extends NetworkNode implements ICrafting
 
         if(!patternStack.isEmpty())
         {
-            ICraftingPattern pattern = ((ICraftingPatternProvider) patternStack.getItem()).create(world, patternStack, this);
+            ICraftingPattern pattern = ((ICraftingPatternProvider) patternStack.getItem()).create(level, patternStack, this);
 
             if(pattern.isValid())
             {
@@ -174,9 +174,9 @@ public class AdvancedCrafterNetworkNode extends NetworkNode implements ICrafting
         if (ticks == 1)
             invalidate();
 
-        if (mode == CrafterMode.PULSE_INSERTS_NEXT_SET && world.isLoaded(pos))
+        if (mode == CrafterMode.PULSE_INSERTS_NEXT_SET && level.isLoaded(pos))
         {
-            if (world.hasNeighborSignal(pos))
+            if (level.hasNeighborSignal(pos))
             {
                 this.wasPowered = true;
                 markDirty();
@@ -315,7 +315,7 @@ public class AdvancedCrafterNetworkNode extends NetworkNode implements ICrafting
         if(proxy == null)
             return null;
 
-        return WorldUtils.getItemHandler(proxy.getFacingTile(), proxy.getDirection().getOpposite());
+        return WorldUtils.getItemHandler(proxy.getFacingBlockEntity(), proxy.getDirection().getOpposite());
     }
 
     @Nullable
@@ -326,18 +326,18 @@ public class AdvancedCrafterNetworkNode extends NetworkNode implements ICrafting
         if(proxy == null)
             return null;
 
-        return WorldUtils.getFluidHandler(proxy.getFacingTile(), proxy.getDirection().getOpposite());
+        return WorldUtils.getFluidHandler(proxy.getFacingBlockEntity(), proxy.getDirection().getOpposite());
     }
 
     @Nullable
     @Override
-    public BlockEntity getConnectedTile()
+    public BlockEntity getConnectedBlockEntity()
     {
         ICraftingPatternContainer proxy = getRootContainer();
         if(proxy == null)
             return null;
 
-        return proxy.getFacingTile();
+        return proxy.getFacingBlockEntity();
     }
 
     @Override
@@ -359,13 +359,13 @@ public class AdvancedCrafterNetworkNode extends NetworkNode implements ICrafting
         if (displayName != null)
             return displayName;
 
-        BlockEntity facing = getConnectedTile();
+        BlockEntity facing = getConnectedBlockEntity();
 
         if (facing instanceof Nameable face && face.getName() != null)
             return face.getName();
 
         if (facing != null)
-            return new TranslatableComponent(world.getBlockState(facing.getBlockPos()).getBlock().getDescriptionId());
+            return new TranslatableComponent(level.getBlockState(facing.getBlockPos()).getBlock().getDescriptionId());
 
         return DEFAULT_NAME;
     }
@@ -424,7 +424,7 @@ public class AdvancedCrafterNetworkNode extends NetworkNode implements ICrafting
         if (visited)
             return null;
 
-        INetworkNode facing = API.instance().getNetworkNodeManager((ServerLevel) world).getNode(pos.relative(getDirection()));
+        INetworkNode facing = API.instance().getNetworkNodeManager((ServerLevel) level).getNode(pos.relative(getDirection()));
         if (!(facing instanceof ICraftingPatternContainer) || facing.getNetwork() != network)
             return this;
 
@@ -466,9 +466,9 @@ public class AdvancedCrafterNetworkNode extends NetworkNode implements ICrafting
         switch (mode)
         {
             case SIGNAL_LOCKS_AUTOCRAFTING:
-                return world.hasNeighborSignal(pos);
+                return level.hasNeighborSignal(pos);
             case SIGNAL_UNLOCKS_AUTOCRAFTING:
-                return !world.hasNeighborSignal(pos);
+                return !level.hasNeighborSignal(pos);
             case PULSE_INSERTS_NEXT_SET:
                 return locked;
             default:

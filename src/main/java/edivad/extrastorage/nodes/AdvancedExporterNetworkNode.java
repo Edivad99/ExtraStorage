@@ -6,14 +6,14 @@ import com.refinedmods.refinedstorage.api.util.IComparer;
 import com.refinedmods.refinedstorage.apiimpl.API;
 import com.refinedmods.refinedstorage.apiimpl.network.node.NetworkNode;
 import com.refinedmods.refinedstorage.apiimpl.network.node.SlottedCraftingRequest;
+import com.refinedmods.refinedstorage.blockentity.config.IComparable;
+import com.refinedmods.refinedstorage.blockentity.config.IType;
 import com.refinedmods.refinedstorage.inventory.fluid.FluidInventory;
 import com.refinedmods.refinedstorage.inventory.item.BaseItemHandler;
 import com.refinedmods.refinedstorage.inventory.item.UpgradeItemHandler;
 import com.refinedmods.refinedstorage.inventory.listener.NetworkNodeFluidInventoryListener;
 import com.refinedmods.refinedstorage.inventory.listener.NetworkNodeInventoryListener;
 import com.refinedmods.refinedstorage.item.UpgradeItem;
-import com.refinedmods.refinedstorage.tile.config.IComparable;
-import com.refinedmods.refinedstorage.tile.config.IType;
 import com.refinedmods.refinedstorage.util.StackUtils;
 import com.refinedmods.refinedstorage.util.WorldUtils;
 import edivad.extrastorage.Main;
@@ -97,9 +97,9 @@ public class AdvancedExporterNetworkNode extends NetworkNode implements ICompara
     public void update() {
         super.update();
 
-        if (canUpdate() && ticks % upgrades.getSpeed() == 0 && world.isLoaded(pos)) {
+        if (canUpdate() && ticks % upgrades.getSpeed() == 0 && level.isLoaded(pos)) {
             if (type == IType.ITEMS) {
-                IItemHandler handler = WorldUtils.getItemHandler(getFacingTile(), getDirection().getOpposite());
+                IItemHandler handler = WorldUtils.getItemHandler(getFacingBlockEntity(), getDirection().getOpposite());
 
                 if (handler != null) {
                     final int handlerSlots = handler.getSlots();
@@ -179,7 +179,7 @@ public class AdvancedExporterNetworkNode extends NetworkNode implements ICompara
                     filterSlot = 0;
                 }
 
-                IFluidHandler handler = WorldUtils.getFluidHandler(getFacingTile(), getDirection().getOpposite());
+                IFluidHandler handler = WorldUtils.getFluidHandler(getFacingBlockEntity(), getDirection().getOpposite());
 
                 if (handler != null) {
                     FluidStack stack = fluids[filterSlot];
@@ -311,7 +311,7 @@ public class AdvancedExporterNetworkNode extends NetworkNode implements ICompara
     @Override
     public int getType()
     {
-        return world.isClientSide ? AdvancedExporterBlockEntity.TYPE.getValue() : type;
+        return level.isClientSide ? AdvancedExporterBlockEntity.TYPE.getValue() : type;
     }
 
     @Override

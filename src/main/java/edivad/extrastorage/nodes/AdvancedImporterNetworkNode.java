@@ -4,16 +4,16 @@ import com.refinedmods.refinedstorage.RS;
 import com.refinedmods.refinedstorage.api.util.Action;
 import com.refinedmods.refinedstorage.api.util.IComparer;
 import com.refinedmods.refinedstorage.apiimpl.network.node.NetworkNode;
+import com.refinedmods.refinedstorage.blockentity.DiskDriveBlockEntity;
+import com.refinedmods.refinedstorage.blockentity.config.IComparable;
+import com.refinedmods.refinedstorage.blockentity.config.IType;
+import com.refinedmods.refinedstorage.blockentity.config.IWhitelistBlacklist;
 import com.refinedmods.refinedstorage.inventory.fluid.FluidInventory;
 import com.refinedmods.refinedstorage.inventory.item.BaseItemHandler;
 import com.refinedmods.refinedstorage.inventory.item.UpgradeItemHandler;
 import com.refinedmods.refinedstorage.inventory.listener.NetworkNodeFluidInventoryListener;
 import com.refinedmods.refinedstorage.inventory.listener.NetworkNodeInventoryListener;
 import com.refinedmods.refinedstorage.item.UpgradeItem;
-import com.refinedmods.refinedstorage.tile.DiskDriveTile;
-import com.refinedmods.refinedstorage.tile.config.IComparable;
-import com.refinedmods.refinedstorage.tile.config.IType;
-import com.refinedmods.refinedstorage.tile.config.IWhitelistBlacklist;
 import com.refinedmods.refinedstorage.util.StackUtils;
 import com.refinedmods.refinedstorage.util.WorldUtils;
 import edivad.extrastorage.Main;
@@ -67,16 +67,16 @@ public class AdvancedImporterNetworkNode extends NetworkNode implements ICompara
     {
         super.update();
 
-        if (!canUpdate() || !world.isLoaded(pos)) {
+        if (!canUpdate() || !level.isLoaded(pos)) {
             return;
         }
 
         if (type == IType.ITEMS)
         {
-            BlockEntity facing = getFacingTile();
+            BlockEntity facing = getFacingBlockEntity();
             IItemHandler handler = WorldUtils.getItemHandler(facing, getDirection().getOpposite());
 
-            if (facing instanceof DiskDriveTile || handler == null) {
+            if (facing instanceof DiskDriveBlockEntity || handler == null) {
                 return;
             }
 
@@ -108,7 +108,7 @@ public class AdvancedImporterNetworkNode extends NetworkNode implements ICompara
         }
         else if (type == IType.FLUIDS && ticks % upgrades.getSpeed() == 0)
         {
-            IFluidHandler handler = WorldUtils.getFluidHandler(getFacingTile(), getDirection().getOpposite());
+            IFluidHandler handler = WorldUtils.getFluidHandler(getFacingBlockEntity(), getDirection().getOpposite());
 
             if (handler != null) {
                 FluidStack stack = handler.drain(FluidAttributes.BUCKET_VOLUME, IFluidHandler.FluidAction.SIMULATE);
@@ -223,7 +223,7 @@ public class AdvancedImporterNetworkNode extends NetworkNode implements ICompara
     @Override
     public int getType()
     {
-        return world.isClientSide ? AdvancedImporterBlockEntity.TYPE.getValue() : type;
+        return level.isClientSide ? AdvancedImporterBlockEntity.TYPE.getValue() : type;
     }
 
     @Override

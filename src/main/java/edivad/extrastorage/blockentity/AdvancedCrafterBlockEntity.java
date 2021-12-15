@@ -1,7 +1,7 @@
 package edivad.extrastorage.blockentity;
 
-import com.refinedmods.refinedstorage.tile.NetworkNodeTile;
-import com.refinedmods.refinedstorage.tile.data.TileDataParameter;
+import com.refinedmods.refinedstorage.blockentity.NetworkNodeBlockEntity;
+import com.refinedmods.refinedstorage.blockentity.data.BlockEntitySynchronizationParameter;
 import edivad.extrastorage.blocks.CrafterTier;
 import edivad.extrastorage.client.screen.dataparameter.AdvancedCrafterTileDataParameterClientListener;
 import edivad.extrastorage.nodes.AdvancedCrafterNetworkNode;
@@ -19,10 +19,10 @@ import net.minecraftforge.items.IItemHandler;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class AdvancedCrafterBlockEntity extends NetworkNodeTile<AdvancedCrafterNetworkNode>
+public class AdvancedCrafterBlockEntity extends NetworkNodeBlockEntity<AdvancedCrafterNetworkNode>
 {
-    public static final TileDataParameter<Integer, AdvancedCrafterBlockEntity> MODE = new TileDataParameter<>(EntityDataSerializers.INT, AdvancedCrafterNetworkNode.CrafterMode.IGNORE.ordinal(), t -> t.getNode().getMode().ordinal(), (t, v) -> t.getNode().setMode(AdvancedCrafterNetworkNode.CrafterMode.getById(v)));
-    private static final TileDataParameter<Boolean, AdvancedCrafterBlockEntity> HAS_ROOT = new TileDataParameter<>(EntityDataSerializers.BOOLEAN, false, t -> t.getNode().getRootContainerNotSelf().isPresent(), null, (t, v) -> new AdvancedCrafterTileDataParameterClientListener().onChanged(t, v));
+    public static final BlockEntitySynchronizationParameter<Integer, AdvancedCrafterBlockEntity> MODE = new BlockEntitySynchronizationParameter<>(EntityDataSerializers.INT, AdvancedCrafterNetworkNode.CrafterMode.IGNORE.ordinal(), t -> t.getNode().getMode().ordinal(), (t, v) -> t.getNode().setMode(AdvancedCrafterNetworkNode.CrafterMode.getById(v)));
+    private static final BlockEntitySynchronizationParameter<Boolean, AdvancedCrafterBlockEntity> HAS_ROOT = new BlockEntitySynchronizationParameter<>(EntityDataSerializers.BOOLEAN, false, t -> t.getNode().getRootContainerNotSelf().isPresent(), null, (t, v) -> new AdvancedCrafterTileDataParameterClientListener().onChanged(t, v));
 
     private final LazyOptional<IItemHandler> patternsCapability = LazyOptional.of(() -> getNode().getPatternItems());
     private final CrafterTier tier;

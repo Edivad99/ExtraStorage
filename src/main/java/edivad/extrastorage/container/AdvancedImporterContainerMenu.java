@@ -1,19 +1,19 @@
 package edivad.extrastorage.container;
 
-import com.refinedmods.refinedstorage.container.BaseContainer;
+import com.refinedmods.refinedstorage.blockentity.config.IType;
+import com.refinedmods.refinedstorage.container.BaseContainerMenu;
 import com.refinedmods.refinedstorage.container.slot.filter.FilterSlot;
 import com.refinedmods.refinedstorage.container.slot.filter.FluidFilterSlot;
-import com.refinedmods.refinedstorage.tile.config.IType;
 import edivad.extrastorage.setup.Registration;
 import edivad.extrastorage.blockentity.AdvancedImporterBlockEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.items.SlotItemHandler;
 
-public class AdvancedImporterContainer extends BaseContainer
+public class AdvancedImporterContainerMenu extends BaseContainerMenu
 {
     private final AdvancedImporterBlockEntity tile;
 
-    public AdvancedImporterContainer(int windowId, Player player, AdvancedImporterBlockEntity tile)
+    public AdvancedImporterContainerMenu(int windowId, Player player, AdvancedImporterBlockEntity tile)
     {
         super(Registration.ADVANCED_IMPORTER_CONTAINER.get(), tile, player, windowId);
         this.tile = tile;
@@ -51,7 +51,7 @@ public class AdvancedImporterContainer extends BaseContainer
     }
 
     @Override
-    public AdvancedImporterBlockEntity getTile()
+    public AdvancedImporterBlockEntity getBlockEntity()
     {
         return tile;
     }

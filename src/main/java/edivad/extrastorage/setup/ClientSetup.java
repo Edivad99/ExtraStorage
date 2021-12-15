@@ -11,7 +11,7 @@ import edivad.extrastorage.client.screen.AdvancedExporterScreen;
 import edivad.extrastorage.client.screen.AdvancedFluidStorageBlockScreen;
 import edivad.extrastorage.client.screen.AdvancedImporterScreen;
 import edivad.extrastorage.client.screen.AdvancedStorageBlockScreen;
-import edivad.extrastorage.container.AdvancedCrafterContainer;
+import edivad.extrastorage.container.AdvancedCrafterContainerMenu;
 import edivad.extrastorage.items.fluid.FluidStorageType;
 import edivad.extrastorage.items.item.ItemStorageType;
 import net.minecraft.client.Minecraft;
@@ -77,10 +77,10 @@ public class ClientSetup
         {
             AbstractContainerMenu container = Minecraft.getInstance().player.containerMenu;
 
-            if (container instanceof AdvancedCrafterContainer)
+            if (container instanceof AdvancedCrafterContainerMenu)
             {
-                AdvancedCrafterContainer actualContainer = (AdvancedCrafterContainer) container;
-                int slots = actualContainer.getTile().getTier().getSlots();
+                AdvancedCrafterContainerMenu actualContainer = (AdvancedCrafterContainerMenu) container;
+                int slots = actualContainer.getBlockEntity().getTier().getSlots();
                 for (int i = 0; i < slots; i++)
                     if (container.getSlot(i).getItem() == pattern)
                         return true;

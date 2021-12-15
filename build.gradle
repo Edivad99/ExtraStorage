@@ -110,14 +110,13 @@ repositories {
 dependencies {
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
 
-    compileOnly "com.refinedmods:refinedstorage:${rs_version}"
-    runtimeOnly fg.deobf("com.refinedmods:refinedstorage:${rs_version}") {
+    implementation fg.deobf("com.refinedmods:refinedstorage:${rs_version}") {
         transitive false
     }
 
     //runtimeOnly fg.deobf("tschipp.carryon:carryon-1.16.5:${co_version}")
-    //compileOnly fg.deobf("mcjty.theoneprobe:theoneprobe:${top_version}:api")
-    //runtimeOnly fg.deobf("mcjty.theoneprobe:theoneprobe:${top_version}")
+    compileOnly fg.deobf("curse.maven:theoneprobe-245211:3550084")
+    runtimeOnly fg.deobf("curse.maven:theoneprobe-245211:3550084")
     runtimeOnly fg.deobf("mezz.jei:jei-${minecraft_version}:${jei_version}")
 
     //runtimeOnly fg.deobf("curse.maven:mekanism-268560:${mekanism_version}")

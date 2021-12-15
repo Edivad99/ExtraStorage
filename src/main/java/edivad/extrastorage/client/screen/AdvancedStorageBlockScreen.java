@@ -1,22 +1,22 @@
 package edivad.extrastorage.client.screen;
 
 import com.refinedmods.refinedstorage.screen.StorageScreen;
-import com.refinedmods.refinedstorage.screen.StorageScreenTileDataParameters;
+import com.refinedmods.refinedstorage.screen.StorageScreenSynchronizationParameters;
 import edivad.extrastorage.blockentity.AdvancedStorageBlockEntity;
-import edivad.extrastorage.container.AdvancedStorageBlockContainer;
+import edivad.extrastorage.container.AdvancedStorageBlockContainerMenu;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
 
-public class AdvancedStorageBlockScreen extends StorageScreen<AdvancedStorageBlockContainer>
+public class AdvancedStorageBlockScreen extends StorageScreen<AdvancedStorageBlockContainerMenu>
 {
-    public AdvancedStorageBlockScreen(AdvancedStorageBlockContainer container, Inventory inventory, Component title)
+    public AdvancedStorageBlockScreen(AdvancedStorageBlockContainerMenu container, Inventory inventory, Component title)
     {
         super(
                 container,
                 inventory,
                 title,
                 "gui/storage.png",
-                new StorageScreenTileDataParameters(null,
+                new StorageScreenSynchronizationParameters(null,
                     AdvancedStorageBlockEntity.REDSTONE_MODE,
                     AdvancedStorageBlockEntity.COMPARE,
                     AdvancedStorageBlockEntity.WHITELIST_BLACKLIST,
@@ -24,6 +24,6 @@ public class AdvancedStorageBlockScreen extends StorageScreen<AdvancedStorageBlo
                     AdvancedStorageBlockEntity.ACCESS_TYPE
                 ),
                 AdvancedStorageBlockEntity.STORED::getValue,
-                () -> (long) ((AdvancedStorageBlockEntity) container.getTile()).getItemStorageType().getCapacity());
+                () -> (long) ((AdvancedStorageBlockEntity) container.getBlockEntity()).getItemStorageType().getCapacity());
     }
 }

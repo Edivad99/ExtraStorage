@@ -1,21 +1,21 @@
 package edivad.extrastorage.blockentity;
 
-import com.refinedmods.refinedstorage.tile.NetworkNodeTile;
-import com.refinedmods.refinedstorage.tile.config.IComparable;
-import com.refinedmods.refinedstorage.tile.config.IType;
-import com.refinedmods.refinedstorage.tile.config.IWhitelistBlacklist;
-import com.refinedmods.refinedstorage.tile.data.TileDataParameter;
+import com.refinedmods.refinedstorage.blockentity.NetworkNodeBlockEntity;
+import com.refinedmods.refinedstorage.blockentity.config.IComparable;
+import com.refinedmods.refinedstorage.blockentity.config.IType;
+import com.refinedmods.refinedstorage.blockentity.config.IWhitelistBlacklist;
+import com.refinedmods.refinedstorage.blockentity.data.BlockEntitySynchronizationParameter;
 import edivad.extrastorage.nodes.AdvancedImporterNetworkNode;
 import edivad.extrastorage.setup.Registration;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 
-public class AdvancedImporterBlockEntity extends NetworkNodeTile<AdvancedImporterNetworkNode>
+public class AdvancedImporterBlockEntity extends NetworkNodeBlockEntity<AdvancedImporterNetworkNode>
 {
-    public static final TileDataParameter<Integer, AdvancedImporterBlockEntity> COMPARE = IComparable.createParameter();
-    public static final TileDataParameter<Integer, AdvancedImporterBlockEntity> WHITELIST_BLACKLIST = IWhitelistBlacklist.createParameter();
-    public static final TileDataParameter<Integer, AdvancedImporterBlockEntity> TYPE = IType.createParameter();
+    public static final BlockEntitySynchronizationParameter<Integer, AdvancedImporterBlockEntity> COMPARE = IComparable.createParameter();
+    public static final BlockEntitySynchronizationParameter<Integer, AdvancedImporterBlockEntity> WHITELIST_BLACKLIST = IWhitelistBlacklist.createParameter();
+    public static final BlockEntitySynchronizationParameter<Integer, AdvancedImporterBlockEntity> TYPE = IType.createParameter();
 
     public AdvancedImporterBlockEntity(BlockPos pos, BlockState state)
     {

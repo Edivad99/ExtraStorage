@@ -3,13 +3,13 @@ package edivad.extrastorage.blocks;
 import com.refinedmods.refinedstorage.block.BlockDirection;
 import com.refinedmods.refinedstorage.block.CableBlock;
 import com.refinedmods.refinedstorage.block.shape.ShapeCache;
-import com.refinedmods.refinedstorage.container.factory.PositionalTileContainerProvider;
+import com.refinedmods.refinedstorage.container.factory.BlockEntityMenuProvider;
 import com.refinedmods.refinedstorage.render.ConstantsCable;
 import com.refinedmods.refinedstorage.util.BlockUtils;
 import com.refinedmods.refinedstorage.util.CollisionUtils;
 import com.refinedmods.refinedstorage.util.NetworkUtils;
 import edivad.extrastorage.blockentity.AdvancedImporterBlockEntity;
-import edivad.extrastorage.container.AdvancedImporterContainer;
+import edivad.extrastorage.container.AdvancedImporterContainerMenu;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.level.ServerPlayer;
@@ -98,9 +98,9 @@ public class AdvancedImporterBlock extends CableBlock
         if (!level.isClientSide && CollisionUtils.isInBounds(getLineShape(state), pos, hit.getLocation())) {
             return NetworkUtils.attemptModify(level, pos, player, () -> NetworkHooks.openGui(
                     (ServerPlayer) player,
-                    new PositionalTileContainerProvider<AdvancedImporterBlockEntity>(
+                    new BlockEntityMenuProvider<AdvancedImporterBlockEntity>(
                             new TranslatableComponent(this.getDescriptionId()),
-                            (blockEntity, windowId, inventory, p) -> new AdvancedImporterContainer(windowId, player, blockEntity),
+                            (blockEntity, windowId, inventory, p) -> new AdvancedImporterContainerMenu(windowId, player, blockEntity),
                             pos
                     ),
                     pos

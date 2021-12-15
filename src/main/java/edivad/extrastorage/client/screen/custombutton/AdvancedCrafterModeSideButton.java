@@ -1,17 +1,17 @@
 package edivad.extrastorage.client.screen.custombutton;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.refinedmods.refinedstorage.blockentity.data.BlockEntitySynchronizationManager;
 import com.refinedmods.refinedstorage.screen.BaseScreen;
 import com.refinedmods.refinedstorage.screen.widget.sidebutton.SideButton;
-import com.refinedmods.refinedstorage.tile.data.TileDataManager;
 import edivad.extrastorage.blockentity.AdvancedCrafterBlockEntity;
-import edivad.extrastorage.container.AdvancedCrafterContainer;
+import edivad.extrastorage.container.AdvancedCrafterContainerMenu;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.resources.language.I18n;
 
 public class AdvancedCrafterModeSideButton extends SideButton
 {
-    public AdvancedCrafterModeSideButton(BaseScreen<AdvancedCrafterContainer> screen) {
+    public AdvancedCrafterModeSideButton(BaseScreen<AdvancedCrafterContainerMenu> screen) {
         super(screen);
     }
 
@@ -21,7 +21,7 @@ public class AdvancedCrafterModeSideButton extends SideButton
     }
 
     public void onPress() {
-        TileDataManager.setParameter(AdvancedCrafterBlockEntity.MODE, AdvancedCrafterBlockEntity.MODE.getValue() + 1);
+        BlockEntitySynchronizationManager.setParameter(AdvancedCrafterBlockEntity.MODE, AdvancedCrafterBlockEntity.MODE.getValue() + 1);
     }
 
     @Override

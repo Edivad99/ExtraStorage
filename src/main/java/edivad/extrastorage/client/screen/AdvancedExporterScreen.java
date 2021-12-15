@@ -9,16 +9,16 @@ import com.refinedmods.refinedstorage.screen.widget.sidebutton.TypeSideButton;
 import com.refinedmods.refinedstorage.util.RenderUtils;
 import edivad.extrastorage.Main;
 import edivad.extrastorage.blockentity.AdvancedExporterBlockEntity;
-import edivad.extrastorage.container.AdvancedExporterContainer;
+import edivad.extrastorage.container.AdvancedExporterContainerMenu;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.entity.player.Inventory;
 
-public class AdvancedExporterScreen extends BaseScreen<AdvancedExporterContainer>
+public class AdvancedExporterScreen extends BaseScreen<AdvancedExporterContainerMenu>
 {
     private boolean hasRegulatorMode;
 
-    public AdvancedExporterScreen(AdvancedExporterContainer container, Inventory inventory, Component title)
+    public AdvancedExporterScreen(AdvancedExporterContainerMenu container, Inventory inventory, Component title)
     {
         super(container, 211, 155, inventory, title);
         this.hasRegulatorMode = hasRegulatorMode();
@@ -26,7 +26,7 @@ public class AdvancedExporterScreen extends BaseScreen<AdvancedExporterContainer
 
     private boolean hasRegulatorMode()
     {
-        return menu.getTile().getNode().getUpgrades().hasUpgrade(UpgradeItem.Type.REGULATOR);
+        return menu.getBlockEntity().getNode().getUpgrades().hasUpgrade(UpgradeItem.Type.REGULATOR);
     }
 
     @Override

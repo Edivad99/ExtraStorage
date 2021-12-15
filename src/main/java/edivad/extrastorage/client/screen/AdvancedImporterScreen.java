@@ -9,14 +9,14 @@ import com.refinedmods.refinedstorage.screen.widget.sidebutton.WhitelistBlacklis
 import com.refinedmods.refinedstorage.util.RenderUtils;
 import edivad.extrastorage.Main;
 import edivad.extrastorage.blockentity.AdvancedImporterBlockEntity;
-import edivad.extrastorage.container.AdvancedImporterContainer;
+import edivad.extrastorage.container.AdvancedImporterContainerMenu;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.entity.player.Inventory;
 
-public class AdvancedImporterScreen extends BaseScreen<AdvancedImporterContainer>
+public class AdvancedImporterScreen extends BaseScreen<AdvancedImporterContainerMenu>
 {
-    public AdvancedImporterScreen(AdvancedImporterContainer container, Inventory inventory, Component title) {
+    public AdvancedImporterScreen(AdvancedImporterContainerMenu container, Inventory inventory, Component title) {
         super(container, 211, 155, inventory, title);
     }
 

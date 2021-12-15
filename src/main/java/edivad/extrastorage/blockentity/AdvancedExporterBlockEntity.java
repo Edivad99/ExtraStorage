@@ -1,19 +1,19 @@
 package edivad.extrastorage.blockentity;
 
-import com.refinedmods.refinedstorage.tile.NetworkNodeTile;
-import com.refinedmods.refinedstorage.tile.config.IComparable;
-import com.refinedmods.refinedstorage.tile.config.IType;
-import com.refinedmods.refinedstorage.tile.data.TileDataParameter;
+import com.refinedmods.refinedstorage.blockentity.NetworkNodeBlockEntity;
+import com.refinedmods.refinedstorage.blockentity.config.IComparable;
+import com.refinedmods.refinedstorage.blockentity.config.IType;
+import com.refinedmods.refinedstorage.blockentity.data.BlockEntitySynchronizationParameter;
 import edivad.extrastorage.setup.Registration;
 import edivad.extrastorage.nodes.AdvancedExporterNetworkNode;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 
-public class AdvancedExporterBlockEntity extends NetworkNodeTile<AdvancedExporterNetworkNode>
+public class AdvancedExporterBlockEntity extends NetworkNodeBlockEntity<AdvancedExporterNetworkNode>
 {
-    public static final TileDataParameter<Integer, AdvancedExporterBlockEntity> COMPARE = IComparable.createParameter();
-    public static final TileDataParameter<Integer, AdvancedExporterBlockEntity> TYPE = IType.createParameter();
+    public static final BlockEntitySynchronizationParameter<Integer, AdvancedExporterBlockEntity> COMPARE = IComparable.createParameter();
+    public static final BlockEntitySynchronizationParameter<Integer, AdvancedExporterBlockEntity> TYPE = IType.createParameter();
 
     public AdvancedExporterBlockEntity(BlockPos pos, BlockState state)
     {

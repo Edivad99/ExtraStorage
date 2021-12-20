@@ -7,7 +7,7 @@ import com.refinedmods.refinedstorage.apiimpl.network.node.storage.ItemStorageWr
 import com.refinedmods.refinedstorage.apiimpl.network.node.storage.StorageNetworkNode;
 import edivad.extrastorage.Main;
 import edivad.extrastorage.blockentity.AdvancedStorageBlockEntity;
-import edivad.extrastorage.items.item.ItemStorageType;
+import edivad.extrastorage.items.storage.item.ItemStorageType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;

@@ -1,15 +1,17 @@
-package edivad.extrastorage.items;
+package edivad.extrastorage.items.storage;
 
 import com.refinedmods.refinedstorage.RSBlocks;
+import com.refinedmods.refinedstorage.RSItems;
 import com.refinedmods.refinedstorage.api.storage.disk.IStorageDisk;
 import com.refinedmods.refinedstorage.api.storage.disk.StorageDiskSyncData;
 import com.refinedmods.refinedstorage.apiimpl.API;
+import com.refinedmods.refinedstorage.item.ProcessorItem;
 import com.refinedmods.refinedstorage.item.blockitem.BaseBlockItem;
 import com.refinedmods.refinedstorage.render.Styles;
-import edivad.extrastorage.blocks.AdvancedStorageBlock;
-import edivad.extrastorage.items.item.ExpandedStorageDiskItem;
-import edivad.extrastorage.items.item.ItemStorageType;
-import edivad.extrastorage.nodes.AdvancedStorageNetworkNode;
+import edivad.extrastorage.blocks.AdvancedFluidStorageBlock;
+import edivad.extrastorage.items.storage.fluid.ExpandedStorageDiskFluid;
+import edivad.extrastorage.items.storage.fluid.FluidStorageType;
+import edivad.extrastorage.nodes.AdvancedFluidStorageNetworkNode;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
@@ -21,6 +23,7 @@ import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
@@ -29,11 +32,11 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import java.util.List;
 import java.util.UUID;
 
-public class AdvancedStorageBlockItem extends BaseBlockItem
+public class AdvancedFluidStorageBlockItem extends BaseBlockItem
 {
-    private final ItemStorageType type;
+    private final FluidStorageType type;
 
-    public AdvancedStorageBlockItem(AdvancedStorageBlock block, Item.Properties builder) {
+    public AdvancedFluidStorageBlockItem(AdvancedFluidStorageBlock block, Item.Properties builder) {
         super(block, builder);
         this.type = block.getType();
     }
@@ -41,6 +44,7 @@ public class AdvancedStorageBlockItem extends BaseBlockItem
     @OnlyIn(Dist.CLIENT)
     @Override
     public void appendHoverText(ItemStack stack, Level level, List<Component> tooltip, TooltipFlag flag) {
+
         super.appendHoverText(stack, level, tooltip, flag);
 
         if (isValid(stack))
@@ -81,10 +85,18 @@ public class AdvancedStorageBlockItem extends BaseBlockItem
             // Newly created storages won't have a tag yet, so allow invalid disks as well.
             if (disk == null || disk.getStored() == 0)
             {
-                ItemStack storagePart = new ItemStack(ExpandedStorageDiskItem.getPartById(type));
+                ItemStack fluidStoragePart = new ItemStack(ExpandedStorageDiskFluid.getPartById(type));
 
-                if (!player.getInventory().add(storagePart.copy()))
-                    Containers.dropItemStack(level, player.getX(), player.getY(), player.getZ(), storagePart);
+                if (!player.getInventory().add(fluidStoragePart.copy()))
+                    Containers.dropItemStack(level, player.getX(), player.getY(), player.getZ(), fluidStoragePart);
+
+                ItemStack processor = new ItemStack(RSItems.PROCESSORS.get(ProcessorItem.Type.BASIC).get());
+                if (!player.getInventory().add(processor.copy()))
+                    Containers.dropItemStack(level, player.getX(), player.getY(), player.getZ(), processor);
+
+                ItemStack bucket = new ItemStack(Items.BUCKET);
+                if (!player.getInventory().add(bucket.copy()))
+                    Containers.dropItemStack(level, player.getX(), player.getY(), player.getZ(), bucket);
 
                 if (disk != null)
                 {
@@ -104,10 +116,10 @@ public class AdvancedStorageBlockItem extends BaseBlockItem
     }
 
     private UUID getId(ItemStack disk) {
-        return disk.getTag().getUUID(AdvancedStorageNetworkNode.NBT_ID);
+        return disk.getTag().getUUID(AdvancedFluidStorageNetworkNode.NBT_ID);
     }
 
     private boolean isValid(ItemStack disk) {
-        return disk.hasTag() && disk.getTag().hasUUID(AdvancedStorageNetworkNode.NBT_ID);
+        return disk.hasTag() && disk.getTag().hasUUID(AdvancedFluidStorageNetworkNode.NBT_ID);
     }
 }

@@ -2,8 +2,8 @@ package edivad.extrastorage.compat;
 
 import edivad.extrastorage.Main;
 import edivad.extrastorage.blocks.CrafterTier;
-import edivad.extrastorage.items.fluid.FluidStorageType;
-import edivad.extrastorage.items.item.ItemStorageType;
+import edivad.extrastorage.items.storage.fluid.FluidStorageType;
+import edivad.extrastorage.items.storage.item.ItemStorageType;
 import edivad.extrastorage.setup.Registration;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.fml.InterModComms;

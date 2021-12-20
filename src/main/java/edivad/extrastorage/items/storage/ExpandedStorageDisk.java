@@ -1,4 +1,4 @@
-package edivad.extrastorage.items;
+package edivad.extrastorage.items.storage;
 
 import com.refinedmods.refinedstorage.RSItems;
 import com.refinedmods.refinedstorage.api.storage.StorageType;

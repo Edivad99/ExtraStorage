@@ -7,7 +7,7 @@ import com.refinedmods.refinedstorage.apiimpl.network.node.storage.FluidStorageN
 import com.refinedmods.refinedstorage.apiimpl.network.node.storage.FluidStorageWrapperStorageDisk;
 import edivad.extrastorage.Main;
 import edivad.extrastorage.blockentity.AdvancedFluidStorageBlockEntity;
-import edivad.extrastorage.items.fluid.FluidStorageType;
+import edivad.extrastorage.items.storage.fluid.FluidStorageType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;

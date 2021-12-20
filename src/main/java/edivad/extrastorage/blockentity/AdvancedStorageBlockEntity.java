@@ -8,7 +8,7 @@ import com.refinedmods.refinedstorage.blockentity.config.IPrioritizable;
 import com.refinedmods.refinedstorage.blockentity.config.IWhitelistBlacklist;
 import com.refinedmods.refinedstorage.blockentity.data.BlockEntitySynchronizationParameter;
 import com.refinedmods.refinedstorage.blockentity.data.RSSerializers;
-import edivad.extrastorage.items.item.ItemStorageType;
+import edivad.extrastorage.items.storage.item.ItemStorageType;
 import edivad.extrastorage.setup.Registration;
 import edivad.extrastorage.nodes.AdvancedStorageNetworkNode;
 import net.minecraft.core.BlockPos;

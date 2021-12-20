@@ -1,7 +1,7 @@
-package edivad.extrastorage.items.item;
+package edivad.extrastorage.items.storage.item;
 
 import com.refinedmods.refinedstorage.api.storage.StorageType;
-import edivad.extrastorage.items.ExpandedStorageDisk;
+import edivad.extrastorage.items.storage.ExpandedStorageDisk;
 import edivad.extrastorage.setup.Registration;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;

@@ -6,7 +6,7 @@ import com.refinedmods.refinedstorage.util.BlockUtils;
 import com.refinedmods.refinedstorage.util.NetworkUtils;
 import edivad.extrastorage.blockentity.AdvancedStorageBlockEntity;
 import edivad.extrastorage.container.AdvancedStorageBlockContainerMenu;
-import edivad.extrastorage.items.item.ItemStorageType;
+import edivad.extrastorage.items.storage.item.ItemStorageType;
 import edivad.extrastorage.nodes.AdvancedStorageNetworkNode;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;

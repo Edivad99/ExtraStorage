@@ -6,7 +6,6 @@ import com.refinedmods.refinedstorage.render.model.FullbrightBakedModel;
 import edivad.extrastorage.Main;
 import edivad.extrastorage.blocks.CrafterTier;
 import edivad.extrastorage.client.screen.AdvancedCrafterScreen;
-import edivad.extrastorage.client.screen.AdvancedCrafterScreenQuark;
 import edivad.extrastorage.client.screen.AdvancedExporterScreen;
 import edivad.extrastorage.client.screen.AdvancedFluidStorageBlockScreen;
 import edivad.extrastorage.client.screen.AdvancedImporterScreen;
@@ -23,7 +22,6 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
@@ -41,15 +39,10 @@ public class ClientSetup
         //Version checker
         MinecraftForge.EVENT_BUS.register(EventHandler.INSTANCE);
 
-        boolean quarkLoaded = ModList.get().isLoaded("quark");
-
         //Special render & GUI
         for(CrafterTier tier : CrafterTier.values())
         {
-            if(quarkLoaded)
-                MenuScreens.register(Registration.CRAFTER_CONTAINER.get(tier).get(), AdvancedCrafterScreenQuark::new);
-            else
-                MenuScreens.register(Registration.CRAFTER_CONTAINER.get(tier).get(), AdvancedCrafterScreen::new);
+            MenuScreens.register(Registration.CRAFTER_CONTAINER.get(tier).get(), AdvancedCrafterScreen::new);
             ItemBlockRenderTypes.setRenderLayer(Registration.CRAFTER_BLOCK.get(tier).get(), RenderType.cutout());
 
             String name = tier.name().toLowerCase();

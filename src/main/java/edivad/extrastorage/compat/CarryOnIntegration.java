@@ -13,12 +13,12 @@ public class CarryOnIntegration
 {
     /**
      * Added this method to avoid unpleasant surprises using the Carry On.
-     * To be removed when the Carry On gives the possibility to move these blocks without
-     * causing problems.
      */
+    private static final String CARRYON_ID = "carryon";
+
     public static void registerCarryOn()
     {
-        if(ModList.get().isLoaded("carryon"))
+        if(ModList.get().isLoaded(CARRYON_ID))
         {
             for(CrafterTier tier : CrafterTier.values())
                 denyBlockCarryOn(Registration.CRAFTER_BLOCK.get(tier).get());
@@ -33,7 +33,7 @@ public class CarryOnIntegration
     private static void denyBlockCarryOn(Block block)
     {
         String registryName = block.getRegistryName().toString();
-        InterModComms.sendTo("carryon", "blacklistBlock", () -> registryName);
+        InterModComms.sendTo(CARRYON_ID, "blacklistBlock", () -> registryName);
         Main.logger.debug(Main.MODNAME + " made it impossible to use Carry On on this block -> " + registryName);
     }
 }

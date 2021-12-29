@@ -15,7 +15,7 @@ import com.refinedmods.refinedstorage.inventory.listener.NetworkNodeFluidInvento
 import com.refinedmods.refinedstorage.inventory.listener.NetworkNodeInventoryListener;
 import com.refinedmods.refinedstorage.item.UpgradeItem;
 import com.refinedmods.refinedstorage.util.StackUtils;
-import com.refinedmods.refinedstorage.util.WorldUtils;
+import com.refinedmods.refinedstorage.util.LevelUtils;
 import edivad.extrastorage.Main;
 import edivad.extrastorage.blockentity.AdvancedExporterBlockEntity;
 import net.minecraft.core.BlockPos;
@@ -99,7 +99,7 @@ public class AdvancedExporterNetworkNode extends NetworkNode implements ICompara
 
         if (canUpdate() && ticks % upgrades.getSpeed() == 0 && level.isLoaded(pos)) {
             if (type == IType.ITEMS) {
-                IItemHandler handler = WorldUtils.getItemHandler(getFacingBlockEntity(), getDirection().getOpposite());
+                IItemHandler handler = LevelUtils.getItemHandler(getFacingBlockEntity(), getDirection().getOpposite());
 
                 if (handler != null) {
                     final int handlerSlots = handler.getSlots();
@@ -179,7 +179,7 @@ public class AdvancedExporterNetworkNode extends NetworkNode implements ICompara
                     filterSlot = 0;
                 }
 
-                IFluidHandler handler = WorldUtils.getFluidHandler(getFacingBlockEntity(), getDirection().getOpposite());
+                IFluidHandler handler = LevelUtils.getFluidHandler(getFacingBlockEntity(), getDirection().getOpposite());
 
                 if (handler != null) {
                     FluidStack stack = fluids[filterSlot];

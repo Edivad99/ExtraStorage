@@ -14,7 +14,7 @@ import com.refinedmods.refinedstorage.inventory.item.validator.PatternItemValida
 import com.refinedmods.refinedstorage.inventory.listener.NetworkNodeInventoryListener;
 import com.refinedmods.refinedstorage.item.UpgradeItem;
 import com.refinedmods.refinedstorage.util.StackUtils;
-import com.refinedmods.refinedstorage.util.WorldUtils;
+import com.refinedmods.refinedstorage.util.LevelUtils;
 import edivad.extrastorage.Main;
 import edivad.extrastorage.blocks.CrafterTier;
 import net.minecraft.core.BlockPos;
@@ -315,7 +315,7 @@ public class AdvancedCrafterNetworkNode extends NetworkNode implements ICrafting
         if(proxy == null)
             return null;
 
-        return WorldUtils.getItemHandler(proxy.getFacingBlockEntity(), proxy.getDirection().getOpposite());
+        return LevelUtils.getItemHandler(proxy.getFacingBlockEntity(), proxy.getDirection().getOpposite());
     }
 
     @Nullable
@@ -326,7 +326,7 @@ public class AdvancedCrafterNetworkNode extends NetworkNode implements ICrafting
         if(proxy == null)
             return null;
 
-        return WorldUtils.getFluidHandler(proxy.getFacingBlockEntity(), proxy.getDirection().getOpposite());
+        return LevelUtils.getFluidHandler(proxy.getFacingBlockEntity(), proxy.getDirection().getOpposite());
     }
 
     @Nullable

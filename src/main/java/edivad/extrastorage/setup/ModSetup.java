@@ -6,7 +6,6 @@ import com.refinedmods.refinedstorage.apiimpl.network.node.NetworkNode;
 import com.refinedmods.refinedstorage.blockentity.data.BlockEntitySynchronizationManager;
 import edivad.extrastorage.Main;
 import edivad.extrastorage.blocks.CrafterTier;
-import edivad.extrastorage.compat.CarryOnIntegration;
 import edivad.extrastorage.compat.TOPIntegration;
 import edivad.extrastorage.items.storage.fluid.FluidStorageType;
 import edivad.extrastorage.items.storage.item.ItemStorageType;
@@ -61,7 +60,6 @@ public class ModSetup {
         Registration.ADVANCED_IMPORTER_TILE.get().create(BlockPos.ZERO, null).getDataManager().getParameters().forEach(BlockEntitySynchronizationManager::registerParameter);
 
         //Integrations
-        CarryOnIntegration.registerCarryOn();
         if(ModList.get().isLoaded("theoneprobe")) {
             InterModComms.sendTo("theoneprobe", "getTheOneProbe", TOPIntegration::new);
         }

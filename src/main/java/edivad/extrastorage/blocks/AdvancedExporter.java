@@ -4,6 +4,7 @@ import com.refinedmods.refinedstorage.block.BlockDirection;
 import com.refinedmods.refinedstorage.block.CableBlock;
 import com.refinedmods.refinedstorage.block.shape.ShapeCache;
 import com.refinedmods.refinedstorage.container.factory.PositionalTileContainerProvider;
+import com.refinedmods.refinedstorage.render.ConstantsCable;
 import com.refinedmods.refinedstorage.util.BlockUtils;
 import com.refinedmods.refinedstorage.util.CollisionUtils;
 import com.refinedmods.refinedstorage.util.NetworkUtils;
@@ -66,12 +67,12 @@ public class AdvancedExporter extends CableBlock
 
     public VoxelShape getShape(BlockState state, IBlockReader world, BlockPos pos, ISelectionContext ctx)
     {
-        return ShapeCache.getOrCreate(state, (s) ->
+        return ConstantsCable.addCoverVoxelShapes(ShapeCache.getOrCreate(state, s ->
         {
             VoxelShape shape = getCableShape(s);
             shape = VoxelShapes.or(shape, this.getLineShape(s));
             return shape;
-        });
+        }), world, pos);
     }
 
     protected VoxelShape getLineShape(BlockState state)

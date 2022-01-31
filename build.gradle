@@ -105,7 +105,8 @@ repositories {
 dependencies {
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
 
-    implementation fg.deobf("com.refinedmods:refinedstorage:${rs_version}")
+    //implementation fg.deobf("com.refinedmods:refinedstorage:${rs_version}")
+    implementation fg.deobf("curse.maven:refinedstorage-243076:3630064")
 
     runtimeOnly fg.deobf("tschipp.carryon:carryon-1.16.5:${co_version}")
     compileOnly fg.deobf("mcjty.theoneprobe:TheOneProbe-${top_version}:api")

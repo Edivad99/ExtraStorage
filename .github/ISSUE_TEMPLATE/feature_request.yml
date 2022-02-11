@@ -1,0 +1,27 @@
+name: Feature request
+description: Do you have an idea for this mod? Write it here!
+labels: [ enhancement ]
+
+body:
+
+  - type: markdown
+    attributes:
+        value: |
+            Provide a summary of the feature request in the title above.
+
+  - type: checkboxes
+    attributes:
+      label: Is there an existing feature request for this?
+      description: Please search to see if an issue already exists for the feature that you want to add.
+      options:
+      - label: I have searched the existing issues
+        required: true
+
+  - type: textarea
+    id: description
+    attributes:
+        label: Describe the feature
+        description: |
+            Be as detailed as possible.
+    validations:
+        required: true

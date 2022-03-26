@@ -120,6 +120,7 @@ dependencies {
         transitive = false
     }
     runtimeOnly fg.deobf("mezz.jei:jei-${minecraft_version}:${jei_version}")
+    runtimeOnly fg.deobf("curse.maven:inventory-sorter-240633:3543137")
     //runtimeOnly fg.deobf("curse.maven:mekanism-268560:${mekanism_version}")
 }
 

@@ -16,7 +16,7 @@ import net.minecraft.data.recipes.ShapelessRecipeBuilder;
 import net.minecraft.data.recipes.SimpleCookingRecipeBuilder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
-import net.minecraft.tags.Tag;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
@@ -60,9 +60,9 @@ public class Recipes extends RecipeProvider
                 .pattern("aca")//
                 .pattern(" b ")//
                 .pattern("a a")//
-                .define('a', ItemTags.bind("forge:ingots/iron"))//
-                .define('b', ItemTags.bind("refinedstorage:crafter"))//
-                .define('c', ItemTags.bind("forge:chests/wooden"))//
+                .define('a', ItemTags.create(new ResourceLocation("forge", "ingots/iron")))//
+                .define('b', ItemTags.create(new ResourceLocation("refinedstorage","crafter")))//
+                .define('c', ItemTags.create(new ResourceLocation("forge","chests/wooden")))//
                 .unlockedBy("has_part", has(RSBlocks.CRAFTER.get(DyeColor.LIGHT_BLUE).get()))//
                 .save(consumer);
 
@@ -70,10 +70,10 @@ public class Recipes extends RecipeProvider
                 .pattern("ada")//
                 .pattern("cbc")//
                 .pattern("a a")//
-                .define('a', ItemTags.bind("forge:storage_blocks/gold"))//
+                .define('a', ItemTags.create(new ResourceLocation("forge", "storage_blocks/gold")))//
                 .define('b', Registration.CRAFTER.get(CrafterTier.IRON).get())//
                 .define('c', Registration.NEURAL_PROCESSOR_ITEM.get())//
-                .define('d', ItemTags.bind("forge:chests/wooden"))//
+                .define('d', ItemTags.create(new ResourceLocation("forge", "chests/wooden")))//
                 .unlockedBy("has_part", has(Registration.CRAFTER.get(CrafterTier.IRON).get()))//
                 .save(consumer);
 
@@ -81,10 +81,10 @@ public class Recipes extends RecipeProvider
                 .pattern("ada")//
                 .pattern("cbc")//
                 .pattern("a a")//
-                .define('a', ItemTags.bind("forge:storage_blocks/diamond"))//
+                .define('a', ItemTags.create(new ResourceLocation("forge", "storage_blocks/diamond")))//
                 .define('b', Registration.CRAFTER.get(CrafterTier.GOLD).get())//
                 .define('c', Registration.NEURAL_PROCESSOR_ITEM.get())//
-                .define('d', ItemTags.bind("forge:chests/wooden"))//
+                .define('d', ItemTags.create(new ResourceLocation("forge", "chests/wooden")))//
                 .unlockedBy("has_part", has(Registration.CRAFTER.get(CrafterTier.GOLD).get()))//
                 .save(consumer);
 
@@ -92,10 +92,10 @@ public class Recipes extends RecipeProvider
                 .pattern("ada")//
                 .pattern("cbc")//
                 .pattern("a a")//
-                .define('a', ItemTags.bind("forge:storage_blocks/netherite"))//
+                .define('a', ItemTags.create(new ResourceLocation("forge", "storage_blocks/netherite")))//
                 .define('b', Registration.CRAFTER.get(CrafterTier.DIAMOND).get())//
                 .define('c', Registration.NEURAL_PROCESSOR_ITEM.get())//
-                .define('d', ItemTags.bind("forge:chests/wooden"))//
+                .define('d', ItemTags.create(new ResourceLocation("forge", "chests/wooden")))//
                 .unlockedBy("has_part", has(Registration.CRAFTER.get(CrafterTier.DIAMOND).get()))//
                 .save(consumer);
 
@@ -127,7 +127,7 @@ public class Recipes extends RecipeProvider
                 .define('b', Items.QUARTZ)//
                 .define('c', RSItems.PROCESSORS.get(ProcessorItem.Type.RAW_ADVANCED).get())//
                 .define('d', RSItems.PROCESSORS.get(ProcessorItem.Type.RAW_IMPROVED).get())//
-                .define('e', ItemTags.bind("forge:obsidian"))//
+                .define('e', ItemTags.create(new ResourceLocation("forge", "obsidian")))//
                 .define('f', RSItems.PROCESSOR_BINDING.get())//
                 .unlockedBy("has_part", has(RSItems.PROCESSORS.get(ProcessorItem.Type.RAW_ADVANCED).get()))//
                 .save(consumer);
@@ -139,7 +139,7 @@ public class Recipes extends RecipeProvider
                 .unlockedBy("has_part", has(Registration.RAW_NEURAL_PROCESSOR_ITEM.get())).save(consumer);
     }
 
-    private void partRecipe(Item result, Tag.Named<Item> previousPart, Consumer<FinishedRecipe> consumer)
+    private void partRecipe(Item result, TagKey<Item> previousPart, Consumer<FinishedRecipe> consumer)
     {
         ShapedRecipeBuilder.shaped(result)//
                 .pattern("DID")//
@@ -167,7 +167,7 @@ public class Recipes extends RecipeProvider
                 .save(consumer, new ResourceLocation(Main.MODID, "part/" + result.getRegistryName().getPath()));
     }
 
-    private void diskRecipe(Item result, Tag.Named<Item> part, Consumer<FinishedRecipe> consumer)
+    private void diskRecipe(Item result, TagKey<Item> part, Consumer<FinishedRecipe> consumer)
     {
         ShapedRecipeBuilder.shaped(result)//
                 .pattern("GRG")//
@@ -187,7 +187,7 @@ public class Recipes extends RecipeProvider
                 .save(consumer, new ResourceLocation(Main.MODID, "disk/shapeless/" + result.getRegistryName().getPath()));
     }
 
-    private void storageBlockRecipe(Item result, Tag.Named<Item> part, Consumer<FinishedRecipe> consumer)
+    private void storageBlockRecipe(Item result, TagKey<Item> part, Consumer<FinishedRecipe> consumer)
     {
         ShapedRecipeBuilder.shaped(result)//
                 .pattern("EPE")//

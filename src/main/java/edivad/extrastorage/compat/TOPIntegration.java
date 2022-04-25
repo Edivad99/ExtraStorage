@@ -31,8 +31,7 @@ public class TOPIntegration implements IProbeInfoProvider, Function<ITheOneProbe
         BlockEntity te = level.getBlockEntity(data.getPos());
         int patterns = 0, speed = 0, slots = 0;
 
-        if(te instanceof AdvancedCrafterBlockEntity) {
-            AdvancedCrafterBlockEntity tile = (AdvancedCrafterBlockEntity) te;
+        if(te instanceof AdvancedCrafterBlockEntity tile) {
             AdvancedCrafterNetworkNode node = tile.getNode();
             CrafterTier tier = tile.getTier();
             patterns = node.getPatterns().size();

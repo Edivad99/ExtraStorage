@@ -24,12 +24,17 @@ import edivad.extrastorage.items.storage.fluid.ExpandedStorageDiskFluid;
 import edivad.extrastorage.items.storage.fluid.FluidStorageType;
 import edivad.extrastorage.items.storage.item.ExpandedStorageDiskItem;
 import edivad.extrastorage.items.storage.item.ItemStorageType;
+import edivad.extrastorage.loottable.AdvancedCrafterLootFunction;
+import edivad.extrastorage.loottable.StorageBlockLootFunction;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
 import net.minecraftforge.common.extensions.IForgeMenuType;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
@@ -46,6 +51,7 @@ public class Registration {
     private static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, Main.MODID);
     private static final DeferredRegister<BlockEntityType<?>> TILES = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITIES, Main.MODID);
     private static final DeferredRegister<MenuType<?>> CONTAINERS = DeferredRegister.create(ForgeRegistries.CONTAINERS, Main.MODID);
+    private static final DeferredRegister<LootItemFunctionType> LOOT_ITEM_FUNCTIONS = DeferredRegister.create(Registry.LOOT_FUNCTION_REGISTRY, Main.MODID);
 
     public static final Map<ItemStorageType, RegistryObject<Item>> ITEM_STORAGE_PART = new HashMap<>();
     public static final Map<FluidStorageType, RegistryObject<Item>> FLUID_STORAGE_PART = new HashMap<>();
@@ -67,7 +73,9 @@ public class Registration {
     public static final Map<CrafterTier, RegistryObject<BlockEntityType<AdvancedCrafterBlockEntity>>> CRAFTER_TILE = new HashMap<>();
     public static final Map<CrafterTier, RegistryObject<MenuType<AdvancedCrafterContainerMenu>>> CRAFTER_CONTAINER = new HashMap<>();
 
-    private static Item.Properties GLOBAL_PROPERTIES = new Item.Properties().tab(ModSetup.extraStorageTab).stacksTo(64);
+    public static final Map<String, RegistryObject<LootItemFunctionType>> REGISTERED_LOOT_ITEM_FUNCTIONS = new HashMap<>();
+
+    private static final Item.Properties GLOBAL_PROPERTIES = new Item.Properties().tab(ModSetup.extraStorageTab).stacksTo(64);
 
     public static void init()
     {
@@ -76,6 +84,7 @@ public class Registration {
         ITEMS.register(eventBus);
         TILES.register(eventBus);
         CONTAINERS.register(eventBus);
+        LOOT_ITEM_FUNCTIONS.register(eventBus);
 
         //StoragePart
         for(ItemStorageType type : ItemStorageType.values())
@@ -146,6 +155,9 @@ public class Registration {
                 return new AdvancedCrafterContainerMenu(windowId, inv.player, be);
             })));
         }
+
+        REGISTERED_LOOT_ITEM_FUNCTIONS.put("storage_block", LOOT_ITEM_FUNCTIONS.register("storage_block", () -> new LootItemFunctionType(new StorageBlockLootFunction.Serializer())));
+        REGISTERED_LOOT_ITEM_FUNCTIONS.put("crafter", LOOT_ITEM_FUNCTIONS.register("crafter", () -> new LootItemFunctionType(new AdvancedCrafterLootFunction.Serializer())));
     }
 
     public static final RegistryObject<AdvancedExporterBlock> ADVANCED_EXPORTER = BLOCKS.register("advanced_exporter", AdvancedExporterBlock::new);

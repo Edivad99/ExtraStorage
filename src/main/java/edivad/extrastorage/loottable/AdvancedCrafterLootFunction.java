@@ -4,7 +4,7 @@ import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
 import edivad.extrastorage.blockentity.AdvancedCrafterBlockEntity;
 import edivad.extrastorage.nodes.AdvancedCrafterNetworkNode;
-import edivad.extrastorage.setup.ESLootFunctions;
+import edivad.extrastorage.setup.Registration;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.storage.loot.LootContext;
@@ -41,7 +41,7 @@ public class AdvancedCrafterLootFunction extends LootItemConditionalFunction {
     }
 
     public LootItemFunctionType getType() {
-        return ESLootFunctions.getCrafter();
+        return Registration.REGISTERED_LOOT_ITEM_FUNCTIONS.get("crafter").get();
     }
 
     public static class Serializer extends LootItemConditionalFunction.Serializer<AdvancedCrafterLootFunction>

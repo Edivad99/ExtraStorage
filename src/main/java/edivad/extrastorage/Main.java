@@ -1,6 +1,5 @@
 package edivad.extrastorage;
 
-import edivad.extrastorage.setup.ESLootFunctions;
 import edivad.extrastorage.setup.Registration;
 import edivad.extrastorage.setup.ClientSetup;
 import edivad.extrastorage.setup.ModSetup;
@@ -31,6 +30,5 @@ public class Main
         // Register the setup method for modloading
         IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
         eventBus.addListener(ModSetup::init);
-        eventBus.addGenericListener(GlobalLootModifierSerializer.class, (RegistryEvent.Register event) -> ESLootFunctions.register());
     }
 }

@@ -6,7 +6,7 @@ import edivad.extrastorage.blockentity.AdvancedFluidStorageBlockEntity;
 import edivad.extrastorage.blockentity.AdvancedStorageBlockEntity;
 import edivad.extrastorage.nodes.AdvancedFluidStorageNetworkNode;
 import edivad.extrastorage.nodes.AdvancedStorageNetworkNode;
-import edivad.extrastorage.setup.ESLootFunctions;
+import edivad.extrastorage.setup.Registration;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.storage.loot.LootContext;
@@ -53,7 +53,7 @@ public class StorageBlockLootFunction extends LootItemConditionalFunction
     }
 
     public LootItemFunctionType getType() {
-        return ESLootFunctions.getStorageBlock();
+        return Registration.REGISTERED_LOOT_ITEM_FUNCTIONS.get("storage_block").get();
     }
 
     public static class Serializer extends LootItemConditionalFunction.Serializer<StorageBlockLootFunction>

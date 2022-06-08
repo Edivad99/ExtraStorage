@@ -2,8 +2,8 @@ package edivad.extrastorage.container;
 
 import com.refinedmods.refinedstorage.container.BaseContainerMenu;
 import com.refinedmods.refinedstorage.container.slot.filter.FilterSlot;
-import edivad.extrastorage.setup.Registration;
 import edivad.extrastorage.blockentity.AdvancedStorageBlockEntity;
+import edivad.extrastorage.setup.Registration;
 import net.minecraft.world.entity.player.Player;
 
 public class AdvancedStorageBlockContainerMenu extends BaseContainerMenu

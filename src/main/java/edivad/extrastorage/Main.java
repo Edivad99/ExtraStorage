@@ -1,11 +1,9 @@
 package edivad.extrastorage;
 
-import edivad.extrastorage.setup.Registration;
 import edivad.extrastorage.setup.ClientSetup;
 import edivad.extrastorage.setup.ModSetup;
+import edivad.extrastorage.setup.Registration;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.common.loot.GlobalLootModifierSerializer;
-import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;

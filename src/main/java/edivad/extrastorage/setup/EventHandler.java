@@ -19,8 +19,6 @@ import java.util.stream.Collectors;
 
 public class EventHandler {
 
-    public static final EventHandler INSTANCE = new EventHandler();
-
     @SubscribeEvent
     public void handlePlayerLoggedInEvent(LoggedInEvent event) {
         try {

@@ -37,7 +37,7 @@ public class ClientSetup
     public void init(FMLClientSetupEvent event)
     {
         //Version checker
-        MinecraftForge.EVENT_BUS.register(EventHandler.INSTANCE);
+        MinecraftForge.EVENT_BUS.register(new EventHandler());
 
         //Special render & GUI
         for(CrafterTier tier : CrafterTier.values())

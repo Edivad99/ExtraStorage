@@ -56,6 +56,6 @@ public class TOPIntegration implements IProbeInfoProvider, Function<ITheOneProbe
     @Override
     public ResourceLocation getID()
     {
-        return new ResourceLocation(Main.MODID ,"default");
+        return new ResourceLocation(Main.MODID, "default");
     }
 }

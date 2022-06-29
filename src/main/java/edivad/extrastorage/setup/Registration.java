@@ -110,7 +110,7 @@ public class Registration {
                 BlockEntity blockEntity = inv.player.getCommandSenderWorld().getBlockEntity(pos);
                 if(!(blockEntity instanceof AdvancedStorageBlockEntity be))
                 {
-                    Main.logger.error("Wrong type of tile entity (expected AdvancedStorageBlockEntity)!");
+                    Main.LOGGER.error("Wrong type of blockentity (expected AdvancedStorageBlockEntity)!");
                     return null;
                 }
                 return new AdvancedStorageBlockContainerMenu(windowId, inv.player, be);
@@ -130,7 +130,7 @@ public class Registration {
                 BlockEntity blockEntity = inv.player.getCommandSenderWorld().getBlockEntity(pos);
                 if(!(blockEntity instanceof AdvancedFluidStorageBlockEntity be))
                 {
-                    Main.logger.error("Wrong type of tile entity (expected AdvancedFluidStorageBlockEntity)!");
+                    Main.LOGGER.error("Wrong type of blockentity (expected AdvancedFluidStorageBlockEntity)!");
                     return null;
                 }
                 return new AdvancedFluidStorageBlockContainerMenu(windowId, inv.player, be);
@@ -148,7 +148,7 @@ public class Registration {
                 BlockEntity blockEntity = inv.player.getCommandSenderWorld().getBlockEntity(pos);
                 if(!(blockEntity instanceof AdvancedCrafterBlockEntity be))
                 {
-                    Main.logger.error("Wrong type of tile entity (expected AdvancedCrafterBlockEntity)!");
+                    Main.LOGGER.error("Wrong type of blockentity (expected AdvancedCrafterBlockEntity)!");
                     return null;
                 }
                 return new AdvancedCrafterContainerMenu(windowId, inv.player, be);
@@ -167,7 +167,7 @@ public class Registration {
         BlockEntity blockEntity = inv.player.getCommandSenderWorld().getBlockEntity(pos);
         if(!(blockEntity instanceof AdvancedExporterBlockEntity be))
         {
-            Main.logger.error("Wrong type of tile entity (expected AdvancedExporterBlockEntity)!");
+            Main.LOGGER.error("Wrong type of blockentity (expected AdvancedExporterBlockEntity)!");
             return null;
         }
         return new AdvancedExporterContainerMenu(windowId, inv.player, be);
@@ -181,7 +181,7 @@ public class Registration {
         BlockEntity blockEntity = inv.player.getCommandSenderWorld().getBlockEntity(pos);
         if(!(blockEntity instanceof AdvancedImporterBlockEntity be))
         {
-            Main.logger.error("Wrong type of tile entity (expected AdvancedImporterBlockEntity)!");
+            Main.LOGGER.error("Wrong type of blockentity (expected AdvancedImporterBlockEntity)!");
             return null;
         }
         return new AdvancedImporterContainerMenu(windowId, inv.player, be);

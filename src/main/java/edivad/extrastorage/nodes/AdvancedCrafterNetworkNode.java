@@ -17,6 +17,7 @@ import com.refinedmods.refinedstorage.util.LevelUtils;
 import com.refinedmods.refinedstorage.util.StackUtils;
 import edivad.extrastorage.Main;
 import edivad.extrastorage.blocks.CrafterTier;
+import edivad.extrastorage.setup.Config;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -160,10 +161,9 @@ public class AdvancedCrafterNetworkNode extends NetworkNode implements ICrafting
     @Override
     public int getEnergyUsage()
     {
-        int energyPatterns = 2 * patterns.size();
-        int energyUpgrades = upgrades.getEnergyUsage() * (tier.ordinal() + 1);
-        int energyCrafter = 15 * (tier.ordinal() +1);
-        return energyCrafter + energyUpgrades + energyPatterns;
+        int energyPatterns = Config.AdvancedCrafter.INCLUDE_PATTERN_ENERGY.get() ? 2 * patterns.size() : 0;
+        int energyCrafter = Config.AdvancedCrafter.BASE_ENERGY.get() * (tier.ordinal() + 1);
+        return energyCrafter + upgrades.getEnergyUsage() + energyPatterns;
     }
 
     @Override

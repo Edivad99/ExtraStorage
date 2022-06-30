@@ -2,6 +2,7 @@ package edivad.extrastorage;
 
 import com.mojang.logging.LogUtils;
 import edivad.extrastorage.setup.ClientSetup;
+import edivad.extrastorage.setup.Config;
 import edivad.extrastorage.setup.ModSetup;
 import edivad.extrastorage.setup.Registration;
 import net.minecraftforge.api.distmarker.Dist;
@@ -25,6 +26,8 @@ public class Main
     {
         DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> ClientSetup::new);
         Registration.init();
+        Config.init();
+
         // Register the setup method for modloading
         IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
         eventBus.addListener(ModSetup::init);

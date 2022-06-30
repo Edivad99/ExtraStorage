@@ -106,19 +106,15 @@ repositories {
     }
     maven {
         name 'RS maven'
-        url = uri("https://maven.pkg.github.com/refinedmods/refinedstorage")
+        url = uri('https://maven.pkg.github.com/refinedmods/refinedstorage')
         credentials {
-            username = "anything"
-            password = "\u0067hp_oGjcDFCn8jeTzIj4Ke9pLoEVtpnZMP4VQgaX"
+            username = 'anything'
+            password = '\u0067hp_oGjcDFCn8jeTzIj4Ke9pLoEVtpnZMP4VQgaX'
         }
     }
     maven {
         name 'Carry On'
         url 'https://maven.blamejared.com/'
-    }
-    maven {
-        name 'curseforge'
-        url 'https://www.cursemaven.com'
     }
 }
 
@@ -134,8 +130,7 @@ dependencies {
     implementation fg.deobf("tschipp.carryon:carryon-${minecraft_version}:${co_version}") {
         transitive = false
     }
-    runtimeOnly fg.deobf("mezz.jei:jei-${minecraft_version}:${jei_version}")
-    //runtimeOnly fg.deobf("curse.maven:mekanism-268560:${mekanism_version}")
+    runtimeOnly fg.deobf("mezz.jei:jei-${minecraft_version}-forge:${jei_version}")
 }
 
 // Example for how to get properties into the manifest for reading by the runtime..

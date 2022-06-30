@@ -53,7 +53,7 @@ public class EventHandler {
 
         }
         catch(Exception e) {
-            Main.logger.warn("Unable to check the version", e);
+            Main.LOGGER.warn("Unable to check the version", e);
         }
     }
 }

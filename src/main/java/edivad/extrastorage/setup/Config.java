@@ -9,6 +9,7 @@ public class Config {
 
     public static void init() {
         var SERVER_BUILDER = new ForgeConfigSpec.Builder();
+        SERVER_BUILDER.comment(Main.MODNAME + "'s config");
         AdvancedCrafter.registerServerConfig(SERVER_BUILDER);
 
         ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, SERVER_BUILDER.build());
@@ -19,7 +20,7 @@ public class Config {
         public static ForgeConfigSpec.BooleanValue INCLUDE_PATTERN_ENERGY;
 
         public static void registerServerConfig(ForgeConfigSpec.Builder SERVER_BUILDER) {
-            SERVER_BUILDER.comment(Main.MODNAME + "'s config").push("crafters");
+            SERVER_BUILDER.push("crafters");
 
             BASE_ENERGY = SERVER_BUILDER
                     .comment("Indicates the minimum level of energy that the crafter consumes")

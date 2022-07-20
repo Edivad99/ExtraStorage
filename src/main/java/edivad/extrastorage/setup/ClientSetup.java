@@ -5,11 +5,7 @@ import com.refinedmods.refinedstorage.render.BakedModelOverrideRegistry;
 import com.refinedmods.refinedstorage.render.model.FullbrightBakedModel;
 import edivad.extrastorage.Main;
 import edivad.extrastorage.blocks.CrafterTier;
-import edivad.extrastorage.client.screen.AdvancedCrafterScreen;
-import edivad.extrastorage.client.screen.AdvancedExporterScreen;
-import edivad.extrastorage.client.screen.AdvancedFluidStorageBlockScreen;
-import edivad.extrastorage.client.screen.AdvancedImporterScreen;
-import edivad.extrastorage.client.screen.AdvancedStorageBlockScreen;
+import edivad.extrastorage.client.screen.*;
 import edivad.extrastorage.container.AdvancedCrafterContainerMenu;
 import edivad.extrastorage.items.storage.fluid.FluidStorageType;
 import edivad.extrastorage.items.storage.item.ItemStorageType;
@@ -19,23 +15,19 @@ import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
+@Mod.EventBusSubscriber(modid = Main.MODID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class ClientSetup
 {
-    private static final BakedModelOverrideRegistry bakedModelOverrideRegistry = new BakedModelOverrideRegistry();
+    private static final BakedModelOverrideRegistry BAKED_MODEL_OVERRIDE_REGISTRY = new BakedModelOverrideRegistry();
 
-    public ClientSetup() {
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::init);
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onModelBake);
-    }
-
-    public void init(FMLClientSetupEvent event)
-    {
+    public static void init(FMLClientSetupEvent event) {
         //Version checker
         MinecraftForge.EVENT_BUS.register(new EventHandler());
 
@@ -47,7 +39,7 @@ public class ClientSetup
 
             String name = tier.name().toLowerCase();
             String parent = "blocks/crafter/" + name + "/cutouts/";
-            bakedModelOverrideRegistry.add(Registration.CRAFTER_BLOCK.get(tier).getId(), (base, registry) -> new FullbrightBakedModel(
+            BAKED_MODEL_OVERRIDE_REGISTRY.add(Registration.CRAFTER_BLOCK.get(tier).getId(), (base, registry) -> new FullbrightBakedModel(
                     base,
                     true,
                     new ResourceLocation(Main.MODID, parent + "side_connected"),
@@ -84,11 +76,11 @@ public class ClientSetup
     }
 
     @SubscribeEvent
-    public void onModelBake(ModelBakeEvent e) {
+    public static void onModelBake(ModelBakeEvent e) {
         FullbrightBakedModel.invalidateCache();
 
         for (ResourceLocation id : e.getModelRegistry().keySet()) {
-            BakedModelOverrideRegistry.BakedModelOverrideFactory factory = this.bakedModelOverrideRegistry.get(new ResourceLocation(id.getNamespace(), id.getPath()));
+            BakedModelOverrideRegistry.BakedModelOverrideFactory factory = BAKED_MODEL_OVERRIDE_REGISTRY.get(new ResourceLocation(id.getNamespace(), id.getPath()));
 
             if (factory != null) {
                 e.getModelRegistry().put(id, factory.create(e.getModelRegistry().get(id), e.getModelRegistry()));

@@ -1,7 +1,6 @@
 package edivad.extrastorage.client.screen.custombutton;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.refinedmods.refinedstorage.blockentity.data.BlockEntitySynchronizationManager;
 import com.refinedmods.refinedstorage.screen.BaseScreen;
 import com.refinedmods.refinedstorage.screen.widget.sidebutton.SideButton;
 import edivad.extrastorage.blockentity.AdvancedCrafterBlockEntity;
@@ -11,21 +10,20 @@ import net.minecraft.client.resources.language.I18n;
 
 public class AdvancedCrafterModeSideButton extends SideButton
 {
-    public AdvancedCrafterModeSideButton(BaseScreen<AdvancedCrafterContainerMenu> screen) {
+    private final AdvancedCrafterBlockEntity blockEntity;
+
+    public AdvancedCrafterModeSideButton(BaseScreen<AdvancedCrafterContainerMenu> screen, AdvancedCrafterBlockEntity blockEntity) {
         super(screen);
+        this.blockEntity = blockEntity;
     }
 
     @Override
     protected void renderButtonIcon(PoseStack poseStack, int x, int y) {
-        this.screen.blit(poseStack, x, y, AdvancedCrafterBlockEntity.MODE.getValue() * 16, 0, 16, 16);
-    }
-
-    public void onPress() {
-        BlockEntitySynchronizationManager.setParameter(AdvancedCrafterBlockEntity.MODE, AdvancedCrafterBlockEntity.MODE.getValue() + 1);
+        this.screen.blit(poseStack, x, y, blockEntity.getCrafterMode().ordinal() * 16, 0, 16, 16);
     }
 
     @Override
     public String getTooltip() {
-        return I18n.get("sidebutton.refinedstorage.crafter_mode") + "\n" + ChatFormatting.GRAY + I18n.get("sidebutton.refinedstorage.crafter_mode." + AdvancedCrafterBlockEntity.MODE.getValue());
+        return I18n.get("sidebutton.refinedstorage.crafter_mode") + "\n" + ChatFormatting.GRAY + I18n.get("sidebutton.refinedstorage.crafter_mode." + blockEntity.getCrafterMode().ordinal());
     }
 }

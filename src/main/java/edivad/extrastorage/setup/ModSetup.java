@@ -9,6 +9,7 @@ import edivad.extrastorage.blocks.CrafterTier;
 import edivad.extrastorage.compat.TOPIntegration;
 import edivad.extrastorage.items.storage.fluid.FluidStorageType;
 import edivad.extrastorage.items.storage.item.ItemStorageType;
+import edivad.extrastorage.network.PacketHandler;
 import edivad.extrastorage.nodes.AdvancedCrafterNetworkNode;
 import edivad.extrastorage.nodes.AdvancedExporterNetworkNode;
 import edivad.extrastorage.nodes.AdvancedFluidStorageNetworkNode;
@@ -38,6 +39,7 @@ public class ModSetup {
 
     public static void init(final FMLCommonSetupEvent event)
     {
+        PacketHandler.init();
         for(CrafterTier tier : CrafterTier.values())
         {
             API.instance().getNetworkNodeRegistry().add(new ResourceLocation(Main.MODID, tier.getID()), (tag, world, pos) -> readAndReturn(tag, new AdvancedCrafterNetworkNode(world, pos, tier)));

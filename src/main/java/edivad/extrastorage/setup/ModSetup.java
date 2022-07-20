@@ -43,7 +43,6 @@ public class ModSetup {
         for(CrafterTier tier : CrafterTier.values())
         {
             API.instance().getNetworkNodeRegistry().add(new ResourceLocation(Main.MODID, tier.getID()), (tag, world, pos) -> readAndReturn(tag, new AdvancedCrafterNetworkNode(world, pos, tier)));
-            Registration.CRAFTER_TILE.get(tier).get().create(BlockPos.ZERO, null).getDataManager().getParameters().forEach(BlockEntitySynchronizationManager::registerParameter);
         }
         for(ItemStorageType type : ItemStorageType.values())
         {

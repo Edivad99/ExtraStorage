@@ -20,14 +20,12 @@ import net.minecraft.world.entity.player.Inventory;
 public class AdvancedCrafterScreen extends BaseScreen<AdvancedCrafterContainerMenu>
 {
     private final CrafterTier tier;
-    private final AdvancedCrafterContainerMenu container;
     private final AdvancedCrafterBlockEntity blockEntity;
 
     public AdvancedCrafterScreen(AdvancedCrafterContainerMenu container, Inventory inventory, Component title)
     {
         super(container, 211, 173 + (container.getBlockEntity().getTier().ordinal() * 36), inventory, title);
         this.tier = container.getBlockEntity().getTier();
-        this.container = container;
         this.blockEntity = container.getBlockEntity();
     }
 

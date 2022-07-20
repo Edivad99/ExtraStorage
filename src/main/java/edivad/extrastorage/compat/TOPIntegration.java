@@ -4,14 +4,10 @@ import com.refinedmods.refinedstorage.apiimpl.network.node.CrafterNetworkNode;
 import com.refinedmods.refinedstorage.blockentity.CrafterBlockEntity;
 import edivad.extrastorage.Main;
 import edivad.extrastorage.blockentity.AdvancedCrafterBlockEntity;
-import edivad.extrastorage.blocks.CrafterTier;
 import edivad.extrastorage.nodes.AdvancedCrafterNetworkNode;
-import mcjty.theoneprobe.api.IProbeHitData;
-import mcjty.theoneprobe.api.IProbeInfo;
-import mcjty.theoneprobe.api.IProbeInfoProvider;
-import mcjty.theoneprobe.api.ITheOneProbe;
-import mcjty.theoneprobe.api.ProbeMode;
-import net.minecraft.network.chat.TextComponent;
+import edivad.extrastorage.tools.Translations;
+import mcjty.theoneprobe.api.*;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
@@ -37,10 +33,9 @@ public class TOPIntegration implements IProbeInfoProvider, Function<ITheOneProbe
 
         if(te instanceof AdvancedCrafterBlockEntity tile) {
             AdvancedCrafterNetworkNode node = tile.getNode();
-            CrafterTier tier = tile.getTier();
             patterns = node.getPatterns().size();
             speed = node.getMaximumSuccessfulCraftingUpdates();
-            slots = tier.getSlots();
+            slots = tile.getTier().getSlots();
         } else if (te instanceof CrafterBlockEntity tile) {
             CrafterNetworkNode node = tile.getNode();
             patterns = node.getPatterns().size();
@@ -48,8 +43,8 @@ public class TOPIntegration implements IProbeInfoProvider, Function<ITheOneProbe
             slots = 9;
         }
         if(te instanceof AdvancedCrafterBlockEntity || te instanceof CrafterBlockEntity) {
-            probeInfo.horizontal().text(new TextComponent(String.format("Occupied space: %d/%d", patterns, slots)));
-            probeInfo.horizontal().text(new TextComponent(String.format("Current speed: %dx", speed)));
+            probeInfo.horizontal().text(new TranslatableComponent(Translations.OCCUPIED_SPACE, String.valueOf(patterns), String.valueOf(slots)));
+            probeInfo.horizontal().text(new TranslatableComponent(Translations.CURRENT_SPEED, String.valueOf(speed)));
         }
     }
 

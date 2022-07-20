@@ -40,5 +40,7 @@
   "itemGroup.extrastorage_tab": "Extra Storage",
   "tooltip.extrastorage.baseSpeed": "Velocità di base: %sx",
   "tooltip.extrastorage.holdShift": "Tieni premuto Maiusc per i dettagli",
-  "tooltip.extrastorage.slotCrafting": "Slot per i modelli: %s"
+  "tooltip.extrastorage.slotCrafting": "Slot per i modelli: %s",
+  "top.extrastorage.currentSpeed": "Velocità attuale: %sx",
+  "top.extrastorage.occupiedSpace": "Spazio occupato: %s/%s"
 }

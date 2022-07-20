@@ -24,7 +24,10 @@ public class Main
 
     public Main()
     {
-        DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> ClientSetup::new);
+        DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
+            FMLJavaModLoadingContext.get().getModEventBus().addListener(ClientSetup::init);
+            FMLJavaModLoadingContext.get().getModEventBus().addListener(ClientSetup::onModelBake);
+        });
         Registration.init();
         Config.init();
 

@@ -24,15 +24,15 @@ public class Main
 
     public Main()
     {
+        IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
-            FMLJavaModLoadingContext.get().getModEventBus().addListener(ClientSetup::init);
-            FMLJavaModLoadingContext.get().getModEventBus().addListener(ClientSetup::onModelBake);
+            eventBus.addListener(ClientSetup::init);
+            eventBus.addListener(ClientSetup::onModelBake);
         });
         Registration.init();
         Config.init();
 
         // Register the setup method for modloading
-        IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
         eventBus.addListener(ModSetup::init);
     }
 }

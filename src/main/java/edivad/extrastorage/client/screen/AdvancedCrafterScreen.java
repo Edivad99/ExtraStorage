@@ -2,15 +2,17 @@ package edivad.extrastorage.client.screen;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.refinedmods.refinedstorage.screen.BaseScreen;
+import com.refinedmods.refinedstorage.screen.widget.sidebutton.SideButton;
 import com.refinedmods.refinedstorage.util.RenderUtils;
 import edivad.extrastorage.Main;
 import edivad.extrastorage.blockentity.AdvancedCrafterBlockEntity;
 import edivad.extrastorage.blocks.CrafterTier;
-import edivad.extrastorage.client.screen.custombutton.AdvancedCrafterModeSideButton;
 import edivad.extrastorage.container.AdvancedCrafterContainerMenu;
 import edivad.extrastorage.network.PacketHandler;
 import edivad.extrastorage.network.packet.UpdateCrafterMode;
 import edivad.extrastorage.nodes.AdvancedCrafterNetworkNode;
+import net.minecraft.ChatFormatting;
+import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.entity.player.Inventory;
@@ -32,12 +34,22 @@ public class AdvancedCrafterScreen extends BaseScreen<AdvancedCrafterContainerMe
     @Override
     public void init() {
         super.init();
-        addSideButton(new AdvancedCrafterModeSideButton(this, blockEntity) {
+        addSideButton(new SideButton(this) {
             @Override
             public void onPress() {
                 var crafterMode = blockEntity.getCrafterMode();
                 blockEntity.setCrafterMode(AdvancedCrafterNetworkNode.CrafterMode.getById(crafterMode.ordinal() + 1));
                 PacketHandler.INSTANCE.sendToServer(new UpdateCrafterMode(blockEntity.getBlockPos(), crafterMode.ordinal() + 1));
+            }
+            @Override
+            protected void renderButtonIcon(PoseStack poseStack, int x, int y) {
+                this.screen.blit(poseStack, x, y, blockEntity.getCrafterMode().ordinal() * 16, 0, 16, 16);
+            }
+
+            @Override
+            public String getTooltip() {
+                return I18n.get("sidebutton.refinedstorage.crafter_mode") + "\n" + ChatFormatting.GRAY
+                        + I18n.get("sidebutton.refinedstorage.crafter_mode." + blockEntity.getCrafterMode().ordinal());
             }
         });
     }

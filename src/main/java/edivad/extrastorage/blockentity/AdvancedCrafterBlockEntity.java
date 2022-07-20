@@ -23,7 +23,7 @@ public class AdvancedCrafterBlockEntity extends NetworkNodeBlockEntity<AdvancedC
     private final CrafterTier tier;
 
     private AdvancedCrafterNetworkNode.CrafterMode CRAFTER_MODE;
-    private static final String CRAFTER_MODE_ID = "crafter__mode_id";
+    private static final String CRAFTER_MODE_ID = "crafter_mode_id";
 
     public AdvancedCrafterBlockEntity(CrafterTier tier, BlockPos pos, BlockState state)
     {
@@ -56,6 +56,7 @@ public class AdvancedCrafterBlockEntity extends NetworkNodeBlockEntity<AdvancedC
     public void setCrafterMode(AdvancedCrafterNetworkNode.CrafterMode mode) {
         if(mode != CRAFTER_MODE) {
             CRAFTER_MODE = mode;
+            getNode().setMode(CRAFTER_MODE);
             setChanged();
         }
     }

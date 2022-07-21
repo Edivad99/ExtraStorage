@@ -127,9 +127,9 @@ dependencies {
     implementation fg.deobf("mcjty.theoneprobe:theoneprobe:${top_version}") {
         transitive = false
     }
-    implementation fg.deobf("tschipp.carryon:carryon-${minecraft_version}:${co_version}") {
+    /*implementation fg.deobf("tschipp.carryon:carryon-${minecraft_version}:${co_version}") {
         transitive = false
-    }
+    }*/
     runtimeOnly fg.deobf("mezz.jei:jei-${minecraft_version}-forge:${jei_version}")
 }
 

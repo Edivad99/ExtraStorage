@@ -34,7 +34,7 @@ public class TagGenerator {
         }
 
         private static TagKey<Block> tag(String name) {
-            return net.minecraft.tags.BlockTags.create(new ResourceLocation("refinedstorage",name));
+            return net.minecraft.tags.BlockTags.create(new ResourceLocation("refinedstorage", name));
         }
     }
 
@@ -71,7 +71,7 @@ public class TagGenerator {
         }
 
         private static TagKey<Item> tag(String name) {
-            return net.minecraft.tags.ItemTags.create(new ResourceLocation("refinedstorage",name));
+            return net.minecraft.tags.ItemTags.create(new ResourceLocation("refinedstorage", name));
         }
     }
 

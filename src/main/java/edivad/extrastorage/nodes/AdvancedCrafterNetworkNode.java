@@ -300,10 +300,11 @@ public class AdvancedCrafterNetworkNode extends NetworkNode implements ICrafting
             return 1;
         else
         {
+            if(hasConnectedInventory())
+                return getConnectedInventory().getSlots();
             if(tier.equals(CrafterTier.IRON))
                 return upgradesCount + tier.getCraftingSpeed();
-            else
-                return (upgradesCount * (tier.getCraftingSpeed() / 5)) + tier.getCraftingSpeed();//PREV Min:1 Max:5
+            return (upgradesCount * (tier.getCraftingSpeed() / 5)) + tier.getCraftingSpeed();//PREV Min:1 Max:5
         }
     }
 

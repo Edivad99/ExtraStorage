@@ -42,5 +42,6 @@
   "tooltip.extrastorage.holdShift": "Hold Shift for details",
   "tooltip.extrastorage.slotCrafting": "Slots for patterns: %s",
   "top.extrastorage.currentSpeed": "Current speed: %sx",
+  "top.extrastorage.limitedSpeed": "Current speed (limited by the machinery): %sx",
   "top.extrastorage.occupiedSpace": "Occupied space: %s/%s"
 }

@@ -50,6 +50,7 @@ public class Lang extends LanguageProvider
         add(Translations.SLOT_CRAFTING, "Slots for patterns: %s");
         add(Translations.BASE_SPEED, "Base speed: %sx");
         add(Translations.CURRENT_SPEED, "Current speed: %sx");
+        add(Translations.LIMITED_SPEED, "Current speed (limited by the machinery): %sx");
         add(Translations.OCCUPIED_SPACE, "Occupied space: %s/%s");
 
         //Advancements

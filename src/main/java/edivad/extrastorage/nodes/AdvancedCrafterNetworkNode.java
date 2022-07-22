@@ -295,17 +295,17 @@ public class AdvancedCrafterNetworkNode extends NetworkNode implements ICrafting
     @Override
     public int getMaximumSuccessfulCraftingUpdates()
     {
+        int speed = getTierSpeed();
+        if(hasConnectedInventory())
+            return Math.min(speed, getConnectedInventory().getSlots());
+        return speed;
+    }
+
+    public int getTierSpeed() {
         int upgradesCount = upgrades.getUpgradeCount(UpgradeItem.Type.SPEED);
-        if(upgradesCount < 0 || upgradesCount > 4)
-            return 1;
-        else
-        {
-            if(hasConnectedInventory())
-                return getConnectedInventory().getSlots();
-            if(tier.equals(CrafterTier.IRON))
-                return upgradesCount + tier.getCraftingSpeed();
-            return (upgradesCount * (tier.getCraftingSpeed() / 5)) + tier.getCraftingSpeed();//PREV Min:1 Max:5
-        }
+        if(tier.equals(CrafterTier.IRON))
+            return upgradesCount + tier.getCraftingSpeed();
+        return (upgradesCount * (tier.getCraftingSpeed() / 5)) + tier.getCraftingSpeed();//PREV Min:1 Max:5
     }
 
     @Nullable

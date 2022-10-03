@@ -10,9 +10,9 @@ import edivad.extrastorage.blocks.AdvancedStorageBlock;
 import edivad.extrastorage.items.storage.item.ExpandedStorageDiskItem;
 import edivad.extrastorage.items.storage.item.ItemStorageType;
 import edivad.extrastorage.nodes.AdvancedStorageNetworkNode;
+import java.util.List;
+import java.util.UUID;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
@@ -25,9 +25,6 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-
-import java.util.List;
-import java.util.UUID;
 
 public class AdvancedStorageBlockItem extends BaseBlockItem
 {
@@ -53,13 +50,13 @@ public class AdvancedStorageBlockItem extends BaseBlockItem
             if (data != null)
             {
                 if (data.getCapacity() == -1)
-                    tooltip.add(new TranslatableComponent("misc.refinedstorage.storage.stored", API.instance().getQuantityFormatter().format(data.getStored())).setStyle(Styles.GRAY));
+                    tooltip.add(Component.translatable("misc.refinedstorage.storage.stored", API.instance().getQuantityFormatter().format(data.getStored())).setStyle(Styles.GRAY));
                 else
-                    tooltip.add(new TranslatableComponent("misc.refinedstorage.storage.stored_capacity", API.instance().getQuantityFormatter().format(data.getStored()), API.instance().getQuantityFormatter().format(data.getCapacity())).setStyle(Styles.GRAY));
+                    tooltip.add(Component.translatable("misc.refinedstorage.storage.stored_capacity", API.instance().getQuantityFormatter().format(data.getStored()), API.instance().getQuantityFormatter().format(data.getCapacity())).setStyle(Styles.GRAY));
             }
 
             if (flag.isAdvanced())
-                tooltip.add(new TextComponent(id.toString()).setStyle(Styles.GRAY));
+                tooltip.add(Component.literal(id.toString()).setStyle(Styles.GRAY));
         }
     }
 

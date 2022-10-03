@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "D": {
+      "item": "refinedstorage:advanced_processor"
+    },
+    "G": {
+      "item": "refinedstorage:4096k_fluid_storage_part"
+    },
+    "I": {
+      "item": "refinedstorage:quartz_enriched_iron"
+    },
+    "R": {
+      "item": "minecraft:redstone"
+    }
+  },
+  "pattern": [
+    "DID",
+    "GRG",
+    "DGD"
+  ],
+  "result": {
+    "item": "extrastorage:storagepart_16384k_fluid"
+  }
+}

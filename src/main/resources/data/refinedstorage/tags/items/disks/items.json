@@ -1,9 +1,0 @@
-{
-  "replace": false,
-  "values": [
-    "#refinedstorage:disks/items/256k",
-    "#refinedstorage:disks/items/1024k",
-    "#refinedstorage:disks/items/4096k",
-    "#refinedstorage:disks/items/16384k"
-  ]
-}

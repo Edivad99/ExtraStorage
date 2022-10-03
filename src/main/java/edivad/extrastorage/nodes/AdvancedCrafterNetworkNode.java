@@ -18,11 +18,16 @@ import com.refinedmods.refinedstorage.util.StackUtils;
 import edivad.extrastorage.Main;
 import edivad.extrastorage.blocks.CrafterTier;
 import edivad.extrastorage.setup.Config;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.UUID;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.Nameable;
@@ -33,15 +38,8 @@ import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.wrapper.CombinedInvWrapper;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class AdvancedCrafterNetworkNode extends NetworkNode implements ICraftingPatternContainer
 {
@@ -104,9 +102,9 @@ public class AdvancedCrafterNetworkNode extends NetworkNode implements ICrafting
                     return 1;
                 }
 
-                @Nonnull
+                @NotNull
                 @Override
-                public ItemStack insertItem(int slot, @Nonnull ItemStack stack, boolean simulate) {
+                public ItemStack insertItem(int slot, @NotNull ItemStack stack, boolean simulate) {
                     if(!stacks.get(slot).isEmpty()) {
                         return stack;
                     }
@@ -123,7 +121,7 @@ public class AdvancedCrafterNetworkNode extends NetworkNode implements ICrafting
                         network.getCraftingManager().invalidate();
                 }
             });
-        DEFAULT_NAME = new TranslatableComponent("block." + Main.MODID + "." + this.tier.getID());
+        DEFAULT_NAME = Component.translatable("block." + Main.MODID + "." + this.tier.getID());
         ID = new ResourceLocation(Main.MODID, tier.getID());
     }
 
@@ -366,7 +364,7 @@ public class AdvancedCrafterNetworkNode extends NetworkNode implements ICrafting
             return face.getName();
 
         if (facing != null)
-            return new TranslatableComponent(level.getBlockState(facing.getBlockPos()).getBlock().getDescriptionId());
+            return Component.translatable(level.getBlockState(facing.getBlockPos()).getBlock().getDescriptionId());
 
         return DEFAULT_NAME;
     }
@@ -460,21 +458,15 @@ public class AdvancedCrafterNetworkNode extends NetworkNode implements ICrafting
     @Override
     public boolean isLocked()
     {
-        Optional<ICraftingPatternContainer> root = getRootContainerNotSelf();
-        if (root.isPresent())
-            return root.get().isLocked();
+        return getRootContainerNotSelf()
+            .map(ICraftingPatternContainer::isLocked)
+            .orElseGet(() -> switch (mode) {
+            case SIGNAL_LOCKS_AUTOCRAFTING -> level.hasNeighborSignal(pos);
+            case SIGNAL_UNLOCKS_AUTOCRAFTING -> !level.hasNeighborSignal(pos);
+            case PULSE_INSERTS_NEXT_SET -> locked;
+            default -> false;
+        });
 
-        switch (mode)
-        {
-            case SIGNAL_LOCKS_AUTOCRAFTING:
-                return level.hasNeighborSignal(pos);
-            case SIGNAL_UNLOCKS_AUTOCRAFTING:
-                return !level.hasNeighborSignal(pos);
-            case PULSE_INSERTS_NEXT_SET:
-                return locked;
-            default:
-                return false;
-        }
     }
 
     @Override

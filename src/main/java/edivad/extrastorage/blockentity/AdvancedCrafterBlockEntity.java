@@ -2,6 +2,7 @@ package edivad.extrastorage.blockentity;
 
 import com.refinedmods.refinedstorage.blockentity.NetworkNodeBlockEntity;
 import com.refinedmods.refinedstorage.blockentity.data.BlockEntitySynchronizationParameter;
+import com.refinedmods.refinedstorage.blockentity.data.BlockEntitySynchronizationSpec;
 import edivad.extrastorage.blocks.CrafterTier;
 import edivad.extrastorage.client.screen.dataparameter.AdvancedCrafterTileDataParameterClientListener;
 import edivad.extrastorage.nodes.AdvancedCrafterNetworkNode;
@@ -12,12 +13,11 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class AdvancedCrafterBlockEntity extends NetworkNodeBlockEntity<AdvancedCrafterNetworkNode>
 {
@@ -27,14 +27,17 @@ public class AdvancedCrafterBlockEntity extends NetworkNodeBlockEntity<AdvancedC
     private final LazyOptional<IItemHandler> patternsCapability = LazyOptional.of(() -> getNode().getPatternItems());
     private final CrafterTier tier;
 
+    public static BlockEntitySynchronizationSpec SPEC = BlockEntitySynchronizationSpec.builder()
+        .addWatchedParameter(REDSTONE_MODE)
+        .addWatchedParameter(MODE)
+        .addParameter(HAS_ROOT)
+        .build();
+
     public AdvancedCrafterBlockEntity(CrafterTier tier, BlockPos pos, BlockState state)
     {
-        super(Registration.CRAFTER_TILE.get(tier).get(), pos, state);
+        super(Registration.CRAFTER_TILE.get(tier).get(), pos, state, SPEC);
 
         this.tier = tier;
-
-        dataManager.addWatchedParameter(MODE);
-        dataManager.addParameter(HAS_ROOT);
     }
 
     @Override
@@ -43,11 +46,11 @@ public class AdvancedCrafterBlockEntity extends NetworkNodeBlockEntity<AdvancedC
         return new AdvancedCrafterNetworkNode(level, pos, tier);
     }
 
-    @Nonnull
+    @NotNull
     @Override
-    public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction direction)
+    public <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction direction)
     {
-        if(cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)
+        if(cap == ForgeCapabilities.ITEM_HANDLER)
             if(direction != null && !direction.equals(this.getNode().getDirection()))
                 return patternsCapability.cast();
         return super.getCapability(cap, direction);

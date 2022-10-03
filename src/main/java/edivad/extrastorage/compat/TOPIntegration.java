@@ -6,15 +6,18 @@ import edivad.extrastorage.Main;
 import edivad.extrastorage.blockentity.AdvancedCrafterBlockEntity;
 import edivad.extrastorage.nodes.AdvancedCrafterNetworkNode;
 import edivad.extrastorage.tools.Translations;
-import mcjty.theoneprobe.api.*;
-import net.minecraft.network.chat.TranslatableComponent;
+import java.util.function.Function;
+import mcjty.theoneprobe.api.IProbeHitData;
+import mcjty.theoneprobe.api.IProbeInfo;
+import mcjty.theoneprobe.api.IProbeInfoProvider;
+import mcjty.theoneprobe.api.ITheOneProbe;
+import mcjty.theoneprobe.api.ProbeMode;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-
-import java.util.function.Function;
 
 public class TOPIntegration implements IProbeInfoProvider, Function<ITheOneProbe, Void> {
 
@@ -36,17 +39,17 @@ public class TOPIntegration implements IProbeInfoProvider, Function<ITheOneProbe
             patterns = node.getPatterns().size();
             speed = node.getMaximumSuccessfulCraftingUpdates();
             slots = tile.getTier().getSlots();
-            probeInfo.horizontal().text(new TranslatableComponent(Translations.OCCUPIED_SPACE, String.valueOf(patterns), String.valueOf(slots)));
+            probeInfo.horizontal().text(Component.translatable(Translations.OCCUPIED_SPACE, String.valueOf(patterns), String.valueOf(slots)));
 
             String translation = node.getTierSpeed() != node.getMaximumSuccessfulCraftingUpdates() ? Translations.LIMITED_SPEED : Translations.CURRENT_SPEED;
-            probeInfo.horizontal().text(new TranslatableComponent(translation, String.valueOf(speed)));
+            probeInfo.horizontal().text(Component.translatable(translation, String.valueOf(speed)));
         } else if (te instanceof CrafterBlockEntity tile) {
             CrafterNetworkNode node = tile.getNode();
             patterns = node.getPatterns().size();
             speed = node.getMaximumSuccessfulCraftingUpdates();
             slots = 9;
-            probeInfo.horizontal().text(new TranslatableComponent(Translations.OCCUPIED_SPACE, String.valueOf(patterns), String.valueOf(slots)));
-            probeInfo.horizontal().text(new TranslatableComponent(Translations.CURRENT_SPEED, String.valueOf(speed)));
+            probeInfo.horizontal().text(Component.translatable(Translations.OCCUPIED_SPACE, String.valueOf(patterns), String.valueOf(slots)));
+            probeInfo.horizontal().text(Component.translatable(Translations.CURRENT_SPEED, String.valueOf(speed)));
         }
     }
 

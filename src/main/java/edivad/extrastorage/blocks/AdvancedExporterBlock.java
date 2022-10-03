@@ -11,7 +11,7 @@ import com.refinedmods.refinedstorage.util.NetworkUtils;
 import edivad.extrastorage.blockentity.AdvancedExporterBlockEntity;
 import edivad.extrastorage.container.AdvancedExporterContainerMenu;
 import net.minecraft.core.BlockPos;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -25,8 +25,7 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.network.NetworkHooks;
-
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 public class AdvancedExporterBlock extends CableBlock
 {
@@ -98,10 +97,10 @@ public class AdvancedExporterBlock extends CableBlock
     public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit)
     {
         if (!level.isClientSide && CollisionUtils.isInBounds(getLineShape(state), pos, hit.getLocation())) {
-            return NetworkUtils.attemptModify(level, pos, player, () -> NetworkHooks.openGui(
+            return NetworkUtils.attemptModify(level, pos, player, () -> NetworkHooks.openScreen(
                     (ServerPlayer) player,
                     new BlockEntityMenuProvider<AdvancedExporterBlockEntity>(
-                            new TranslatableComponent(this.getDescriptionId()),
+                            Component.translatable(this.getDescriptionId()),
                             (blockEntity, windowId, inventory, p) -> new AdvancedExporterContainerMenu(windowId, player, blockEntity),
                             pos
                     ),

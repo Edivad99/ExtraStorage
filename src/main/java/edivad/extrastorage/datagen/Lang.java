@@ -53,14 +53,11 @@ public class Lang extends LanguageProvider
         add(Translations.LIMITED_SPEED, "Current speed (limited by the machinery): %sx");
         add(Translations.OCCUPIED_SPACE, "Occupied space: %s/%s");
 
-        //Advancements
-        add("advancements.extrastorage.iron_crafter", "Iron Crafter");
-        add("advancements.extrastorage.iron_crafter.description", "The next generation of crafters!");
-
-        add("advancements.extrastorage.advanced_exporter", "Advanced Exporter");
-        add("advancements.extrastorage.advanced_exporter.description", "A much larger exporter!");
-
-        add("advancements.extrastorage.advanced_importer", "Advanced Importer");
-        add("advancements.extrastorage.advanced_importer.description", "Many more filters!");
+        add(Translations.IRON_CRAFTER.title(), "Iron Crafter");
+        add(Translations.IRON_CRAFTER.desc(), "The next generation of crafters!");
+        add(Translations.ADVANCED_EXPORTER.title(), "Advanced Exporter");
+        add(Translations.ADVANCED_EXPORTER.desc(), "A much larger exporter!");
+        add(Translations.ADVANCED_IMPORTER.title(), "Advanced Importer");
+        add(Translations.ADVANCED_IMPORTER.desc(), "Many more filters!");
     }
 }

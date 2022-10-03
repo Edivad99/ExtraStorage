@@ -24,6 +24,7 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraftforge.common.Tags;
 
 import java.util.function.Consumer;
+import net.minecraftforge.registries.RegistryObject;
 
 public class Recipes extends RecipeProvider
 {
@@ -38,22 +39,22 @@ public class Recipes extends RecipeProvider
         for(ItemStorageType type : ItemStorageType.values())
         {
             if(type.equals(ItemStorageType.TIER_5))
-                partRecipe(Registration.ITEM_STORAGE_PART.get(type).get(), RSItems.ITEM_STORAGE_PARTS.get(com.refinedmods.refinedstorage.apiimpl.storage.ItemStorageType.SIXTY_FOUR_K).get(), consumer);
+                partRecipe(Registration.ITEM_STORAGE_PART.get(type), RSItems.ITEM_STORAGE_PARTS.get(com.refinedmods.refinedstorage.apiimpl.storage.ItemStorageType.SIXTY_FOUR_K).get(), consumer);
             else
-                partRecipe(Registration.ITEM_STORAGE_PART.get(type).get(), TagGenerator.Items.PARTS_ITEM.get(ItemStorageType.values()[type.ordinal()-1]), consumer);
+                partRecipe(Registration.ITEM_STORAGE_PART.get(type), TagGenerator.Items.PARTS_ITEM.get(ItemStorageType.values()[type.ordinal()-1]), consumer);
 
-            diskRecipe(Registration.ITEM_DISK.get(type).get(), TagGenerator.Items.PARTS_ITEM.get(type), consumer);
-            storageBlockRecipe(Registration.ITEM_STORAGE.get(type).get(), TagGenerator.Items.PARTS_ITEM.get(type), consumer);
+            diskRecipe(Registration.ITEM_DISK.get(type), TagGenerator.Items.PARTS_ITEM.get(type), consumer);
+            storageBlockRecipe(Registration.ITEM_STORAGE.get(type), TagGenerator.Items.PARTS_ITEM.get(type), consumer);
         }
         for(FluidStorageType type : FluidStorageType.values())
         {
             if(type.equals(FluidStorageType.TIER_5))
-                partRecipe(Registration.FLUID_STORAGE_PART.get(type).get(), RSItems.FLUID_STORAGE_PARTS.get(com.refinedmods.refinedstorage.apiimpl.storage.FluidStorageType.FOUR_THOUSAND_NINETY_SIX_K).get(), consumer);
+                partRecipe(Registration.FLUID_STORAGE_PART.get(type), RSItems.FLUID_STORAGE_PARTS.get(com.refinedmods.refinedstorage.apiimpl.storage.FluidStorageType.FOUR_THOUSAND_NINETY_SIX_K).get(), consumer);
             else
-                partRecipe(Registration.FLUID_STORAGE_PART.get(type).get(), TagGenerator.Items.PARTS_FLUID.get(FluidStorageType.values()[type.ordinal()-1]), consumer);
+                partRecipe(Registration.FLUID_STORAGE_PART.get(type), TagGenerator.Items.PARTS_FLUID.get(FluidStorageType.values()[type.ordinal()-1]), consumer);
 
-            diskRecipe(Registration.FLUID_DISK.get(type).get(), TagGenerator.Items.PARTS_FLUID.get(type), consumer);
-            storageBlockRecipe(Registration.FLUID_STORAGE.get(type).get(), TagGenerator.Items.PARTS_FLUID.get(type), consumer);
+            diskRecipe(Registration.FLUID_DISK.get(type), TagGenerator.Items.PARTS_FLUID.get(type), consumer);
+            storageBlockRecipe(Registration.FLUID_STORAGE.get(type), TagGenerator.Items.PARTS_FLUID.get(type), consumer);
         }
 
         ShapedRecipeBuilder.shaped(Registration.CRAFTER.get(CrafterTier.IRON).get())//
@@ -139,9 +140,9 @@ public class Recipes extends RecipeProvider
                 .unlockedBy("has_part", has(Registration.RAW_NEURAL_PROCESSOR_ITEM.get())).save(consumer);
     }
 
-    private void partRecipe(Item result, TagKey<Item> previousPart, Consumer<FinishedRecipe> consumer)
+    private void partRecipe(RegistryObject<Item> result, TagKey<Item> previousPart, Consumer<FinishedRecipe> consumer)
     {
-        ShapedRecipeBuilder.shaped(result)//
+        ShapedRecipeBuilder.shaped(result.get())//
                 .pattern("DID")//
                 .pattern("GRG")//
                 .pattern("DGD")//
@@ -150,12 +151,12 @@ public class Recipes extends RecipeProvider
                 .define('I', RSItems.QUARTZ_ENRICHED_IRON.get())//
                 .define('R', Items.REDSTONE)//
                 .unlockedBy("has_previous_part", has(previousPart))//
-                .save(consumer, new ResourceLocation(Main.MODID, "part/" + result.getRegistryName().getPath()));
+                .save(consumer, new ResourceLocation(Main.MODID, "part/" + result.getId().getPath()));
     }
 
-    private void partRecipe(Item result, Item previousPart, Consumer<FinishedRecipe> consumer)
+    private void partRecipe(RegistryObject<Item> result, Item previousPart, Consumer<FinishedRecipe> consumer)
     {
-        ShapedRecipeBuilder.shaped(result)//
+        ShapedRecipeBuilder.shaped(result.get())//
                 .pattern("DID")//
                 .pattern("GRG")//
                 .pattern("DGD")//
@@ -164,12 +165,12 @@ public class Recipes extends RecipeProvider
                 .define('I', RSItems.QUARTZ_ENRICHED_IRON.get())//
                 .define('R', Items.REDSTONE)//
                 .unlockedBy("has_previous_part", has(previousPart))//
-                .save(consumer, new ResourceLocation(Main.MODID, "part/" + result.getRegistryName().getPath()));
+                .save(consumer, new ResourceLocation(Main.MODID, "part/" + result.getId().getPath()));
     }
 
-    private void diskRecipe(Item result, TagKey<Item> part, Consumer<FinishedRecipe> consumer)
+    private void diskRecipe(RegistryObject<Item> result, TagKey<Item> part, Consumer<FinishedRecipe> consumer)
     {
-        ShapedRecipeBuilder.shaped(result)//
+        ShapedRecipeBuilder.shaped(result.get())//
                 .pattern("GRG")//
                 .pattern("RSR")//
                 .pattern("III")//
@@ -178,18 +179,18 @@ public class Recipes extends RecipeProvider
                 .define('I', RSItems.QUARTZ_ENRICHED_IRON.get())//
                 .define('R', Items.REDSTONE)//
                 .unlockedBy("has_part", has(part))//
-                .save(consumer, new ResourceLocation(Main.MODID, "disk/shaped/" + result.getRegistryName().getPath()));
+                .save(consumer, new ResourceLocation(Main.MODID, "disk/shaped/" + result.getId().getPath()));
 
-        ShapelessRecipeBuilder.shapeless(result)//
+        ShapelessRecipeBuilder.shapeless(result.get())//
                 .requires(RSItems.STORAGE_HOUSING.get())//
                 .requires(part)//
                 .unlockedBy("has_part", has(part))//
-                .save(consumer, new ResourceLocation(Main.MODID, "disk/shapeless/" + result.getRegistryName().getPath()));
+                .save(consumer, new ResourceLocation(Main.MODID, "disk/shapeless/" + result.getId().getPath()));
     }
 
-    private void storageBlockRecipe(Item result, TagKey<Item> part, Consumer<FinishedRecipe> consumer)
+    private void storageBlockRecipe(RegistryObject<Item> result, TagKey<Item> part, Consumer<FinishedRecipe> consumer)
     {
-        ShapedRecipeBuilder.shaped(result)//
+        ShapedRecipeBuilder.shaped(result.get())//
                 .pattern("EPE")//
                 .pattern("EME")//
                 .pattern("ERE")//
@@ -198,6 +199,6 @@ public class Recipes extends RecipeProvider
                 .define('P', part)//
                 .define('E', RSItems.QUARTZ_ENRICHED_IRON.get())//
                 .unlockedBy("has_part", has(part))//
-                .save(consumer, new ResourceLocation(Main.MODID, "storage_block/" + result.getRegistryName().getPath()));
+                .save(consumer, new ResourceLocation(Main.MODID, "storage_block/" + result.getId().getPath()));
     }
 }

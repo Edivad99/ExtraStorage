@@ -8,17 +8,15 @@ import com.refinedmods.refinedstorage.apiimpl.network.node.storage.FluidStorageW
 import edivad.extrastorage.Main;
 import edivad.extrastorage.blockentity.AdvancedFluidStorageBlockEntity;
 import edivad.extrastorage.items.storage.fluid.FluidStorageType;
+import java.util.List;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.fluids.FluidStack;
-
-import javax.annotation.Nullable;
-import java.util.List;
+import org.jetbrains.annotations.Nullable;
 
 public class AdvancedFluidStorageNetworkNode extends FluidStorageNetworkNode
 {
@@ -87,7 +85,7 @@ public class AdvancedFluidStorageNetworkNode extends FluidStorageNetworkNode
     @Override
     public Component getTitle()
     {
-        return new TranslatableComponent("block." + Main.MODID + ".block_" + type.getName() + "_fluid");
+        return Component.translatable("block." + Main.MODID + ".block_" + type.getName() + "_fluid");
     }
 
     @Override

@@ -7,6 +7,7 @@ import com.refinedmods.refinedstorage.blockentity.config.IComparable;
 import com.refinedmods.refinedstorage.blockentity.config.IPrioritizable;
 import com.refinedmods.refinedstorage.blockentity.config.IWhitelistBlacklist;
 import com.refinedmods.refinedstorage.blockentity.data.BlockEntitySynchronizationParameter;
+import com.refinedmods.refinedstorage.blockentity.data.BlockEntitySynchronizationSpec;
 import com.refinedmods.refinedstorage.blockentity.data.RSSerializers;
 import edivad.extrastorage.items.storage.item.ItemStorageType;
 import edivad.extrastorage.nodes.AdvancedStorageNetworkNode;
@@ -25,17 +26,19 @@ public class AdvancedStorageBlockEntity extends NetworkNodeBlockEntity<AdvancedS
 
     private final ItemStorageType type;
 
+    public static BlockEntitySynchronizationSpec SPEC = BlockEntitySynchronizationSpec.builder()
+        .addWatchedParameter(REDSTONE_MODE)
+        .addWatchedParameter(PRIORITY)
+        .addWatchedParameter(COMPARE)
+        .addWatchedParameter(WHITELIST_BLACKLIST)
+        .addWatchedParameter(STORED)
+        .addWatchedParameter(ACCESS_TYPE)
+        .build();
+
     public AdvancedStorageBlockEntity(ItemStorageType type, BlockPos pos, BlockState state)
     {
-        super(Registration.ITEM_STORAGE_TILE.get(type).get(), pos, state);
-
+        super(Registration.ITEM_STORAGE_TILE.get(type).get(), pos, state, SPEC);
         this.type = type;
-
-        dataManager.addWatchedParameter(PRIORITY);
-        dataManager.addWatchedParameter(COMPARE);
-        dataManager.addWatchedParameter(WHITELIST_BLACKLIST);
-        dataManager.addWatchedParameter(STORED);
-        dataManager.addWatchedParameter(ACCESS_TYPE);
     }
 
     public ItemStorageType getItemStorageType()

@@ -1,11 +1,13 @@
 package edivad.extrastorage.nodes;
 
 import com.refinedmods.refinedstorage.RS;
+import com.refinedmods.refinedstorage.api.network.node.ICoverable;
 import com.refinedmods.refinedstorage.api.util.Action;
 import com.refinedmods.refinedstorage.api.util.IComparer;
 import com.refinedmods.refinedstorage.apiimpl.API;
 import com.refinedmods.refinedstorage.apiimpl.network.node.NetworkNode;
 import com.refinedmods.refinedstorage.apiimpl.network.node.SlottedCraftingRequest;
+import com.refinedmods.refinedstorage.apiimpl.network.node.cover.CoverManager;
 import com.refinedmods.refinedstorage.blockentity.config.IComparable;
 import com.refinedmods.refinedstorage.blockentity.config.IType;
 import com.refinedmods.refinedstorage.inventory.fluid.FluidInventory;
@@ -23,14 +25,14 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidType;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.ItemHandlerHelper;
 
-public class AdvancedExporterNetworkNode extends NetworkNode implements IComparable, IType
+public class AdvancedExporterNetworkNode extends NetworkNode implements IComparable, IType, ICoverable
 {
     public static final ResourceLocation ID = new ResourceLocation(Main.MODID, "advanced_exporter");
 
@@ -42,6 +44,7 @@ public class AdvancedExporterNetworkNode extends NetworkNode implements ICompara
 
     private final BaseItemHandler itemFilters = new BaseItemHandler(SLOTS).addListener(new NetworkNodeInventoryListener(this));
     private final FluidInventory fluidFilters = new FluidInventory(SLOTS).addListener(new NetworkNodeFluidInventoryListener(this));
+    private final CoverManager coverManager;
 
     private final UpgradeItemHandler upgrades = (UpgradeItemHandler) new UpgradeItemHandler(4, UpgradeItem.Type.SPEED, UpgradeItem.Type.CRAFTING, UpgradeItem.Type.STACK, UpgradeItem.Type.REGULATOR)
         .addListener(new NetworkNodeInventoryListener(this))
@@ -63,9 +66,9 @@ public class AdvancedExporterNetworkNode extends NetworkNode implements ICompara
 
                     FluidStack filteredFluid = fluidFilters.getFluid(i);
 
-                    if (!filteredFluid.isEmpty() && filteredFluid.getAmount() != FluidAttributes.BUCKET_VOLUME)
+                    if (!filteredFluid.isEmpty() && filteredFluid.getAmount() != FluidType.BUCKET_VOLUME)
                     {
-                        filteredFluid.setAmount(FluidAttributes.BUCKET_VOLUME);
+                        filteredFluid.setAmount(FluidType.BUCKET_VOLUME);
                         changed = true;
                     }
                 }
@@ -85,6 +88,7 @@ public class AdvancedExporterNetworkNode extends NetworkNode implements ICompara
     public AdvancedExporterNetworkNode(Level level, BlockPos pos)
     {
         super(level, pos);
+        this.coverManager = new CoverManager(this);
     }
 
     @Override
@@ -185,7 +189,7 @@ public class AdvancedExporterNetworkNode extends NetworkNode implements ICompara
                     FluidStack stack = fluids[filterSlot];
 
                     if (stack != null) {
-                        int toExtract = FluidAttributes.BUCKET_VOLUME * upgrades.getStackInteractCount();
+                        int toExtract = FluidType.BUCKET_VOLUME * upgrades.getStackInteractCount();
 
                         FluidStack stackInStorage = network.getFluidStorageCache().getList().get(stack, compare);
 
@@ -259,6 +263,7 @@ public class AdvancedExporterNetworkNode extends NetworkNode implements ICompara
     public CompoundTag write(CompoundTag tag)
     {
         super.write(tag);
+        tag.put(CoverManager.NBT_COVER_MANAGER, this.coverManager.writeToNbt());
         StackUtils.writeItems(upgrades, 1, tag);
         return tag;
     }
@@ -278,6 +283,9 @@ public class AdvancedExporterNetworkNode extends NetworkNode implements ICompara
     public void read(CompoundTag tag)
     {
         super.read(tag);
+        if (tag.contains(CoverManager.NBT_COVER_MANAGER)) {
+            this.coverManager.readFromNbt(tag.getCompound(CoverManager.NBT_COVER_MANAGER));
+        }
         StackUtils.readItems(upgrades, 1, tag);
     }
 
@@ -331,5 +339,10 @@ public class AdvancedExporterNetworkNode extends NetworkNode implements ICompara
     public FluidInventory getFluidFilters()
     {
         return fluidFilters;
+    }
+
+    @Override
+    public CoverManager getCoverManager() {
+        return coverManager;
     }
 }

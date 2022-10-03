@@ -7,7 +7,6 @@ import edivad.extrastorage.Main;
 import edivad.extrastorage.blocks.CrafterTier;
 import edivad.extrastorage.container.AdvancedCrafterContainerMenu;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.entity.player.Inventory;
 
 public class AdvancedCrafterScreen extends BaseScreen<AdvancedCrafterContainerMenu>
@@ -42,6 +41,6 @@ public class AdvancedCrafterScreen extends BaseScreen<AdvancedCrafterContainerMe
     public void renderForeground(PoseStack poseStack, int mouseX, int mouseY)
     {
         renderString(poseStack, 7, 7, RenderUtils.shorten(title.getString(), 26));
-        renderString(poseStack, 7, 78 + (36 * tier.ordinal()), new TranslatableComponent("container.inventory").getString());
+        renderString(poseStack, 7, 78 + (36 * tier.ordinal()), Component.translatable("container.inventory").getString());
     }
 }

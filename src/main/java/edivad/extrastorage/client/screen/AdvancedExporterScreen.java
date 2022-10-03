@@ -11,7 +11,6 @@ import edivad.extrastorage.Main;
 import edivad.extrastorage.blockentity.AdvancedExporterBlockEntity;
 import edivad.extrastorage.container.AdvancedExporterContainerMenu;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.entity.player.Inventory;
 
 public class AdvancedExporterScreen extends BaseScreen<AdvancedExporterContainerMenu>
@@ -59,6 +58,6 @@ public class AdvancedExporterScreen extends BaseScreen<AdvancedExporterContainer
     public void renderForeground(PoseStack poseStack, int i, int i1)
     {
         renderString(poseStack, 7, 7, RenderUtils.shorten(title.getString(), 26));
-        renderString(poseStack, 7, 60, new TranslatableComponent("container.inventory").getString());
+        renderString(poseStack, 7, 60, Component.translatable("container.inventory").getString());
     }
 }

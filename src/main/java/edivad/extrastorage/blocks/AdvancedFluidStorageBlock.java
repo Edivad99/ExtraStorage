@@ -20,8 +20,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.network.NetworkHooks;
-
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 public class AdvancedFluidStorageBlock extends NetworkNodeBlock
 {
@@ -65,7 +64,9 @@ public class AdvancedFluidStorageBlock extends NetworkNodeBlock
     public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit) {
         if (!level.isClientSide)
         {
-            return NetworkUtils.attemptModify(level, pos, player, () -> NetworkHooks.openGui((ServerPlayer) player, new BlockEntityMenuProvider<AdvancedFluidStorageBlockEntity>(
+            return NetworkUtils.attemptModify(level, pos, player, () -> NetworkHooks.openScreen(
+                (ServerPlayer) player,
+                    new BlockEntityMenuProvider<AdvancedFluidStorageBlockEntity>(
                     ((AdvancedFluidStorageBlockEntity) level.getBlockEntity(pos)).getNode().getTitle(),
                     (tile, windowId, inventory, p) -> new AdvancedFluidStorageBlockContainerMenu(windowId, player, tile),
                     pos

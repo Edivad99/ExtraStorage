@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "G": {
+      "tag": "forge:glass"
+    },
+    "I": {
+      "item": "refinedstorage:quartz_enriched_iron"
+    },
+    "R": {
+      "item": "minecraft:redstone"
+    },
+    "S": {
+      "tag": "refinedstorage:parts/fluids/1048576k"
+    }
+  },
+  "pattern": [
+    "GRG",
+    "RSR",
+    "III"
+  ],
+  "result": {
+    "item": "extrastorage:disk_1048576k_fluid"
+  }
+}

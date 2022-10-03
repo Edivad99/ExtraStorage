@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "conditions": [
+        {
+          "condition": "minecraft:survives_explosion"
+        }
+      ],
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "function": "extrastorage:storage_block"
+            }
+          ],
+          "name": "extrastorage:block_16384k"
+        }
+      ],
+      "rolls": 1.0
+    }
+  ]
+}

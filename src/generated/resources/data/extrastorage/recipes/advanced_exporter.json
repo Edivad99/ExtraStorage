@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "a": {
+      "item": "minecraft:redstone_torch"
+    },
+    "b": {
+      "item": "refinedstorage:exporter"
+    },
+    "c": {
+      "item": "refinedstorage:improved_processor"
+    }
+  },
+  "pattern": [
+    " a ",
+    "cbc",
+    " a "
+  ],
+  "result": {
+    "item": "extrastorage:advanced_exporter"
+  }
+}

@@ -9,11 +9,11 @@ import com.refinedmods.refinedstorage.util.NetworkUtils;
 import edivad.extrastorage.blockentity.AdvancedCrafterBlockEntity;
 import edivad.extrastorage.container.AdvancedCrafterContainerMenu;
 import edivad.extrastorage.tools.Translations;
+import java.util.List;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -29,9 +29,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.network.NetworkHooks;
-
-import javax.annotation.Nullable;
-import java.util.List;
+import org.jetbrains.annotations.Nullable;
 
 public class AdvancedCrafterBlock extends NetworkNodeBlock
 {
@@ -75,7 +73,7 @@ public class AdvancedCrafterBlock extends NetworkNodeBlock
     {
         if (!level.isClientSide)
         {
-            return NetworkUtils.attempt(level, pos, player, () -> NetworkHooks.openGui(
+            return NetworkUtils.attempt(level, pos, player, () -> NetworkHooks.openScreen(
                     (ServerPlayer) player,
                     new BlockEntityMenuProvider<AdvancedCrafterBlockEntity>(
                             ((AdvancedCrafterBlockEntity) level.getBlockEntity(pos)).getNode().getName(),
@@ -99,12 +97,12 @@ public class AdvancedCrafterBlock extends NetworkNodeBlock
     public void appendHoverText(ItemStack stack, BlockGetter blockGetter, List<Component> tooltip, TooltipFlag flag) {
         if(Screen.hasShiftDown())
         {
-            tooltip.add(new TranslatableComponent(Translations.SLOT_CRAFTING, tier.getSlots()).withStyle(ChatFormatting.GREEN));
-            tooltip.add(new TranslatableComponent(Translations.BASE_SPEED, tier.getCraftingSpeed()).withStyle(ChatFormatting.GREEN));
+            tooltip.add(Component.translatable(Translations.SLOT_CRAFTING, tier.getSlots()).withStyle(ChatFormatting.GREEN));
+            tooltip.add(Component.translatable(Translations.BASE_SPEED, tier.getCraftingSpeed()).withStyle(ChatFormatting.GREEN));
         }
         else
         {
-            tooltip.add(new TranslatableComponent(Translations.HOLD_SHIFT).withStyle(ChatFormatting.GRAY));
+            tooltip.add(Component.translatable(Translations.HOLD_SHIFT).withStyle(ChatFormatting.GRAY));
         }
     }
 }

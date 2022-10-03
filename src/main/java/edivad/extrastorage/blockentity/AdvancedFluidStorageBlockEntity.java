@@ -7,6 +7,7 @@ import com.refinedmods.refinedstorage.blockentity.config.IComparable;
 import com.refinedmods.refinedstorage.blockentity.config.IPrioritizable;
 import com.refinedmods.refinedstorage.blockentity.config.IWhitelistBlacklist;
 import com.refinedmods.refinedstorage.blockentity.data.BlockEntitySynchronizationParameter;
+import com.refinedmods.refinedstorage.blockentity.data.BlockEntitySynchronizationSpec;
 import com.refinedmods.refinedstorage.blockentity.data.RSSerializers;
 import edivad.extrastorage.items.storage.fluid.FluidStorageType;
 import edivad.extrastorage.nodes.AdvancedFluidStorageNetworkNode;
@@ -25,17 +26,19 @@ public class AdvancedFluidStorageBlockEntity extends NetworkNodeBlockEntity<Adva
 
     private final FluidStorageType type;
 
+    public static BlockEntitySynchronizationSpec SPEC = BlockEntitySynchronizationSpec.builder()
+        .addWatchedParameter(REDSTONE_MODE)
+        .addWatchedParameter(PRIORITY)
+        .addWatchedParameter(COMPARE)
+        .addWatchedParameter(WHITELIST_BLACKLIST)
+        .addWatchedParameter(STORED)
+        .addWatchedParameter(ACCESS_TYPE)
+        .build();
+
     public AdvancedFluidStorageBlockEntity(FluidStorageType type, BlockPos pos, BlockState state)
     {
-        super(Registration.FLUID_STORAGE_TILE.get(type).get(), pos, state);
-
+        super(Registration.FLUID_STORAGE_TILE.get(type).get(), pos, state, SPEC);
         this.type = type;
-
-        dataManager.addWatchedParameter(PRIORITY);
-        dataManager.addWatchedParameter(COMPARE);
-        dataManager.addWatchedParameter(WHITELIST_BLACKLIST);
-        dataManager.addWatchedParameter(STORED);
-        dataManager.addWatchedParameter(ACCESS_TYPE);
     }
 
     public FluidStorageType getFluidStorageType()

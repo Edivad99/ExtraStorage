@@ -11,7 +11,7 @@ import com.refinedmods.refinedstorage.util.NetworkUtils;
 import edivad.extrastorage.blockentity.AdvancedImporterBlockEntity;
 import edivad.extrastorage.container.AdvancedImporterContainerMenu;
 import net.minecraft.core.BlockPos;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -25,8 +25,7 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.network.NetworkHooks;
-
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 public class AdvancedImporterBlock extends CableBlock
 {
@@ -83,7 +82,6 @@ public class AdvancedImporterBlock extends CableBlock
             case SOUTH -> LINE_SOUTH;
             case EAST -> LINE_EAST;
             case WEST -> LINE_WEST;
-            default -> Shapes.empty();
         };
     }
 
@@ -96,10 +94,10 @@ public class AdvancedImporterBlock extends CableBlock
 
     public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
         if (!level.isClientSide && CollisionUtils.isInBounds(getLineShape(state), pos, hit.getLocation())) {
-            return NetworkUtils.attemptModify(level, pos, player, () -> NetworkHooks.openGui(
+            return NetworkUtils.attemptModify(level, pos, player, () -> NetworkHooks.openScreen(
                     (ServerPlayer) player,
                     new BlockEntityMenuProvider<AdvancedImporterBlockEntity>(
-                            new TranslatableComponent(this.getDescriptionId()),
+                            Component.translatable(this.getDescriptionId()),
                             (blockEntity, windowId, inventory, p) -> new AdvancedImporterContainerMenu(windowId, player, blockEntity),
                             pos
                     ),

@@ -8,6 +8,7 @@ import edivad.extrastorage.blocks.CrafterTier;
 import edivad.extrastorage.items.storage.fluid.FluidStorageType;
 import edivad.extrastorage.items.storage.item.ItemStorageType;
 import edivad.extrastorage.setup.Registration;
+import java.util.function.Consumer;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.data.recipes.RecipeProvider;
@@ -22,8 +23,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraftforge.common.Tags;
-
-import java.util.function.Consumer;
 import net.minecraftforge.registries.RegistryObject;
 
 public class Recipes extends RecipeProvider

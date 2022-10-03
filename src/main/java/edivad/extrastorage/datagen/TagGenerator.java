@@ -4,6 +4,8 @@ import edivad.extrastorage.Main;
 import edivad.extrastorage.items.storage.fluid.FluidStorageType;
 import edivad.extrastorage.items.storage.item.ItemStorageType;
 import edivad.extrastorage.setup.Registration;
+import java.util.HashMap;
+import java.util.Map;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.tags.BlockTagsProvider;
 import net.minecraft.data.tags.ItemTagsProvider;
@@ -12,9 +14,6 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.common.data.ExistingFileHelper;
-
-import java.util.HashMap;
-import java.util.Map;
 
 public class TagGenerator {
     public static class Blocks {

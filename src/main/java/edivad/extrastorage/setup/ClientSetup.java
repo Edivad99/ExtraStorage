@@ -11,8 +11,6 @@ import edivad.extrastorage.items.storage.fluid.FluidStorageType;
 import edivad.extrastorage.items.storage.item.ItemStorageType;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.MenuScreens;
-import net.minecraft.client.renderer.ItemBlockRenderTypes;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraftforge.client.event.ModelEvent;
@@ -38,9 +36,6 @@ public class ClientSetup {
 
         MenuScreens.register(Registration.ADVANCED_EXPORTER_CONTAINER.get(), AdvancedExporterScreen::new);
         MenuScreens.register(Registration.ADVANCED_IMPORTER_CONTAINER.get(), AdvancedImporterScreen::new);
-
-        ItemBlockRenderTypes.setRenderLayer(Registration.ADVANCED_EXPORTER.get(), RenderType.cutout());
-        ItemBlockRenderTypes.setRenderLayer(Registration.ADVANCED_IMPORTER.get(), RenderType.cutout());
 
         for (ItemStorageType type : ItemStorageType.values())
             MenuScreens.register(Registration.ITEM_STORAGE_CONTAINER.get(type).get(), AdvancedStorageBlockScreen::new);

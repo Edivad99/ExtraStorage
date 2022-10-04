@@ -1,5 +1,6 @@
 {
     "parent": "block/block",
+    "render_type": "cutout",
     "textures": {
         "border": "extrastorage:blocks/cable_part_border"
     },

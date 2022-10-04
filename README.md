@@ -1,5 +1,5 @@
 # ExtraStorage
-![ExtraStorage CI](https://github.com/Edivad99/ExtraStorage/workflows/ExtraStorage%20CI/badge.svg?branch=1.18.x)
+![ExtraStorage CI](https://github.com/Edivad99/ExtraStorage/workflows/ExtraStorage%20CI/badge.svg?branch=1.19.x)
 [![CurseForge](http://cf.way2muchnoise.eu/full_410168_downloads.svg)](https://www.curseforge.com/minecraft/mc-mods/extrastorage)
 ## Table of Contents
 
@@ -28,4 +28,4 @@ You install this mod by putting it into the `minecraft/mods/` folder.
 
 ExtraStorage crashing, have a suggestion, found a bug?  Create an issue now!
 
-Providing as many details as possible does help us to find and resolve the issue faster and also you getting a fixed version as fast as possible.
+Providing as many details as possible does help us find and resolve the issue faster, and also you're getting a fixed version as fast as possible.

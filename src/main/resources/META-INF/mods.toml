@@ -16,7 +16,7 @@ description="Extra Storage adds new blocks to Refined Storage"
 [[dependencies.extrastorage]]
     modId="forge"
     mandatory=true
-    versionRange="[43,)"
+    versionRange="[43.1.1,)"
     ordering="NONE"
     side="BOTH"
 [[dependencies.extrastorage]]

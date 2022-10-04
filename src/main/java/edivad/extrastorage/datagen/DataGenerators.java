@@ -15,10 +15,10 @@ public class DataGenerators {
 
         TagGenerator.BlockTags blockTagsProvider = new TagGenerator.BlockTags(generator, existingFileHelper);
         generator.addProvider(event.includeServer(), blockTagsProvider);
-        generator.addProvider(event.includeServer(),new TagGenerator.ItemTags(generator, blockTagsProvider, existingFileHelper));
-        generator.addProvider(event.includeServer(),new Recipes(generator));
-        generator.addProvider(event.includeServer(),new Lang(generator));
-        generator.addProvider(event.includeServer(),new LootTableGenerator(generator));
+        generator.addProvider(event.includeServer(), new TagGenerator.ItemTags(generator, blockTagsProvider, existingFileHelper));
+        generator.addProvider(event.includeServer(), new Recipes(generator));
+        generator.addProvider(event.includeServer(), new Lang(generator));
+        generator.addProvider(event.includeServer(), new LootTableGenerator(generator));
         generator.addProvider(event.includeClient(), new BlockStates(generator, existingFileHelper));
         generator.addProvider(event.includeClient(), new Items(generator, existingFileHelper));
     }

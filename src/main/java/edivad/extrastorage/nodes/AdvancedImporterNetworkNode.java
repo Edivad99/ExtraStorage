@@ -32,8 +32,7 @@ import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
 
-public class AdvancedImporterNetworkNode extends NetworkNode implements IComparable, IWhitelistBlacklist, IType, ICoverable
-{
+public class AdvancedImporterNetworkNode extends NetworkNode implements IComparable, IWhitelistBlacklist, IType, ICoverable {
     public static final ResourceLocation ID = new ResourceLocation(Main.MODID, "advanced_importer");
 
     private static final String NBT_COMPARE = "Compare";
@@ -45,8 +44,9 @@ public class AdvancedImporterNetworkNode extends NetworkNode implements ICompara
     private final FluidInventory fluidFilters = new FluidInventory(18).addListener(new NetworkNodeFluidInventoryListener(this));
     private final CoverManager coverManager;
 
-    private final UpgradeItemHandler upgrades = (UpgradeItemHandler) new UpgradeItemHandler(4, UpgradeItem.Type.SPEED, UpgradeItem.Type.STACK)
-        .addListener(new NetworkNodeInventoryListener(this));
+    private final UpgradeItemHandler upgrades = (UpgradeItemHandler)
+            new UpgradeItemHandler(4, UpgradeItem.Type.SPEED, UpgradeItem.Type.STACK)
+            .addListener(new NetworkNodeInventoryListener(this));
 
     private int compare = IComparer.COMPARE_NBT;
     private int mode = IWhitelistBlacklist.BLACKLIST;
@@ -54,29 +54,25 @@ public class AdvancedImporterNetworkNode extends NetworkNode implements ICompara
 
     private int currentSlot;
 
-    public AdvancedImporterNetworkNode(Level level, BlockPos pos)
-    {
+    public AdvancedImporterNetworkNode(Level level, BlockPos pos) {
         super(level, pos);
         this.coverManager = new CoverManager(this);
     }
 
     @Override
-    public int getEnergyUsage()
-    {
+    public int getEnergyUsage() {
         return 4 * (RS.SERVER_CONFIG.getImporter().getUsage() + upgrades.getEnergyUsage());
     }
 
     @Override
-    public void update()
-    {
+    public void update() {
         super.update();
 
         if (!canUpdate() || !level.isLoaded(pos)) {
             return;
         }
 
-        if (type == IType.ITEMS)
-        {
+        if (type == IType.ITEMS) {
             BlockEntity facing = getFacingBlockEntity();
             IItemHandler handler = LevelUtils.getItemHandler(facing, getDirection().getOpposite());
 
@@ -109,9 +105,7 @@ public class AdvancedImporterNetworkNode extends NetworkNode implements ICompara
                     }
                 }
             }
-        }
-        else if (type == IType.FLUIDS && ticks % upgrades.getSpeed() == 0)
-        {
+        } else if (type == IType.FLUIDS && ticks % upgrades.getSpeed() == 0) {
             IFluidHandler handler = LevelUtils.getFluidHandler(getFacingBlockEntity(), getDirection().getOpposite());
 
             if (handler != null) {
@@ -136,40 +130,34 @@ public class AdvancedImporterNetworkNode extends NetworkNode implements ICompara
     }
 
     @Override
-    public int getCompare()
-    {
+    public int getCompare() {
         return compare;
     }
 
     @Override
-    public void setCompare(int compare)
-    {
+    public void setCompare(int compare) {
         this.compare = compare;
         markDirty();
     }
 
     @Override
-    public int getWhitelistBlacklistMode()
-    {
+    public int getWhitelistBlacklistMode() {
         return mode;
     }
 
     @Override
-    public void setWhitelistBlacklistMode(int mode)
-    {
+    public void setWhitelistBlacklistMode(int mode) {
         this.mode = mode;
         markDirty();
     }
 
     @Override
-    public ResourceLocation getId()
-    {
+    public ResourceLocation getId() {
         return ID;
     }
 
     @Override
-    public CompoundTag write(CompoundTag tag)
-    {
+    public CompoundTag write(CompoundTag tag) {
         super.write(tag);
         tag.put(CoverManager.NBT_COVER_MANAGER, this.coverManager.writeToNbt());
         StackUtils.writeItems(upgrades, 1, tag);
@@ -177,8 +165,7 @@ public class AdvancedImporterNetworkNode extends NetworkNode implements ICompara
     }
 
     @Override
-    public CompoundTag writeConfiguration(CompoundTag tag)
-    {
+    public CompoundTag writeConfiguration(CompoundTag tag) {
         super.writeConfiguration(tag);
         tag.putInt(NBT_COMPARE, compare);
         tag.putInt(NBT_MODE, mode);
@@ -189,8 +176,7 @@ public class AdvancedImporterNetworkNode extends NetworkNode implements ICompara
     }
 
     @Override
-    public void read(CompoundTag tag)
-    {
+    public void read(CompoundTag tag) {
         super.read(tag);
         if (tag.contains(CoverManager.NBT_COVER_MANAGER)) {
             this.coverManager.readFromNbt(tag.getCompound(CoverManager.NBT_COVER_MANAGER));
@@ -199,8 +185,7 @@ public class AdvancedImporterNetworkNode extends NetworkNode implements ICompara
     }
 
     @Override
-    public void readConfiguration(CompoundTag tag)
-    {
+    public void readConfiguration(CompoundTag tag) {
         super.readConfiguration(tag);
         if (tag.contains(NBT_COMPARE)) {
             compare = tag.getInt(NBT_COMPARE);
@@ -217,39 +202,33 @@ public class AdvancedImporterNetworkNode extends NetworkNode implements ICompara
         }
     }
 
-    public UpgradeItemHandler getUpgrades()
-    {
+    public UpgradeItemHandler getUpgrades() {
         return upgrades;
     }
 
     @Override
-    public IItemHandler getDrops()
-    {
+    public IItemHandler getDrops() {
         return upgrades;
     }
 
     @Override
-    public int getType()
-    {
+    public int getType() {
         return level.isClientSide ? AdvancedImporterBlockEntity.TYPE.getValue() : type;
     }
 
     @Override
-    public void setType(int type)
-    {
+    public void setType(int type) {
         this.type = type;
         markDirty();
     }
 
     @Override
-    public IItemHandlerModifiable getItemFilters()
-    {
+    public IItemHandlerModifiable getItemFilters() {
         return itemFilters;
     }
 
     @Override
-    public FluidInventory getFluidFilters()
-    {
+    public FluidInventory getFluidFilters() {
         return fluidFilters;
     }
 

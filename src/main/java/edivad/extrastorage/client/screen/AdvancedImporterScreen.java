@@ -13,15 +13,13 @@ import edivad.extrastorage.container.AdvancedImporterContainerMenu;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
 
-public class AdvancedImporterScreen extends BaseScreen<AdvancedImporterContainerMenu>
-{
+public class AdvancedImporterScreen extends BaseScreen<AdvancedImporterContainerMenu> {
     public AdvancedImporterScreen(AdvancedImporterContainerMenu container, Inventory inventory, Component title) {
         super(container, 211, 155, inventory, title);
     }
 
     @Override
-    public void onPostInit(int x, int y)
-    {
+    public void onPostInit(int x, int y) {
         addSideButton(new RedstoneModeSideButton(this, AdvancedImporterBlockEntity.REDSTONE_MODE));
         addSideButton(new TypeSideButton(this, AdvancedImporterBlockEntity.TYPE));
         addSideButton(new WhitelistBlacklistSideButton(this, AdvancedImporterBlockEntity.WHITELIST_BLACKLIST));
@@ -29,20 +27,17 @@ public class AdvancedImporterScreen extends BaseScreen<AdvancedImporterContainer
     }
 
     @Override
-    public void tick(int x, int y)
-    {
+    public void tick(int x, int y) {
     }
 
     @Override
-    public void renderBackground(PoseStack poseStack, int x, int y, int mouseX, int mouseY)
-    {
+    public void renderBackground(PoseStack poseStack, int x, int y, int mouseX, int mouseY) {
         bindTexture(Main.MODID, "gui/advanced_exporter_importer.png");
         blit(poseStack, x, y, 0, 0, imageWidth, imageHeight);
     }
 
     @Override
-    public void renderForeground(PoseStack poseStack, int i, int i1)
-    {
+    public void renderForeground(PoseStack poseStack, int i, int i1) {
         renderString(poseStack, 7, 7, RenderUtils.shorten(title.getString(), 26));
         renderString(poseStack, 7, 60, Component.translatable("container.inventory").getString());
     }

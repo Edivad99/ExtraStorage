@@ -9,11 +9,7 @@ import edivad.extrastorage.blocks.CrafterTier;
 import edivad.extrastorage.compat.TOPIntegration;
 import edivad.extrastorage.items.storage.fluid.FluidStorageType;
 import edivad.extrastorage.items.storage.item.ItemStorageType;
-import edivad.extrastorage.nodes.AdvancedCrafterNetworkNode;
-import edivad.extrastorage.nodes.AdvancedExporterNetworkNode;
-import edivad.extrastorage.nodes.AdvancedFluidStorageNetworkNode;
-import edivad.extrastorage.nodes.AdvancedImporterNetworkNode;
-import edivad.extrastorage.nodes.AdvancedStorageNetworkNode;
+import edivad.extrastorage.nodes.*;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
@@ -30,26 +26,21 @@ public class ModSetup {
     public static final CreativeModeTab extraStorageTab = new CreativeModeTab(Main.MODID + "_tab") {
 
         @Override
-        public ItemStack makeIcon()
-        {
+        public ItemStack makeIcon() {
             return new ItemStack(Registration.CRAFTER_BLOCK.get(CrafterTier.GOLD).get());
         }
     };
 
-    public static void init(final FMLCommonSetupEvent event)
-    {
-        for(CrafterTier tier : CrafterTier.values())
-        {
+    public static void init(final FMLCommonSetupEvent event) {
+        for (CrafterTier tier : CrafterTier.values()) {
             API.instance().getNetworkNodeRegistry().add(new ResourceLocation(Main.MODID, tier.getID()), (tag, world, pos) -> readAndReturn(tag, new AdvancedCrafterNetworkNode(world, pos, tier)));
             Registration.CRAFTER_TILE.get(tier).get().create(BlockPos.ZERO, null).getDataManager().getParameters().forEach(BlockEntitySynchronizationManager::registerParameter);
         }
-        for(ItemStorageType type : ItemStorageType.values())
-        {
+        for (ItemStorageType type : ItemStorageType.values()) {
             API.instance().getNetworkNodeRegistry().add(new ResourceLocation(Main.MODID, "block_" + type.getName()), (tag, world, pos) -> readAndReturn(tag, new AdvancedStorageNetworkNode(world, pos, type)));
             Registration.ITEM_STORAGE_TILE.get(type).get().create(BlockPos.ZERO, null).getDataManager().getParameters().forEach(BlockEntitySynchronizationManager::registerParameter);
         }
-        for(FluidStorageType type : FluidStorageType.values())
-        {
+        for (FluidStorageType type : FluidStorageType.values()) {
             API.instance().getNetworkNodeRegistry().add(new ResourceLocation(Main.MODID, "block_" + type.getName() + "_fluid"), (tag, world, pos) -> readAndReturn(tag, new AdvancedFluidStorageNetworkNode(world, pos, type)));
             Registration.FLUID_STORAGE_TILE.get(type).get().create(BlockPos.ZERO, null).getDataManager().getParameters().forEach(BlockEntitySynchronizationManager::registerParameter);
         }
@@ -60,7 +51,7 @@ public class ModSetup {
         Registration.ADVANCED_IMPORTER_TILE.get().create(BlockPos.ZERO, null).getDataManager().getParameters().forEach(BlockEntitySynchronizationManager::registerParameter);
 
         //Integrations
-        if(ModList.get().isLoaded("theoneprobe")) {
+        if (ModList.get().isLoaded("theoneprobe")) {
             InterModComms.sendTo("theoneprobe", "getTheOneProbe", TOPIntegration::new);
         }
     }

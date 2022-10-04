@@ -12,8 +12,6 @@ import edivad.extrastorage.blocks.AdvancedFluidStorageBlock;
 import edivad.extrastorage.items.storage.fluid.ExpandedStorageDiskFluid;
 import edivad.extrastorage.items.storage.fluid.FluidStorageType;
 import edivad.extrastorage.nodes.AdvancedFluidStorageNetworkNode;
-import java.util.List;
-import java.util.UUID;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.Containers;
@@ -29,8 +27,10 @@ import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-public class AdvancedFluidStorageBlockItem extends BaseBlockItem
-{
+import java.util.List;
+import java.util.UUID;
+
+public class AdvancedFluidStorageBlockItem extends BaseBlockItem {
     private final FluidStorageType type;
 
     public AdvancedFluidStorageBlockItem(AdvancedFluidStorageBlock block, Item.Properties builder) {
@@ -41,18 +41,15 @@ public class AdvancedFluidStorageBlockItem extends BaseBlockItem
     @OnlyIn(Dist.CLIENT)
     @Override
     public void appendHoverText(ItemStack stack, Level level, List<Component> tooltip, TooltipFlag flag) {
-
         super.appendHoverText(stack, level, tooltip, flag);
 
-        if (isValid(stack))
-        {
+        if (isValid(stack)) {
             UUID id = getId(stack);
 
             API.instance().getStorageDiskSync().sendRequest(id);
 
             StorageDiskSyncData data = API.instance().getStorageDiskSync().getData(id);
-            if (data != null)
-            {
+            if (data != null) {
                 if (data.getCapacity() == -1)
                     tooltip.add(Component.translatable("misc.refinedstorage.storage.stored", API.instance().getQuantityFormatter().format(data.getStored())).setStyle(Styles.GRAY));
                 else
@@ -68,20 +65,17 @@ public class AdvancedFluidStorageBlockItem extends BaseBlockItem
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         ItemStack storageStack = player.getItemInHand(hand);
 
-        if(!level.isClientSide && player.isCrouching())
-        {
+        if (!level.isClientSide && player.isCrouching()) {
             UUID diskId = null;
             IStorageDisk disk = null;
 
-            if (isValid(storageStack))
-            {
+            if (isValid(storageStack)) {
                 diskId = getId(storageStack);
                 disk = API.instance().getStorageDiskManager((ServerLevel) level).get(diskId);
             }
 
             // Newly created storages won't have a tag yet, so allow invalid disks as well.
-            if (disk == null || disk.getStored() == 0)
-            {
+            if (disk == null || disk.getStored() == 0) {
                 ItemStack fluidStoragePart = new ItemStack(ExpandedStorageDiskFluid.getPartById(type));
 
                 if (!player.getInventory().add(fluidStoragePart.copy()))
@@ -95,8 +89,7 @@ public class AdvancedFluidStorageBlockItem extends BaseBlockItem
                 if (!player.getInventory().add(bucket.copy()))
                     Containers.dropItemStack(level, player.getX(), player.getY(), player.getZ(), bucket);
 
-                if (disk != null)
-                {
+                if (disk != null) {
                     API.instance().getStorageDiskManager((ServerLevel) level).remove(diskId);
                     API.instance().getStorageDiskManager((ServerLevel) level).markForSaving();
                 }

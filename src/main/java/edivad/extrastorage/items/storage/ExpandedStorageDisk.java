@@ -8,8 +8,6 @@ import com.refinedmods.refinedstorage.api.storage.disk.StorageDiskSyncData;
 import com.refinedmods.refinedstorage.apiimpl.API;
 import com.refinedmods.refinedstorage.render.Styles;
 import edivad.extrastorage.setup.ModSetup;
-import java.util.List;
-import java.util.UUID;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.Containers;
@@ -25,23 +23,22 @@ import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-public abstract class ExpandedStorageDisk extends Item implements IStorageDiskProvider
-{
+import java.util.List;
+import java.util.UUID;
+
+public abstract class ExpandedStorageDisk extends Item implements IStorageDiskProvider {
     private static final String ID = "ID";
 
-    public ExpandedStorageDisk()
-    {
+    public ExpandedStorageDisk() {
         super(new Item.Properties().tab(ModSetup.extraStorageTab).stacksTo(1));
     }
 
     @Override
-    public void inventoryTick(ItemStack stack, Level level, Entity entity, int slot, boolean isSelected)
-    {
-        if(!level.isClientSide && !stack.hasTag() && entity instanceof Player player)
-        {
+    public void inventoryTick(ItemStack stack, Level level, Entity entity, int slot, boolean isSelected) {
+        if (!level.isClientSide && !stack.hasTag() && entity instanceof Player player) {
             UUID id = UUID.randomUUID();
             ServerLevel serverLevel = (ServerLevel) level;
-            if(getType() == StorageType.ITEM)
+            if (getType() == StorageType.ITEM)
                 API.instance().getStorageDiskManager(serverLevel).set(id, API.instance().createDefaultItemDisk(serverLevel, this.getCapacity(stack), player));
             else if (getType() == StorageType.FLUID)
                 API.instance().getStorageDiskManager(serverLevel).set(id, API.instance().createDefaultFluidDisk(serverLevel, this.getCapacity(stack), player));
@@ -51,19 +48,15 @@ public abstract class ExpandedStorageDisk extends Item implements IStorageDiskPr
     }
 
     @Override
-    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand)
-    {
+    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         ItemStack diskStack = player.getItemInHand(hand);
-        if(!level.isClientSide && player.isCrouching())
-        {
+        if (!level.isClientSide && player.isCrouching()) {
             ServerLevel serverLevel = (ServerLevel) level;
             IStorageDisk disk = API.instance().getStorageDiskManager(serverLevel).getByStack(diskStack);
-            if(disk != null && disk.getStored() == 0)
-            {
+            if (disk != null && disk.getStored() == 0) {
                 ItemStack part = new ItemStack(getPart(), diskStack.getCount());
 
-                if(!player.getInventory().add(part.copy()))
-                {
+                if (!player.getInventory().add(part.copy())) {
                     Containers.dropItemStack(level, player.getX(), player.getY(), player.getZ(), part);
                 }
 
@@ -79,47 +72,40 @@ public abstract class ExpandedStorageDisk extends Item implements IStorageDiskPr
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public void appendHoverText(ItemStack stack, Level level, List<Component> tooltip, TooltipFlag flag)
-    {
+    public void appendHoverText(ItemStack stack, Level level, List<Component> tooltip, TooltipFlag flag) {
         super.appendHoverText(stack, level, tooltip, flag);
-        if(isValid(stack))
-        {
+        if (isValid(stack)) {
             UUID id = this.getId(stack);
             API.instance().getStorageDiskSync().sendRequest(id);
             StorageDiskSyncData data = API.instance().getStorageDiskSync().getData(id);
-            if(data != null)
-            {
-                if(data.getCapacity() == -1)
+            if (data != null) {
+                if (data.getCapacity() == -1)
                     tooltip.add(Component.translatable("misc.refinedstorage.storage.stored", API.instance().getQuantityFormatter().format(data.getStored())).setStyle(Styles.GRAY));
                 else
                     tooltip.add(Component.translatable("misc.refinedstorage.storage.stored_capacity", API.instance().getQuantityFormatter().format(data.getStored()), API.instance().getQuantityFormatter().format(data.getCapacity())).setStyle(Styles.GRAY));
             }
-            if(flag.isAdvanced())
+            if (flag.isAdvanced())
                 tooltip.add(Component.literal(id.toString()).setStyle(Styles.GRAY));
         }
     }
 
     @Override
-    public int getEntityLifespan(ItemStack stack, Level level)
-    {
+    public int getEntityLifespan(ItemStack stack, Level level) {
         return Integer.MAX_VALUE;
     }
 
     @Override
-    public UUID getId(ItemStack disk)
-    {
+    public UUID getId(ItemStack disk) {
         return disk.getTag().getUUID(ID);
     }
 
     @Override
-    public void setId(ItemStack disk, UUID id)
-    {
+    public void setId(ItemStack disk, UUID id) {
         disk.getOrCreateTag().putUUID(ID, id);
     }
 
     @Override
-    public boolean isValid(ItemStack disk)
-    {
+    public boolean isValid(ItemStack disk) {
         return disk.hasTag() && disk.getTag().hasUUID(ID);
     }
 

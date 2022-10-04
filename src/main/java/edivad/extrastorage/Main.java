@@ -14,16 +14,14 @@ import org.slf4j.Logger;
 
 @Mod(Main.MODID)
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
-public class Main
-{
+public class Main {
     public static final String MODID = "extrastorage";
     public static final String MODNAME = "Extra Storage";
 
     public static final Logger LOGGER = LogUtils.getLogger();
 
 
-    public Main()
-    {
+    public Main() {
         IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
             eventBus.addListener(ClientSetup::init);

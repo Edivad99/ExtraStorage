@@ -24,11 +24,10 @@ public class AdvancedCrafterLootFunction extends LootItemConditionalFunction {
     }
 
     @Override
-    protected ItemStack run(ItemStack stack, LootContext lootContext)
-    {
-        BlockEntity blockEntity = lootContext.getParamOrNull(LootContextParams.BLOCK_ENTITY);
+    protected ItemStack run(ItemStack stack, LootContext lootContext) {
+        var blockEntity = lootContext.getParamOrNull(LootContextParams.BLOCK_ENTITY);
 
-        AdvancedCrafterNetworkNode removedNode = ((AdvancedCrafterBlockEntity) blockEntity).getRemovedNode();
+        var removedNode = ((AdvancedCrafterBlockEntity) blockEntity).getRemovedNode();
         if (removedNode == null) {
             removedNode = ((AdvancedCrafterBlockEntity) blockEntity).getNode();
         }
@@ -44,8 +43,7 @@ public class AdvancedCrafterLootFunction extends LootItemConditionalFunction {
         return Registration.REGISTERED_LOOT_ITEM_FUNCTIONS.get("crafter").get();
     }
 
-    public static class Serializer extends LootItemConditionalFunction.Serializer<AdvancedCrafterLootFunction>
-    {
+    public static class Serializer extends LootItemConditionalFunction.Serializer<AdvancedCrafterLootFunction> {
         @Override
         public AdvancedCrafterLootFunction deserialize(JsonObject object, JsonDeserializationContext deserializationContext, LootItemCondition[] conditions) {
             return new AdvancedCrafterLootFunction(conditions);

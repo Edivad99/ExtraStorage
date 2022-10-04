@@ -4,8 +4,6 @@ import edivad.extrastorage.Main;
 import edivad.extrastorage.items.storage.fluid.FluidStorageType;
 import edivad.extrastorage.items.storage.item.ItemStorageType;
 import edivad.extrastorage.setup.Registration;
-import java.util.HashMap;
-import java.util.Map;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.tags.BlockTagsProvider;
 import net.minecraft.data.tags.ItemTagsProvider;
@@ -14,6 +12,9 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.common.data.ExistingFileHelper;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class TagGenerator {
     public static class Blocks {
@@ -24,10 +25,10 @@ public class TagGenerator {
         public static final Map<FluidStorageType, TagKey<Block>> STORAGE_BLOCKS_FLUID = new HashMap<>();
 
         static {
-            for (ItemStorageType type : ItemStorageType.values()) {
+            for (var type : ItemStorageType.values()) {
                 STORAGE_BLOCKS_ITEM.put(type, tag("storage_blocks/items/" + type.getName()));
             }
-            for (FluidStorageType type : FluidStorageType.values()) {
+            for (var type : FluidStorageType.values()) {
                 STORAGE_BLOCKS_FLUID.put(type, tag("storage_blocks/fluids/" + type.getName()));
             }
         }
@@ -57,12 +58,12 @@ public class TagGenerator {
         public static final Map<FluidStorageType, TagKey<Item>> DISKS_FLUID = new HashMap<>();
 
         static {
-            for (ItemStorageType type : ItemStorageType.values()) {
+            for (var type : ItemStorageType.values()) {
                 STORAGE_BLOCKS_ITEM.put(type, tag("storage_blocks/items/" + type.getName()));
                 PARTS_ITEM.put(type, tag("parts/items/" + type.getName()));
                 DISKS_ITEM.put(type, tag("disks/items/" + type.getName()));
             }
-            for (FluidStorageType type : FluidStorageType.values()) {
+            for (var type : FluidStorageType.values()) {
                 STORAGE_BLOCKS_FLUID.put(type, tag("storage_blocks/fluids/" + type.getName()));
                 PARTS_FLUID.put(type, tag("parts/fluids/" + type.getName()));
                 DISKS_FLUID.put(type, tag("disks/fluids/" + type.getName()));
@@ -81,16 +82,16 @@ public class TagGenerator {
 
         @Override
         protected void addTags() {
-            TagAppender<Block> itemBlocksBuilder = this.tag(Blocks.ITEM_STORAGE_BLOCKS);
-            for (ItemStorageType type : ItemStorageType.values()) {
-                TagKey<Block> tag = Blocks.STORAGE_BLOCKS_ITEM.get(type);
+            var itemBlocksBuilder = this.tag(Blocks.ITEM_STORAGE_BLOCKS);
+            for (var type : ItemStorageType.values()) {
+                var tag = Blocks.STORAGE_BLOCKS_ITEM.get(type);
                 this.tag(tag).add(Registration.ITEM_STORAGE_BLOCK.get(type).get());
                 itemBlocksBuilder.addTag(tag);
             }
 
-            TagAppender<Block> fluidBlocksBuilder = this.tag(Blocks.FLUID_STORAGE_BLOCKS);
-            for (FluidStorageType type : FluidStorageType.values()) {
-                TagKey<Block> tag = Blocks.STORAGE_BLOCKS_FLUID.get(type);
+            var fluidBlocksBuilder = this.tag(Blocks.FLUID_STORAGE_BLOCKS);
+            for (var type : FluidStorageType.values()) {
+                var tag = Blocks.STORAGE_BLOCKS_FLUID.get(type);
                 this.tag(tag).add(Registration.FLUID_STORAGE_BLOCK.get(type).get());
                 fluidBlocksBuilder.addTag(tag);
             }
@@ -107,10 +108,10 @@ public class TagGenerator {
 
         @Override
         protected void addTags() {
-            TagAppender<Item> itemPartsBuilder = this.tag(Items.ITEM_PARTS);
-            TagAppender<Item> itemDisksBuilder = this.tag(Items.ITEM_DISKS);
-            for (ItemStorageType type : ItemStorageType.values()) {
-                TagKey<Item> tag = Items.PARTS_ITEM.get(type);
+            var itemPartsBuilder = this.tag(Items.ITEM_PARTS);
+            var itemDisksBuilder = this.tag(Items.ITEM_DISKS);
+            for (var type : ItemStorageType.values()) {
+                var tag = Items.PARTS_ITEM.get(type);
                 this.tag(tag).add(Registration.ITEM_STORAGE_PART.get(type).get());
                 itemPartsBuilder.addTag(tag);
 
@@ -119,10 +120,10 @@ public class TagGenerator {
                 itemDisksBuilder.addTag(tag);
             }
 
-            TagAppender<Item> fluidPartsBuilder = this.tag(Items.FLUID_PARTS);
-            TagAppender<Item> fluidDisksBuilder = this.tag(Items.FLUID_DISKS);
-            for (FluidStorageType type : FluidStorageType.values()) {
-                TagKey<Item> tag = Items.PARTS_FLUID.get(type);
+            var fluidPartsBuilder = this.tag(Items.FLUID_PARTS);
+            var fluidDisksBuilder = this.tag(Items.FLUID_DISKS);
+            for (var type : FluidStorageType.values()) {
+                var tag = Items.PARTS_FLUID.get(type);
                 this.tag(tag).add(Registration.FLUID_STORAGE_PART.get(type).get());
                 fluidPartsBuilder.addTag(tag);
 
@@ -138,12 +139,12 @@ public class TagGenerator {
 
             // blocks
             this.copy(Blocks.ITEM_STORAGE_BLOCKS, Items.ITEM_STORAGE_BLOCKS);
-            for (ItemStorageType type : ItemStorageType.values()) {
+            for (var type : ItemStorageType.values()) {
                 this.copy(Blocks.STORAGE_BLOCKS_ITEM.get(type), Items.STORAGE_BLOCKS_ITEM.get(type));
             }
 
             this.copy(Blocks.FLUID_STORAGE_BLOCKS, Items.FLUID_STORAGE_BLOCKS);
-            for (FluidStorageType type : FluidStorageType.values()) {
+            for (var type : FluidStorageType.values()) {
                 this.copy(Blocks.STORAGE_BLOCKS_FLUID.get(type), Items.STORAGE_BLOCKS_FLUID.get(type));
             }
 

@@ -7,10 +7,8 @@ import edivad.extrastorage.container.AdvancedFluidStorageBlockContainerMenu;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
 
-public class AdvancedFluidStorageBlockScreen extends StorageScreen<AdvancedFluidStorageBlockContainerMenu>
-{
-    public AdvancedFluidStorageBlockScreen(AdvancedFluidStorageBlockContainerMenu container, Inventory inventory, Component title)
-    {
+public class AdvancedFluidStorageBlockScreen extends StorageScreen<AdvancedFluidStorageBlockContainerMenu> {
+    public AdvancedFluidStorageBlockScreen(AdvancedFluidStorageBlockContainerMenu container, Inventory inventory, Component title) {
         super(
                 container,
                 inventory,

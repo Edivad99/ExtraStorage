@@ -18,12 +18,6 @@ import com.refinedmods.refinedstorage.util.StackUtils;
 import edivad.extrastorage.Main;
 import edivad.extrastorage.blocks.CrafterTier;
 import edivad.extrastorage.setup.Config;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -41,40 +35,22 @@ import net.minecraftforge.items.wrapper.CombinedInvWrapper;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class AdvancedCrafterNetworkNode extends NetworkNode implements ICraftingPatternContainer
-{
-    public enum CrafterMode
-    {
-        IGNORE,
-        SIGNAL_UNLOCKS_AUTOCRAFTING,
-        SIGNAL_LOCKS_AUTOCRAFTING,
-        PULSE_INSERTS_NEXT_SET;
+import java.util.*;
 
-        public static CrafterMode getById(int id)
-        {
-            if (id >= 0 && id < values().length)
-                return values()[id];
-            return IGNORE;
-        }
-    }
-
-    private final Component DEFAULT_NAME;
-
+public class AdvancedCrafterNetworkNode extends NetworkNode implements ICraftingPatternContainer {
     private static final String NBT_DISPLAY_NAME = "DisplayName";
     private static final String NBT_UUID = "CrafterUuid";
     private static final String NBT_MODE = "Mode";
     private static final String NBT_LOCKED = "Locked";
     private static final String NBT_WAS_POWERED = "WasPowered";
     private static final String NBT_TIER = "Tier";
-
+    private final Component DEFAULT_NAME;
     private final BaseItemHandler patternsInventory;
-
     private final Map<Integer, ICraftingPattern> slot_to_pattern = new HashMap<>();
     private final List<ICraftingPattern> patterns = new ArrayList<>();
-
     private final UpgradeItemHandler upgrades = (UpgradeItemHandler) new UpgradeItemHandler(4, UpgradeItem.Type.SPEED)
             .addListener(new NetworkNodeInventoryListener(this));
-
+    private final ResourceLocation ID;
     // Used to prevent infinite recursion on getRootContainer() when there's e.g. two crafters facing each other.
     private boolean visited = false;
 
@@ -89,67 +65,58 @@ public class AdvancedCrafterNetworkNode extends NetworkNode implements ICrafting
     private UUID uuid = null;
 
     private CrafterTier tier;
-    private final ResourceLocation ID;
-
-    public AdvancedCrafterNetworkNode(Level level, BlockPos pos, CrafterTier tier)
-    {
+    public AdvancedCrafterNetworkNode(Level level, BlockPos pos, CrafterTier tier) {
         super(level, pos);
         this.tier = tier;
-        this.patternsInventory = new BaseItemHandler(this.tier.getSlots())
-            {
-                @Override
-                public int getSlotLimit(int slot) {
-                    return 1;
-                }
-
-                @NotNull
-                @Override
-                public ItemStack insertItem(int slot, @NotNull ItemStack stack, boolean simulate) {
-                    if(!stacks.get(slot).isEmpty()) {
-                        return stack;
-                    }
-                    return super.insertItem(slot, stack, simulate);
-                }
+        this.patternsInventory = new BaseItemHandler(this.tier.getSlots()) {
+            @Override
+            public int getSlotLimit(int slot) {
+                return 1;
             }
-            .addValidator(new PatternItemValidator(level))
-            .addListener(new NetworkNodeInventoryListener(this))
-            .addListener((handler, slot, reading) -> {
-                if (!reading) {
-                    if (!level.isClientSide)
-                        invalidateSlot(slot);
-                    if (network != null)
-                        network.getCraftingManager().invalidate();
+
+            @NotNull
+            @Override
+            public ItemStack insertItem(int slot, @NotNull ItemStack stack, boolean simulate) {
+                if (!stacks.get(slot).isEmpty()) {
+                    return stack;
                 }
-            });
+                return super.insertItem(slot, stack, simulate);
+            }
+        }
+        .addValidator(new PatternItemValidator(level))
+        .addListener(new NetworkNodeInventoryListener(this))
+        .addListener((handler, slot, reading) -> {
+            if (!reading) {
+                if (!level.isClientSide)
+                    invalidateSlot(slot);
+                if (network != null)
+                    network.getCraftingManager().invalidate();
+            }
+        });
         DEFAULT_NAME = Component.translatable("block." + Main.MODID + "." + this.tier.getID());
         ID = new ResourceLocation(Main.MODID, tier.getID());
     }
 
-    private void invalidate()
-    {
+    private void invalidate() {
         slot_to_pattern.clear();
         patterns.clear();
-     
-        for(int i = 0; i < patternsInventory.getSlots(); ++i)
-        {
+
+        for (int i = 0; i < patternsInventory.getSlots(); ++i) {
             invalidateSlot(i);
         }
     }
 
-    private void invalidateSlot(int slot)
-    {
+    private void invalidateSlot(int slot) {
         if (slot_to_pattern.containsKey(slot)) {
             patterns.remove(slot_to_pattern.remove(slot));
         }
-        
-        ItemStack patternStack = patternsInventory.getStackInSlot(slot);
 
-        if(!patternStack.isEmpty())
-        {
-            ICraftingPattern pattern = ((ICraftingPatternProvider) patternStack.getItem()).create(level, patternStack, this);
+        var patternStack = patternsInventory.getStackInSlot(slot);
 
-            if(pattern.isValid())
-            {
+        if (!patternStack.isEmpty()) {
+            var pattern = ((ICraftingPatternProvider) patternStack.getItem()).create(level, patternStack, this);
+
+            if (pattern.isValid()) {
                 slot_to_pattern.put(slot, pattern);
                 patterns.add(pattern);
             }
@@ -157,30 +124,24 @@ public class AdvancedCrafterNetworkNode extends NetworkNode implements ICrafting
     }
 
     @Override
-    public int getEnergyUsage()
-    {
+    public int getEnergyUsage() {
         int energyPatterns = Config.AdvancedCrafter.INCLUDE_PATTERN_ENERGY.get() ? 2 * patterns.size() : 0;
         int energyCrafter = Config.AdvancedCrafter.BASE_ENERGY.get() * (tier.ordinal() + 1);
         return energyCrafter + upgrades.getEnergyUsage() + energyPatterns;
     }
 
     @Override
-    public void update()
-    {
+    public void update() {
         super.update();
 
         if (ticks == 1)
             invalidate();
 
-        if (mode == CrafterMode.PULSE_INSERTS_NEXT_SET && level.isLoaded(pos))
-        {
-            if (level.hasNeighborSignal(pos))
-            {
+        if (mode == CrafterMode.PULSE_INSERTS_NEXT_SET && level.isLoaded(pos)) {
+            if (level.hasNeighborSignal(pos)) {
                 this.wasPowered = true;
                 markDirty();
-            }
-            else if (wasPowered)
-            {
+            } else if (wasPowered) {
                 this.wasPowered = false;
                 this.locked = false;
                 markDirty();
@@ -189,210 +150,168 @@ public class AdvancedCrafterNetworkNode extends NetworkNode implements ICrafting
     }
 
     @Override
-    protected void onConnectedStateChange(INetwork network, boolean state, ConnectivityStateChangeCause cause)
-    {
+    protected void onConnectedStateChange(INetwork network, boolean state, ConnectivityStateChangeCause cause) {
         super.onConnectedStateChange(network, state, cause);
         network.getCraftingManager().invalidate();
     }
 
     @Override
-    public void onDisconnected(INetwork network)
-    {
+    public void onDisconnected(INetwork network) {
         super.onDisconnected(network);
-
         network.getCraftingManager().getTasks().stream()
                 .filter(task -> task.getPattern().getContainer().getPosition().equals(pos))
                 .forEach(task -> network.getCraftingManager().cancel(task.getId()));
     }
 
     @Override
-    public void onDirectionChanged(Direction direction)
-    {
+    public void onDirectionChanged(Direction direction) {
         super.onDirectionChanged(direction);
-
-        if(network != null)
+        if (network != null)
             network.getCraftingManager().invalidate();
     }
 
     @Override
-    public void read(CompoundTag tag)
-    {
+    public void read(CompoundTag tag) {
         super.read(tag);
-
         StackUtils.readItems(patternsInventory, 0, tag);
-
         invalidate();
-
         StackUtils.readItems(upgrades, 1, tag);
-
         if (tag.contains(NBT_DISPLAY_NAME)) {
             displayName = Component.Serializer.fromJson(tag.getString(NBT_DISPLAY_NAME));
         }
-
         if (tag.hasUUID(NBT_UUID)) {
             uuid = tag.getUUID(NBT_UUID);
         }
-
         if (tag.contains(NBT_MODE)) {
             mode = CrafterMode.getById(tag.getInt(NBT_MODE));
         }
-
         if (tag.contains(NBT_LOCKED)) {
             locked = tag.getBoolean(NBT_LOCKED);
         }
-
         if (tag.contains(NBT_WAS_POWERED)) {
             wasPowered = tag.getBoolean(NBT_WAS_POWERED);
         }
-
-        if(tag.contains(NBT_TIER)) {
+        if (tag.contains(NBT_TIER)) {
             tier = CrafterTier.values()[tag.getInt(NBT_TIER)];
         }
     }
 
     @Override
-    public ResourceLocation getId()
-    {
+    public ResourceLocation getId() {
         return ID;
     }
 
     @Override
-    public CompoundTag write(CompoundTag tag)
-    {
+    public CompoundTag write(CompoundTag tag) {
         super.write(tag);
-
         StackUtils.writeItems(patternsInventory, 0, tag);
         StackUtils.writeItems(upgrades, 1, tag);
-
         if (displayName != null) {
             tag.putString(NBT_DISPLAY_NAME, Component.Serializer.toJson(displayName));
         }
-
         if (uuid != null) {
             tag.putUUID(NBT_UUID, uuid);
         }
-
         tag.putInt(NBT_MODE, mode.ordinal());
         tag.putBoolean(NBT_LOCKED, locked);
         tag.putBoolean(NBT_WAS_POWERED, wasPowered);
         tag.putInt(NBT_TIER, tier.ordinal());
-
         return tag;
     }
 
     @Override
-    public int getUpdateInterval()
-    {
+    public int getUpdateInterval() {
         int upgradesCount = upgrades.getUpgradeCount(UpgradeItem.Type.SPEED);
-        if(upgradesCount < 0 || upgradesCount > 4)
+        if (upgradesCount < 0 || upgradesCount > 4)
             return 0;
         else
             return 10 - (upgradesCount * 2);//Min:2 Max:10
     }
 
     @Override
-    public int getMaximumSuccessfulCraftingUpdates()
-    {
+    public int getMaximumSuccessfulCraftingUpdates() {
         int speed = getTierSpeed();
-        if(hasConnectedInventory())
+        if (hasConnectedInventory())
             return Math.min(speed, getConnectedInventory().getSlots());
         return speed;
     }
 
     public int getTierSpeed() {
         int upgradesCount = upgrades.getUpgradeCount(UpgradeItem.Type.SPEED);
-        if(tier.equals(CrafterTier.IRON))
+        if (tier.equals(CrafterTier.IRON))
             return upgradesCount + tier.getCraftingSpeed();
         return (upgradesCount * (tier.getCraftingSpeed() / 5)) + tier.getCraftingSpeed();//PREV Min:1 Max:5
     }
 
     @Nullable
     @Override
-    public IItemHandler getConnectedInventory()
-    {
-        ICraftingPatternContainer proxy = getRootContainer();
-        if(proxy == null)
+    public IItemHandler getConnectedInventory() {
+        var proxy = getRootContainer();
+        if (proxy == null)
             return null;
-
         return LevelUtils.getItemHandler(proxy.getFacingBlockEntity(), proxy.getDirection().getOpposite());
     }
 
     @Nullable
     @Override
-    public IFluidHandler getConnectedFluidInventory()
-    {
-        ICraftingPatternContainer proxy = getRootContainer();
-        if(proxy == null)
+    public IFluidHandler getConnectedFluidInventory() {
+        var proxy = getRootContainer();
+        if (proxy == null)
             return null;
-
         return LevelUtils.getFluidHandler(proxy.getFacingBlockEntity(), proxy.getDirection().getOpposite());
     }
 
     @Nullable
     @Override
-    public BlockEntity getConnectedBlockEntity()
-    {
-        ICraftingPatternContainer proxy = getRootContainer();
-        if(proxy == null)
+    public BlockEntity getConnectedBlockEntity() {
+        var proxy = getRootContainer();
+        if (proxy == null)
             return null;
-
         return proxy.getFacingBlockEntity();
     }
 
     @Override
-    public List<ICraftingPattern> getPatterns()
-    {
+    public List<ICraftingPattern> getPatterns() {
         return patterns;
     }
 
     @Nullable
     @Override
-    public IItemHandlerModifiable getPatternInventory()
-    {
+    public IItemHandlerModifiable getPatternInventory() {
         return patternsInventory;
     }
 
     @Override
-    public Component getName()
-    {
+    public Component getName() {
         if (displayName != null)
             return displayName;
-
-        BlockEntity facing = getConnectedBlockEntity();
-
+        var facing = getConnectedBlockEntity();
         if (facing instanceof Nameable face && face.getName() != null)
             return face.getName();
-
         if (facing != null)
             return Component.translatable(level.getBlockState(facing.getBlockPos()).getBlock().getDescriptionId());
-
         return DEFAULT_NAME;
     }
 
-    public void setDisplayName(Component displayName)
-    {
-        this.displayName = displayName;
-    }
-
     @Nullable
-    public Component getDisplayName()
-    {
+    public Component getDisplayName() {
         return displayName;
     }
 
+    public void setDisplayName(Component displayName) {
+        this.displayName = displayName;
+    }
+
     @Override
-    public BlockPos getPosition()
-    {
+    public BlockPos getPosition() {
         return pos;
     }
 
-    public CrafterMode getMode()
-    {
+    public CrafterMode getMode() {
         return mode;
     }
 
-    public void setMode(CrafterMode mode)
-    {
+    public void setMode(CrafterMode mode) {
         this.mode = mode;
         this.wasPowered = false;
         this.locked = false;
@@ -400,20 +319,17 @@ public class AdvancedCrafterNetworkNode extends NetworkNode implements ICrafting
         markDirty();
     }
 
-    public IItemHandler getPatternItems()
-    {
+    public IItemHandler getPatternItems() {
         return patternsInventory;
     }
 
-    public UpgradeItemHandler getUpgrades()
-    {
+    public UpgradeItemHandler getUpgrades() {
         return upgrades;
     }
 
     @Nullable
     @Override
-    public IItemHandler getDrops()
-    {
+    public IItemHandler getDrops() {
         return new CombinedInvWrapper(patternsInventory, upgrades);
     }
 
@@ -424,31 +340,26 @@ public class AdvancedCrafterNetworkNode extends NetworkNode implements ICrafting
             return null;
 
         INetworkNode facing = API.instance().getNetworkNodeManager((ServerLevel) level).getNode(pos.relative(getDirection()));
-        if (!(facing instanceof ICraftingPatternContainer) || facing.getNetwork() != network)
+        if (!(facing instanceof ICraftingPatternContainer container) || facing.getNetwork() != network)
             return this;
 
         visited = true;
-        ICraftingPatternContainer facingContainer = ((ICraftingPatternContainer) facing).getRootContainer();
+        var facingContainer = container.getRootContainer();
         visited = false;
 
         return facingContainer;
     }
 
-    public Optional<ICraftingPatternContainer> getRootContainerNotSelf()
-    {
-        ICraftingPatternContainer root = getRootContainer();
-
+    public Optional<ICraftingPatternContainer> getRootContainerNotSelf() {
+        var root = getRootContainer();
         if (root != null && root != this)
             return Optional.of(root);
-
         return Optional.empty();
     }
 
     @Override
-    public UUID getUuid()
-    {
-        if(this.uuid == null)
-        {
+    public UUID getUuid() {
+        if (this.uuid == null) {
             this.uuid = UUID.randomUUID();
             markDirty();
         }
@@ -456,37 +367,43 @@ public class AdvancedCrafterNetworkNode extends NetworkNode implements ICrafting
     }
 
     @Override
-    public boolean isLocked()
-    {
+    public boolean isLocked() {
         return getRootContainerNotSelf()
-            .map(ICraftingPatternContainer::isLocked)
-            .orElseGet(() -> switch (mode) {
-            case SIGNAL_LOCKS_AUTOCRAFTING -> level.hasNeighborSignal(pos);
-            case SIGNAL_UNLOCKS_AUTOCRAFTING -> !level.hasNeighborSignal(pos);
-            case PULSE_INSERTS_NEXT_SET -> locked;
-            default -> false;
-        });
-
+                .map(ICraftingPatternContainer::isLocked)
+                .orElseGet(() -> switch (mode) {
+                    case SIGNAL_LOCKS_AUTOCRAFTING -> level.hasNeighborSignal(pos);
+                    case SIGNAL_UNLOCKS_AUTOCRAFTING -> !level.hasNeighborSignal(pos);
+                    case PULSE_INSERTS_NEXT_SET -> locked;
+                    default -> false;
+                });
     }
 
     @Override
-    public void unlock()
-    {
-        locked=false;
+    public void unlock() {
+        locked = false;
     }
 
     @Override
-    public void onUsedForProcessing()
-    {
-        Optional<ICraftingPatternContainer> root = getRootContainerNotSelf();
-        if (root.isPresent())
-        {
+    public void onUsedForProcessing() {
+        var root = getRootContainerNotSelf();
+        if (root.isPresent()) {
             root.get().onUsedForProcessing();
-        }
-        else if (mode == CrafterMode.PULSE_INSERTS_NEXT_SET)
-        {
+        } else if (mode == CrafterMode.PULSE_INSERTS_NEXT_SET) {
             this.locked = true;
             markDirty();
+        }
+    }
+
+    public enum CrafterMode {
+        IGNORE,
+        SIGNAL_UNLOCKS_AUTOCRAFTING,
+        SIGNAL_LOCKS_AUTOCRAFTING,
+        PULSE_INSERTS_NEXT_SET;
+
+        public static CrafterMode getById(int id) {
+            if (id >= 0 && id < values().length)
+                return values()[id];
+            return IGNORE;
         }
     }
 }

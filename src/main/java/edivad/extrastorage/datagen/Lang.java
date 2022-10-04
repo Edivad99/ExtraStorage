@@ -9,36 +9,30 @@ import edivad.extrastorage.tools.Translations;
 import net.minecraft.data.DataGenerator;
 import net.minecraftforge.common.data.LanguageProvider;
 
-public class Lang extends LanguageProvider
-{
-    public Lang(DataGenerator gen)
-    {
+public class Lang extends LanguageProvider {
+    public Lang(DataGenerator gen) {
         super(gen, Main.MODID, "en_us");
     }
 
     @Override
-    protected void addTranslations()
-    {
+    protected void addTranslations() {
         add("itemGroup." + Main.MODID + "_tab", Main.MODNAME);
 
-        for(ItemStorageType type : ItemStorageType.values())
-        {
+        for (ItemStorageType type : ItemStorageType.values()) {
             add(Registration.ITEM_STORAGE_PART.get(type).get(), type.getName() + " Storage Part");
             add(Registration.ITEM_DISK.get(type).get(), type.getName() + " Storage Disk");
             add(Registration.ITEM_STORAGE_BLOCK.get(type).get(), type.getName() + " Storage Block");
         }
 
-        for(FluidStorageType type : FluidStorageType.values())
-        {
+        for (FluidStorageType type : FluidStorageType.values()) {
             add(Registration.FLUID_STORAGE_PART.get(type).get(), type.getName() + " Fluid Storage Part");
             add(Registration.FLUID_DISK.get(type).get(), type.getName() + " Fluid Storage Disk");
             add(Registration.FLUID_STORAGE_BLOCK.get(type).get(), type.getName() + " Fluid Storage Block");
         }
 
-        for(CrafterTier tier : CrafterTier.values())
-        {
+        for (CrafterTier tier : CrafterTier.values()) {
             String baseName = tier.name().toLowerCase();
-            String TierName = baseName.substring(0,1).toUpperCase() + baseName.substring(1);
+            String TierName = baseName.substring(0, 1).toUpperCase() + baseName.substring(1);
             add(Registration.CRAFTER.get(tier).get(), TierName + " Crafter");
         }
 

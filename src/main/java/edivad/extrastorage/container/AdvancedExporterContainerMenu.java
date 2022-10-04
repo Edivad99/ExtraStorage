@@ -10,32 +10,27 @@ import edivad.extrastorage.setup.Registration;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.items.SlotItemHandler;
 
-public class AdvancedExporterContainerMenu extends BaseContainerMenu
-{
-    private final AdvancedExporterBlockEntity tile;
+public class AdvancedExporterContainerMenu extends BaseContainerMenu {
+    private final AdvancedExporterBlockEntity exporterBlockEntity;
     private boolean hasRegulatorMode;
 
-    public AdvancedExporterContainerMenu(int windowId, Player player, AdvancedExporterBlockEntity tile)
-    {
-        super(Registration.ADVANCED_EXPORTER_CONTAINER.get(), tile, player, windowId);
-        this.tile = tile;
+    public AdvancedExporterContainerMenu(int windowId, Player player, AdvancedExporterBlockEntity exporterBlockEntity) {
+        super(Registration.ADVANCED_EXPORTER_CONTAINER.get(), exporterBlockEntity, player, windowId);
+        this.exporterBlockEntity = exporterBlockEntity;
         this.hasRegulatorMode = hasRegulatorMode();
         initSlots();
     }
 
-    private boolean hasRegulatorMode()
-    {
-        return tile.getNode().getUpgrades().hasUpgrade(UpgradeItem.Type.REGULATOR);
+    private boolean hasRegulatorMode() {
+        return exporterBlockEntity.getNode().getUpgrades().hasUpgrade(UpgradeItem.Type.REGULATOR);
     }
 
     @Override
-    public void broadcastChanges()
-    {
+    public void broadcastChanges() {
         super.broadcastChanges();
 
         boolean updatedHasRegulatorMode = hasRegulatorMode();
-        if (hasRegulatorMode != updatedHasRegulatorMode)
-        {
+        if (hasRegulatorMode != updatedHasRegulatorMode) {
             hasRegulatorMode = updatedHasRegulatorMode;
             initSlots();
         }
@@ -47,42 +42,40 @@ public class AdvancedExporterContainerMenu extends BaseContainerMenu
 
         this.transferManager.clearTransfers();
 
-        for (int i = 0; i < 4; i++)
-            addSlot(new SlotItemHandler(tile.getNode().getUpgrades(), i, 187, 6 + (i * 18)));
+        for (int i = 0; i < 4; i++) {
+            addSlot(new SlotItemHandler(exporterBlockEntity.getNode().getUpgrades(), i, 187, 6 + (i * 18)));
+        }
 
-        boolean hasRegulator = tile.getNode().getUpgrades().hasUpgrade(UpgradeItem.Type.REGULATOR);
+        boolean hasRegulator = exporterBlockEntity.getNode().getUpgrades().hasUpgrade(UpgradeItem.Type.REGULATOR);
 
-        for (int i = 0; i < 2; i++)
-        {
-            for (int j = 0; j < 9; j++)
-            {
+        for (int i = 0; i < 2; i++) {
+            for (int j = 0; j < 9; j++) {
                 int index = (i * 9) + j;
                 int x = 8 + (18 * j);
                 int y = 20 + (18 * i);
 
                 addSlot(new FilterSlot(
-                        tile.getNode().getItemFilters(),
+                        exporterBlockEntity.getNode().getItemFilters(),
                         index, x, y,
                         hasRegulator ? FilterSlot.FILTER_ALLOW_SIZE : 0
-                ).setEnableHandler(() -> tile.getNode().getType() == IType.ITEMS));
+                ).setEnableHandler(() -> exporterBlockEntity.getNode().getType() == IType.ITEMS));
 
                 addSlot(new FluidFilterSlot(
-                        tile.getNode().getFluidFilters(),
+                        exporterBlockEntity.getNode().getFluidFilters(),
                         index, x, y,
                         hasRegulator ? FluidFilterSlot.FILTER_ALLOW_SIZE : 0
-                ).setEnableHandler(() -> tile.getNode().getType() == IType.FLUIDS));
+                ).setEnableHandler(() -> exporterBlockEntity.getNode().getType() == IType.FLUIDS));
             }
         }
 
         addPlayerInventory(8, 73);
 
-        transferManager.addBiTransfer(getPlayer().getInventory(), tile.getNode().getUpgrades());
-        transferManager.addFilterTransfer(getPlayer().getInventory(), tile.getNode().getItemFilters(), tile.getNode().getFluidFilters(), tile.getNode()::getType);
+        transferManager.addBiTransfer(getPlayer().getInventory(), exporterBlockEntity.getNode().getUpgrades());
+        transferManager.addFilterTransfer(getPlayer().getInventory(), exporterBlockEntity.getNode().getItemFilters(), exporterBlockEntity.getNode().getFluidFilters(), exporterBlockEntity.getNode()::getType);
     }
 
     @Override
-    public AdvancedExporterBlockEntity getBlockEntity()
-    {
-        return tile;
+    public AdvancedExporterBlockEntity getBlockEntity() {
+        return exporterBlockEntity;
     }
 }

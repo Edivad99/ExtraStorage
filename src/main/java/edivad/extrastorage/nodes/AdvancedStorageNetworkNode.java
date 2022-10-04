@@ -8,7 +8,6 @@ import com.refinedmods.refinedstorage.apiimpl.network.node.storage.StorageNetwor
 import edivad.extrastorage.Main;
 import edivad.extrastorage.blockentity.AdvancedStorageBlockEntity;
 import edivad.extrastorage.items.storage.item.ItemStorageType;
-import java.util.List;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -18,8 +17,9 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 
-public class AdvancedStorageNetworkNode extends StorageNetworkNode
-{
+import java.util.List;
+
+public class AdvancedStorageNetworkNode extends StorageNetworkNode {
     public static final ResourceLocation BLOCK_256K_ID = new ResourceLocation(Main.MODID, "block_256k");
     public static final ResourceLocation BLOCK_1024K_ID = new ResourceLocation(Main.MODID, "block_1024k");
     public static final ResourceLocation BLOCK_4096K_ID = new ResourceLocation(Main.MODID, "block_4096k");
@@ -28,33 +28,28 @@ public class AdvancedStorageNetworkNode extends StorageNetworkNode
     private final ItemStorageType type;
     private IStorageDisk<ItemStack> storage;
 
-    public AdvancedStorageNetworkNode(Level level, BlockPos pos, ItemStorageType type)
-    {
+    public AdvancedStorageNetworkNode(Level level, BlockPos pos, ItemStorageType type) {
         super(level, pos, null);
         this.type = type;
     }
 
     @Override
-    public int getEnergyUsage()
-    {
+    public int getEnergyUsage() {
         return 10 + (type.ordinal() * 2);
     }
 
     @Override
-    public ResourceLocation getId()
-    {
-        return switch(type) {
+    public ResourceLocation getId() {
+        return switch (type) {
             case TIER_5 -> BLOCK_256K_ID;
             case TIER_6 -> BLOCK_1024K_ID;
             case TIER_7 -> BLOCK_4096K_ID;
             case TIER_8 -> BLOCK_16384K_ID;
-            default -> null;
         };
     }
 
     @Override
-    public void addItemStorages(List<IStorage<ItemStack>> storages)
-    {
+    public void addItemStorages(List<IStorage<ItemStack>> storages) {
         if (storage == null) {
             loadStorage(null);
         }
@@ -63,12 +58,10 @@ public class AdvancedStorageNetworkNode extends StorageNetworkNode
     }
 
     @Override
-    public void loadStorage(@Nullable Player owner)
-    {
+    public void loadStorage(@Nullable Player owner) {
         IStorageDisk disk = API.instance().getStorageDiskManager((ServerLevel) level).get(getStorageId());
 
-        if (disk == null)
-        {
+        if (disk == null) {
             disk = API.instance().createDefaultItemDisk((ServerLevel) level, type.getCapacity(), owner);
             API.instance().getStorageDiskManager((ServerLevel) level).set(getStorageId(), disk);
             API.instance().getStorageDiskManager((ServerLevel) level).markForSaving();
@@ -77,26 +70,22 @@ public class AdvancedStorageNetworkNode extends StorageNetworkNode
         this.storage = new ItemStorageWrapperStorageDisk(this, disk);
     }
 
-    public IStorageDisk<ItemStack> getStorage()
-    {
+    public IStorageDisk<ItemStack> getStorage() {
         return storage;
     }
 
     @Override
-    public Component getTitle()
-    {
+    public Component getTitle() {
         return Component.translatable("block." + Main.MODID + ".block_" + type.getName());
     }
 
     @Override
-    public long getStored()
-    {
+    public long getStored() {
         return AdvancedStorageBlockEntity.STORED.getValue();
     }
 
     @Override
-    public long getCapacity()
-    {
+    public long getCapacity() {
         return type.getCapacity();
     }
 }

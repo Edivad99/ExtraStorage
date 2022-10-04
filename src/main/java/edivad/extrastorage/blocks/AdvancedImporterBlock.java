@@ -27,8 +27,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.network.NetworkHooks;
 import org.jetbrains.annotations.Nullable;
 
-public class AdvancedImporterBlock extends CableBlock
-{
+public class AdvancedImporterBlock extends CableBlock {
     private static final VoxelShape LINE_NORTH_1 = box(6, 6, 4, 10, 10, 6);
     private static final VoxelShape LINE_NORTH_2 = box(5, 5, 2, 11, 11, 4);
     private static final VoxelShape LINE_NORTH_3 = box(3, 3, 0, 13, 13, 2);
@@ -54,18 +53,15 @@ public class AdvancedImporterBlock extends CableBlock
     private static final VoxelShape LINE_DOWN_3 = box(3, 0, 3, 13, 2, 13);
     private static final VoxelShape LINE_DOWN = Shapes.or(LINE_DOWN_1, LINE_DOWN_2, LINE_DOWN_3);
 
-    public AdvancedImporterBlock()
-    {
+    public AdvancedImporterBlock() {
         super(BlockUtils.DEFAULT_GLASS_PROPERTIES);
     }
 
-    public BlockDirection getDirection()
-    {
+    public BlockDirection getDirection() {
         return BlockDirection.ANY;
     }
 
-    public VoxelShape getShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext ctx)
-    {
+    public VoxelShape getShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext ctx) {
         return ConstantsCable.addCoverVoxelShapes(ShapeCache.getOrCreate(state, s -> {
             VoxelShape shape = getCableShape(s);
             shape = Shapes.or(shape, this.getLineShape(s));
@@ -73,9 +69,8 @@ public class AdvancedImporterBlock extends CableBlock
         }), world, pos);
     }
 
-    protected VoxelShape getLineShape(BlockState state)
-    {
-        return switch(state.getValue(this.getDirection().getProperty())) {
+    protected VoxelShape getLineShape(BlockState state) {
+        return switch (state.getValue(this.getDirection().getProperty())) {
             case UP -> LINE_UP;
             case DOWN -> LINE_DOWN;
             case NORTH -> LINE_NORTH;
@@ -87,8 +82,7 @@ public class AdvancedImporterBlock extends CableBlock
 
     @Nullable
     @Override
-    public BlockEntity newBlockEntity(BlockPos pos, BlockState state)
-    {
+    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
         return new AdvancedImporterBlockEntity(pos, state);
     }
 

@@ -27,8 +27,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.network.NetworkHooks;
 import org.jetbrains.annotations.Nullable;
 
-public class AdvancedExporterBlock extends CableBlock
-{
+public class AdvancedExporterBlock extends CableBlock {
     private static final VoxelShape LINE_NORTH_1 = box(6.0, 6.0, 0.0, 10.0, 10.0, 2.0);
     private static final VoxelShape LINE_NORTH_2 = box(5.0, 5.0, 2.0, 11.0, 11.0, 4.0);
     private static final VoxelShape LINE_NORTH_3 = box(3.0, 3.0, 4.0, 13.0, 13.0, 6.0);
@@ -54,18 +53,15 @@ public class AdvancedExporterBlock extends CableBlock
     private static final VoxelShape LINE_DOWN_3 = box(3.0, 4.0, 3.0, 13.0, 6.0, 13.0);
     private static final VoxelShape LINE_DOWN = Shapes.or(LINE_DOWN_1, LINE_DOWN_2, LINE_DOWN_3);
 
-    public AdvancedExporterBlock()
-    {
+    public AdvancedExporterBlock() {
         super(BlockUtils.DEFAULT_GLASS_PROPERTIES);
     }
 
-    public BlockDirection getDirection()
-    {
+    public BlockDirection getDirection() {
         return BlockDirection.ANY;
     }
 
-    public VoxelShape getShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext ctx)
-    {
+    public VoxelShape getShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext ctx) {
         return ConstantsCable.addCoverVoxelShapes(ShapeCache.getOrCreate(state, s -> {
             VoxelShape shape = getCableShape(s);
             shape = Shapes.or(shape, getLineShape(s));
@@ -73,29 +69,25 @@ public class AdvancedExporterBlock extends CableBlock
         }), world, pos);
     }
 
-    protected VoxelShape getLineShape(BlockState state)
-    {
-        return switch(state.getValue(this.getDirection().getProperty())) {
+    protected VoxelShape getLineShape(BlockState state) {
+        return switch (state.getValue(this.getDirection().getProperty())) {
             case UP -> LINE_UP;
             case DOWN -> LINE_DOWN;
             case NORTH -> LINE_NORTH;
             case SOUTH -> LINE_SOUTH;
             case EAST -> LINE_EAST;
             case WEST -> LINE_WEST;
-            default -> Shapes.empty();
         };
     }
 
     @Nullable
     @Override
-    public BlockEntity newBlockEntity(BlockPos pos, BlockState state)
-    {
+    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
         return new AdvancedExporterBlockEntity(pos, state);
     }
 
     @Override
-    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit)
-    {
+    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
         if (!level.isClientSide && CollisionUtils.isInBounds(getLineShape(state), pos, hit.getLocation())) {
             return NetworkUtils.attemptModify(level, pos, player, () -> NetworkHooks.openScreen(
                     (ServerPlayer) player,

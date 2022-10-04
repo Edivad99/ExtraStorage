@@ -15,8 +15,7 @@ import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 
-public class StorageBlockLootFunction extends LootItemConditionalFunction
-{
+public class StorageBlockLootFunction extends LootItemConditionalFunction {
     protected StorageBlockLootFunction(LootItemCondition[] conditions) {
         super(conditions);
     }
@@ -26,22 +25,17 @@ public class StorageBlockLootFunction extends LootItemConditionalFunction
     }
 
     @Override
-    public ItemStack run(ItemStack stack, LootContext lootContext)
-    {
-        BlockEntity blockEntity = lootContext.getParamOrNull(LootContextParams.BLOCK_ENTITY);
-        if (blockEntity instanceof AdvancedStorageBlockEntity itemStorageBlockEntity)
-        {
-            AdvancedStorageNetworkNode removedNode = itemStorageBlockEntity.getRemovedNode();
-            if (removedNode == null)
-            {
+    public ItemStack run(ItemStack stack, LootContext lootContext) {
+        var blockEntity = lootContext.getParamOrNull(LootContextParams.BLOCK_ENTITY);
+        if (blockEntity instanceof AdvancedStorageBlockEntity itemStorageBlockEntity) {
+            var removedNode = itemStorageBlockEntity.getRemovedNode();
+            if (removedNode == null) {
                 removedNode = itemStorageBlockEntity.getNode();
             }
 
             stack.getOrCreateTag().putUUID(AdvancedStorageNetworkNode.NBT_ID, removedNode.getStorageId());
-        }
-        else if (blockEntity instanceof AdvancedFluidStorageBlockEntity fluidStorageBlockEntity)
-        {
-            AdvancedFluidStorageNetworkNode removedNode = fluidStorageBlockEntity.getRemovedNode();
+        } else if (blockEntity instanceof AdvancedFluidStorageBlockEntity fluidStorageBlockEntity) {
+            var removedNode = fluidStorageBlockEntity.getRemovedNode();
             if (removedNode == null) {
                 removedNode = fluidStorageBlockEntity.getNode();
             }
@@ -56,8 +50,7 @@ public class StorageBlockLootFunction extends LootItemConditionalFunction
         return Registration.REGISTERED_LOOT_ITEM_FUNCTIONS.get("storage_block").get();
     }
 
-    public static class Serializer extends LootItemConditionalFunction.Serializer<StorageBlockLootFunction>
-    {
+    public static class Serializer extends LootItemConditionalFunction.Serializer<StorageBlockLootFunction> {
         @Override
         public StorageBlockLootFunction deserialize(JsonObject object, JsonDeserializationContext deserializationContext, LootItemCondition[] conditions) {
             return new StorageBlockLootFunction(conditions);

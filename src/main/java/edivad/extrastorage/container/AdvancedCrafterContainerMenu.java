@@ -7,37 +7,37 @@ import edivad.extrastorage.setup.Registration;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.items.SlotItemHandler;
 
-public class AdvancedCrafterContainerMenu extends BaseContainerMenu
-{
-    private final AdvancedCrafterBlockEntity tile;
+public class AdvancedCrafterContainerMenu extends BaseContainerMenu {
+    private final AdvancedCrafterBlockEntity crafterBlockEntity;
 
-    public AdvancedCrafterContainerMenu(int windowId, Player player, AdvancedCrafterBlockEntity crafter)
-    {
-        super(Registration.CRAFTER_CONTAINER.get(crafter.getTier()).get(), crafter, player, windowId);
-        this.tile = crafter;
+    public AdvancedCrafterContainerMenu(int windowId, Player player, AdvancedCrafterBlockEntity crafterBlockEntity) {
+        super(Registration.CRAFTER_CONTAINER.get(crafterBlockEntity.getTier()).get(), crafterBlockEntity, player, windowId);
+        this.crafterBlockEntity = crafterBlockEntity;
 
-        CrafterTier tier = crafter.getTier();
-        for(int i = 0; i < tier.getRowsOfSlots(); i++)
-            for(int j = 0; j < 9; j++)
-                addSlot(new SlotItemHandler(crafter.getNode().getPatternItems(), (i * 9) + j, 8 + (18 * j), 20 + (18 * i)));
+        CrafterTier tier = crafterBlockEntity.getTier();
+        for (int i = 0; i < tier.getRowsOfSlots(); i++) {
+            for (int j = 0; j < 9; j++) {
+                addSlot(new SlotItemHandler(crafterBlockEntity.getNode().getPatternItems(), (i * 9) + j, 8 + (18 * j), 20 + (18 * i)));
+            }
+        }
 
-        for (int i = 0; i < 4; i++)
-            addSlot(new SlotItemHandler(crafter.getNode().getUpgrades(), i, 187, 6 + (i * 18)));
+        for (int i = 0; i < 4; i++) {
+            addSlot(new SlotItemHandler(crafterBlockEntity.getNode().getUpgrades(), i, 187, 6 + (i * 18)));
+        }
 
-        switch(tier) {
+        switch (tier) {
             case IRON -> addPlayerInventory(8, 91);
             case GOLD -> addPlayerInventory(8, 127);
             case DIAMOND -> addPlayerInventory(8, 163);
             case NETHERITE -> addPlayerInventory(8, 199);
         }
 
-        transferManager.addBiTransfer(player.getInventory(), crafter.getNode().getUpgrades());
-        transferManager.addBiTransfer(player.getInventory(), crafter.getNode().getPatternItems());
+        transferManager.addBiTransfer(player.getInventory(), crafterBlockEntity.getNode().getUpgrades());
+        transferManager.addBiTransfer(player.getInventory(), crafterBlockEntity.getNode().getPatternItems());
     }
 
     @Override
-    public AdvancedCrafterBlockEntity getBlockEntity()
-    {
-        return tile;
+    public AdvancedCrafterBlockEntity getBlockEntity() {
+        return crafterBlockEntity;
     }
 }

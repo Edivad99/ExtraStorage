@@ -9,50 +9,46 @@ import edivad.extrastorage.setup.Registration;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.items.SlotItemHandler;
 
-public class AdvancedImporterContainerMenu extends BaseContainerMenu
-{
-    private final AdvancedImporterBlockEntity tile;
+public class AdvancedImporterContainerMenu extends BaseContainerMenu {
+    private final AdvancedImporterBlockEntity importerBlockEntity;
 
-    public AdvancedImporterContainerMenu(int windowId, Player player, AdvancedImporterBlockEntity tile)
-    {
-        super(Registration.ADVANCED_IMPORTER_CONTAINER.get(), tile, player, windowId);
-        this.tile = tile;
+    public AdvancedImporterContainerMenu(int windowId, Player player, AdvancedImporterBlockEntity importerBlockEntity) {
+        super(Registration.ADVANCED_IMPORTER_CONTAINER.get(), importerBlockEntity, player, windowId);
+        this.importerBlockEntity = importerBlockEntity;
         initSlots();
     }
 
     public void initSlots() {
-        for (int i = 0; i < 4; i++)
-            addSlot(new SlotItemHandler(tile.getNode().getUpgrades(), i, 187, 6 + (i * 18)));
+        for (int i = 0; i < 4; i++) {
+            addSlot(new SlotItemHandler(importerBlockEntity.getNode().getUpgrades(), i, 187, 6 + (i * 18)));
+        }
 
-        for (int i = 0; i < 2; i++)
-        {
-            for (int j = 0; j < 9; j++)
-            {
+        for (int i = 0; i < 2; i++) {
+            for (int j = 0; j < 9; j++) {
                 int index = (i * 9) + j;
                 int x = 8 + (18 * j);
                 int y = 20 + (18 * i);
 
                 addSlot(new FilterSlot(
-                        tile.getNode().getItemFilters(),
+                        importerBlockEntity.getNode().getItemFilters(),
                         index, x, y
-                ).setEnableHandler(() -> tile.getNode().getType() == IType.ITEMS));
+                ).setEnableHandler(() -> importerBlockEntity.getNode().getType() == IType.ITEMS));
 
                 addSlot(new FluidFilterSlot(
-                        tile.getNode().getFluidFilters(),
+                        importerBlockEntity.getNode().getFluidFilters(),
                         index, x, y
-                ).setEnableHandler(() -> tile.getNode().getType() == IType.FLUIDS));
+                ).setEnableHandler(() -> importerBlockEntity.getNode().getType() == IType.FLUIDS));
             }
         }
 
         addPlayerInventory(8, 73);
 
-        transferManager.addBiTransfer(getPlayer().getInventory(), tile.getNode().getUpgrades());
-        transferManager.addFilterTransfer(getPlayer().getInventory(), tile.getNode().getItemFilters(), tile.getNode().getFluidFilters(), tile.getNode()::getType);
+        transferManager.addBiTransfer(getPlayer().getInventory(), importerBlockEntity.getNode().getUpgrades());
+        transferManager.addFilterTransfer(getPlayer().getInventory(), importerBlockEntity.getNode().getItemFilters(), importerBlockEntity.getNode().getFluidFilters(), importerBlockEntity.getNode()::getType);
     }
 
     @Override
-    public AdvancedImporterBlockEntity getBlockEntity()
-    {
-        return tile;
+    public AdvancedImporterBlockEntity getBlockEntity() {
+        return importerBlockEntity;
     }
 }

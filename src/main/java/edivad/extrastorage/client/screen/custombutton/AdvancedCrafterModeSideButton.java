@@ -9,8 +9,7 @@ import edivad.extrastorage.container.AdvancedCrafterContainerMenu;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.resources.language.I18n;
 
-public class AdvancedCrafterModeSideButton extends SideButton
-{
+public class AdvancedCrafterModeSideButton extends SideButton {
     public AdvancedCrafterModeSideButton(BaseScreen<AdvancedCrafterContainerMenu> screen) {
         super(screen);
     }

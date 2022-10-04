@@ -20,13 +20,13 @@ public class Items extends ItemModelProvider {
 
     @Override
     protected void registerModels() {
-        for(ItemStorageType type : ItemStorageType.values()) {
+        for (var type : ItemStorageType.values()) {
             singleTexture(getPath(Registration.ITEM_STORAGE_PART.get(type).get()), mcLoc("item/generated"), "layer0", modLoc("items/parts/" + type.getName()));
             singleTexture(getPath(Registration.ITEM_DISK.get(type).get()), mcLoc("item/generated"), "layer0", modLoc("items/disks/" + type.getName()));
             parentedBlock(Registration.ITEM_STORAGE_BLOCK.get(type).get());
         }
 
-        for(FluidStorageType type : FluidStorageType.values()) {
+        for (var type : FluidStorageType.values()) {
             singleTexture(getPath(Registration.FLUID_STORAGE_PART.get(type).get()), mcLoc("item/generated"), "layer0", modLoc("items/parts/" + type.getName() + "_fluid"));
             singleTexture(getPath(Registration.FLUID_DISK.get(type).get()), mcLoc("item/generated"), "layer0", modLoc("items/disks/" + type.getName() + "_fluid"));
             parentedBlock(Registration.FLUID_STORAGE_BLOCK.get(type).get());

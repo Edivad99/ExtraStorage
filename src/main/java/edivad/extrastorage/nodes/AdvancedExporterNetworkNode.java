@@ -32,8 +32,7 @@ import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.ItemHandlerHelper;
 
-public class AdvancedExporterNetworkNode extends NetworkNode implements IComparable, IType, ICoverable
-{
+public class AdvancedExporterNetworkNode extends NetworkNode implements IComparable, IType, ICoverable {
     public static final ResourceLocation ID = new ResourceLocation(Main.MODID, "advanced_exporter");
 
     private static final String NBT_COMPARE = "Compare";
@@ -45,55 +44,46 @@ public class AdvancedExporterNetworkNode extends NetworkNode implements ICompara
     private final BaseItemHandler itemFilters = new BaseItemHandler(SLOTS).addListener(new NetworkNodeInventoryListener(this));
     private final FluidInventory fluidFilters = new FluidInventory(SLOTS).addListener(new NetworkNodeFluidInventoryListener(this));
     private final CoverManager coverManager;
-
-    private final UpgradeItemHandler upgrades = (UpgradeItemHandler) new UpgradeItemHandler(4, UpgradeItem.Type.SPEED, UpgradeItem.Type.CRAFTING, UpgradeItem.Type.STACK, UpgradeItem.Type.REGULATOR)
-        .addListener(new NetworkNodeInventoryListener(this))
-        .addListener((handler, slot, reading) ->
-        {
-            if (!reading && !getUpgrades().hasUpgrade(UpgradeItem.Type.REGULATOR))
-            {
-                boolean changed = false;
-
-                for (int i = 0; i < SLOTS; i++)
-                {
-                    ItemStack filteredItem = itemFilters.getStackInSlot(i);
-
-                    if (filteredItem.getCount() > 1)
-                    {
-                        filteredItem.setCount(1);
-                        changed = true;
-                    }
-
-                    FluidStack filteredFluid = fluidFilters.getFluid(i);
-
-                    if (!filteredFluid.isEmpty() && filteredFluid.getAmount() != FluidType.BUCKET_VOLUME)
-                    {
-                        filteredFluid.setAmount(FluidType.BUCKET_VOLUME);
-                        changed = true;
-                    }
-                }
-
-                if (changed)
-                {
-                    markDirty();
-                }
-            }
-        });
-
     private int compare = IComparer.COMPARE_NBT;
-    private int type = IType.ITEMS;
+    private final UpgradeItemHandler upgrades = (UpgradeItemHandler)
+            new UpgradeItemHandler(4, UpgradeItem.Type.SPEED, UpgradeItem.Type.CRAFTING, UpgradeItem.Type.STACK, UpgradeItem.Type.REGULATOR)
+            .addListener(new NetworkNodeInventoryListener(this))
+            .addListener((handler, slot, reading) ->
+            {
+                if (!reading && !getUpgrades().hasUpgrade(UpgradeItem.Type.REGULATOR)) {
+                    boolean changed = false;
 
+                    for (int i = 0; i < SLOTS; i++) {
+                        ItemStack filteredItem = itemFilters.getStackInSlot(i);
+
+                        if (filteredItem.getCount() > 1) {
+                            filteredItem.setCount(1);
+                            changed = true;
+                        }
+
+                        FluidStack filteredFluid = fluidFilters.getFluid(i);
+
+                        if (!filteredFluid.isEmpty() && filteredFluid.getAmount() != FluidType.BUCKET_VOLUME) {
+                            filteredFluid.setAmount(FluidType.BUCKET_VOLUME);
+                            changed = true;
+                        }
+                    }
+
+                    if (changed) {
+                        markDirty();
+                    }
+                }
+            });
+    private int type = IType.ITEMS;
     private int filterSlot;
 
-    public AdvancedExporterNetworkNode(Level level, BlockPos pos)
-    {
+    public AdvancedExporterNetworkNode(Level level, BlockPos pos) {
         super(level, pos);
         this.coverManager = new CoverManager(this);
     }
 
     @Override
-    public int getEnergyUsage()
-    {
+    public int getEnergyUsage() {
         return 4 * (RS.SERVER_CONFIG.getExporter().getUsage() + upgrades.getEnergyUsage());
     }
 
@@ -241,27 +231,23 @@ public class AdvancedExporterNetworkNode extends NetworkNode implements ICompara
     }
 
     @Override
-    public int getCompare()
-    {
+    public int getCompare() {
         return compare;
     }
 
     @Override
-    public void setCompare(int compare)
-    {
+    public void setCompare(int compare) {
         this.compare = compare;
         markDirty();
     }
 
     @Override
-    public ResourceLocation getId()
-    {
+    public ResourceLocation getId() {
         return ID;
     }
 
     @Override
-    public CompoundTag write(CompoundTag tag)
-    {
+    public CompoundTag write(CompoundTag tag) {
         super.write(tag);
         tag.put(CoverManager.NBT_COVER_MANAGER, this.coverManager.writeToNbt());
         StackUtils.writeItems(upgrades, 1, tag);
@@ -269,8 +255,7 @@ public class AdvancedExporterNetworkNode extends NetworkNode implements ICompara
     }
 
     @Override
-    public CompoundTag writeConfiguration(CompoundTag tag)
-    {
+    public CompoundTag writeConfiguration(CompoundTag tag) {
         super.writeConfiguration(tag);
         tag.putInt(NBT_COMPARE, compare);
         tag.putInt(NBT_TYPE, type);
@@ -280,8 +265,7 @@ public class AdvancedExporterNetworkNode extends NetworkNode implements ICompara
     }
 
     @Override
-    public void read(CompoundTag tag)
-    {
+    public void read(CompoundTag tag) {
         super.read(tag);
         if (tag.contains(CoverManager.NBT_COVER_MANAGER)) {
             this.coverManager.readFromNbt(tag.getCompound(CoverManager.NBT_COVER_MANAGER));
@@ -290,8 +274,7 @@ public class AdvancedExporterNetworkNode extends NetworkNode implements ICompara
     }
 
     @Override
-    public void readConfiguration(CompoundTag tag)
-    {
+    public void readConfiguration(CompoundTag tag) {
         super.readConfiguration(tag);
         if (tag.contains(NBT_COMPARE)) {
             compare = tag.getInt(NBT_COMPARE);
@@ -305,39 +288,33 @@ public class AdvancedExporterNetworkNode extends NetworkNode implements ICompara
         }
     }
 
-    public UpgradeItemHandler getUpgrades()
-    {
+    public UpgradeItemHandler getUpgrades() {
         return upgrades;
     }
 
     @Override
-    public IItemHandler getDrops()
-    {
+    public IItemHandler getDrops() {
         return getUpgrades();
     }
 
     @Override
-    public int getType()
-    {
+    public int getType() {
         return level.isClientSide ? AdvancedExporterBlockEntity.TYPE.getValue() : type;
     }
 
     @Override
-    public void setType(int type)
-    {
+    public void setType(int type) {
         this.type = type;
         markDirty();
     }
 
     @Override
-    public IItemHandlerModifiable getItemFilters()
-    {
+    public IItemHandlerModifiable getItemFilters() {
         return itemFilters;
     }
 
     @Override
-    public FluidInventory getFluidFilters()
-    {
+    public FluidInventory getFluidFilters() {
         return fluidFilters;
     }
 

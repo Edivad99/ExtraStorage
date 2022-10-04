@@ -3,8 +3,7 @@ package edivad.extrastorage.tools;
 import edivad.edivadlib.tools.TranslationsAdvancement;
 import edivad.extrastorage.Main;
 
-public class Translations
-{
+public class Translations {
     public static final String HOLD_SHIFT = "tooltip." + Main.MODID + ".holdShift";
     public static final String SLOT_CRAFTING = "tooltip." + Main.MODID + ".slotCrafting";
     public static final String BASE_SPEED = "tooltip." + Main.MODID + ".baseSpeed";

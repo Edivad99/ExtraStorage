@@ -5,11 +5,7 @@ import com.refinedmods.refinedstorage.render.BakedModelOverrideRegistry;
 import edivad.edivadlib.setup.UpdateChecker;
 import edivad.extrastorage.Main;
 import edivad.extrastorage.blocks.CrafterTier;
-import edivad.extrastorage.client.screen.AdvancedCrafterScreen;
-import edivad.extrastorage.client.screen.AdvancedExporterScreen;
-import edivad.extrastorage.client.screen.AdvancedFluidStorageBlockScreen;
-import edivad.extrastorage.client.screen.AdvancedImporterScreen;
-import edivad.extrastorage.client.screen.AdvancedStorageBlockScreen;
+import edivad.extrastorage.client.screen.*;
 import edivad.extrastorage.container.AdvancedCrafterContainerMenu;
 import edivad.extrastorage.items.storage.fluid.FluidStorageType;
 import edivad.extrastorage.items.storage.item.ItemStorageType;
@@ -24,21 +20,19 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 
-public class ClientSetup
-{
+public class ClientSetup {
     private static final BakedModelOverrideRegistry BAKED_MODEL_OVERRIDE_REGISTRY = new BakedModelOverrideRegistry();
 
     private ClientSetup() {
     }
 
     @SubscribeEvent
-    public static void init(FMLClientSetupEvent event)
-    {
+    public static void init(FMLClientSetupEvent event) {
         //Version checker
         MinecraftForge.EVENT_BUS.register(new UpdateChecker(Main.MODID));
 
         //Special render & GUI
-        for(CrafterTier tier : CrafterTier.values()) {
+        for (CrafterTier tier : CrafterTier.values()) {
             MenuScreens.register(Registration.CRAFTER_CONTAINER.get(tier).get(), AdvancedCrafterScreen::new);
         }
 
@@ -48,23 +42,19 @@ public class ClientSetup
         ItemBlockRenderTypes.setRenderLayer(Registration.ADVANCED_EXPORTER.get(), RenderType.cutout());
         ItemBlockRenderTypes.setRenderLayer(Registration.ADVANCED_IMPORTER.get(), RenderType.cutout());
 
-        for(ItemStorageType type : ItemStorageType.values())
+        for (ItemStorageType type : ItemStorageType.values())
             MenuScreens.register(Registration.ITEM_STORAGE_CONTAINER.get(type).get(), AdvancedStorageBlockScreen::new);
-        for(FluidStorageType type : FluidStorageType.values())
+        for (FluidStorageType type : FluidStorageType.values())
             MenuScreens.register(Registration.FLUID_STORAGE_CONTAINER.get(type).get(), AdvancedFluidStorageBlockScreen::new);
 
-        API.instance().addPatternRenderHandler(pattern ->
-        {
+        API.instance().addPatternRenderHandler(pattern -> {
             AbstractContainerMenu container = Minecraft.getInstance().player.containerMenu;
-
-            if (container instanceof AdvancedCrafterContainerMenu actualContainer)
-            {
+            if (container instanceof AdvancedCrafterContainerMenu actualContainer) {
                 int slots = actualContainer.getBlockEntity().getTier().getSlots();
                 for (int i = 0; i < slots; i++)
                     if (container.getSlot(i).getItem() == pattern)
                         return true;
             }
-
             return false;
         });
     }
@@ -79,5 +69,4 @@ public class ClientSetup
             }
         }
     }
-
 }

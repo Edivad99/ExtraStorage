@@ -36,8 +36,11 @@ public class TOPIntegration implements IProbeInfoProvider, Function<ITheOneProbe
             slots = tile.getTier().getSlots();
             probeInfo.horizontal().text(Component.translatable(Translations.OCCUPIED_SPACE, String.valueOf(patterns), String.valueOf(slots)));
 
-            String translation = node.getTierSpeed() != node.getMaximumSuccessfulCraftingUpdates() ? Translations.LIMITED_SPEED : Translations.CURRENT_SPEED;
-            probeInfo.horizontal().text(Component.translatable(translation, String.valueOf(speed)));
+            if (node.getTierSpeed() != node.getMaximumSuccessfulCraftingUpdates()) {
+                probeInfo.horizontal().text(Component.translatable(Translations.LIMITED_SPEED, node.getName().getString(), String.valueOf(speed)));
+            } else {
+                probeInfo.horizontal().text(Component.translatable(Translations.CURRENT_SPEED, String.valueOf(speed)));
+            }
         } else if (te instanceof CrafterBlockEntity tile) {
             CrafterNetworkNode node = tile.getNode();
             patterns = node.getPatterns().size();

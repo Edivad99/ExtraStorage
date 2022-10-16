@@ -12,7 +12,6 @@ import edivad.extrastorage.items.storage.item.ItemStorageType;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraftforge.client.event.ModelEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -30,20 +29,20 @@ public class ClientSetup {
         MinecraftForge.EVENT_BUS.register(new UpdateChecker(Main.MODID));
 
         //Special render & GUI
-        for (CrafterTier tier : CrafterTier.values()) {
+        for (var tier : CrafterTier.values()) {
             MenuScreens.register(Registration.CRAFTER_CONTAINER.get(tier).get(), AdvancedCrafterScreen::new);
         }
 
         MenuScreens.register(Registration.ADVANCED_EXPORTER_CONTAINER.get(), AdvancedExporterScreen::new);
         MenuScreens.register(Registration.ADVANCED_IMPORTER_CONTAINER.get(), AdvancedImporterScreen::new);
 
-        for (ItemStorageType type : ItemStorageType.values())
+        for (var type : ItemStorageType.values())
             MenuScreens.register(Registration.ITEM_STORAGE_CONTAINER.get(type).get(), AdvancedStorageBlockScreen::new);
-        for (FluidStorageType type : FluidStorageType.values())
+        for (var type : FluidStorageType.values())
             MenuScreens.register(Registration.FLUID_STORAGE_CONTAINER.get(type).get(), AdvancedFluidStorageBlockScreen::new);
 
         API.instance().addPatternRenderHandler(pattern -> {
-            AbstractContainerMenu container = Minecraft.getInstance().player.containerMenu;
+            var container = Minecraft.getInstance().player.containerMenu;
             if (container instanceof AdvancedCrafterContainerMenu actualContainer) {
                 int slots = actualContainer.getBlockEntity().getTier().getSlots();
                 for (int i = 0; i < slots; i++)
@@ -56,9 +55,8 @@ public class ClientSetup {
 
     @SubscribeEvent
     public static void onModelBake(ModelEvent.BakingCompleted e) {
-        for (ResourceLocation id : e.getModels().keySet()) {
-            BakedModelOverrideRegistry.BakedModelOverrideFactory factory = BAKED_MODEL_OVERRIDE_REGISTRY.get(new ResourceLocation(id.getNamespace(), id.getPath()));
-
+        for (var id : e.getModels().keySet()) {
+            var factory = BAKED_MODEL_OVERRIDE_REGISTRY.get(new ResourceLocation(id.getNamespace(), id.getPath()));
             if (factory != null) {
                 e.getModels().put(id, factory.create(e.getModels().get(id), e.getModels()));
             }

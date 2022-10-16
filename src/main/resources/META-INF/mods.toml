@@ -31,7 +31,7 @@ description="Extra Storage adds new blocks to Refined Storage"
     versionRange="[1.11.0,)"
     ordering="AFTER"
     side="BOTH"
-[[dependencies.dimstorage]]
+[[dependencies.extrastorage]]
     modId="edivadlib"
     mandatory=true
     versionRange="[1.2.0,)"

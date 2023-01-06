@@ -1,0 +1,29 @@
+{
+  "parent": "refinedstorage:importing",
+  "display": {
+    "frame": "goal",
+    "icon": {
+      "item": "extrastorage:advanced_importer"
+    },
+    "title": {
+      "translate": "advancements.extrastorage.advanced_importer"
+    },
+    "description": {
+      "translate": "advancements.extrastorage.advanced_importer.description"
+    }
+  },
+  "criteria": {
+    "certus": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "extrastorage:advanced_importer"
+            ]
+          }
+        ]
+      }
+    }
+  }
+}

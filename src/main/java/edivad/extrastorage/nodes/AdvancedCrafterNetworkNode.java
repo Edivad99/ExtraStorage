@@ -460,21 +460,14 @@ public class AdvancedCrafterNetworkNode extends NetworkNode implements ICrafting
     @Override
     public boolean isLocked()
     {
-        Optional<ICraftingPatternContainer> root = getRootContainerNotSelf();
-        if (root.isPresent())
-            return root.get().isLocked();
-
-        switch (mode)
-        {
-            case SIGNAL_LOCKS_AUTOCRAFTING:
-                return level.hasNeighborSignal(pos);
-            case SIGNAL_UNLOCKS_AUTOCRAFTING:
-                return !level.hasNeighborSignal(pos);
-            case PULSE_INSERTS_NEXT_SET:
-                return locked;
-            default:
-                return false;
-        }
+        return getRootContainerNotSelf()
+                .map(ICraftingPatternContainer::isLocked)
+                .orElseGet(() -> switch (mode) {
+                    case SIGNAL_LOCKS_AUTOCRAFTING -> level.hasNeighborSignal(pos);
+                    case SIGNAL_UNLOCKS_AUTOCRAFTING -> !level.hasNeighborSignal(pos);
+                    case PULSE_INSERTS_NEXT_SET -> locked;
+                    default -> false;
+                });
     }
 
     @Override

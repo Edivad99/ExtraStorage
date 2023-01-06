@@ -83,7 +83,6 @@ public class AdvancedImporterBlock extends CableBlock
             case SOUTH -> LINE_SOUTH;
             case EAST -> LINE_EAST;
             case WEST -> LINE_WEST;
-            default -> Shapes.empty();
         };
     }
 

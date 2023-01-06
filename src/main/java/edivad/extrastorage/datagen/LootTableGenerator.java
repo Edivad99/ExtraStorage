@@ -28,7 +28,6 @@ import java.util.Map;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
 
 public class LootTableGenerator extends LootTableProvider {
     public LootTableGenerator(DataGenerator dataGeneratorIn) {
@@ -68,9 +67,9 @@ public class LootTableGenerator extends LootTableProvider {
         protected Iterable<Block> getKnownBlocks()
         {
             List<Block> res = new ArrayList<>();
-            res.addAll(Registration.CRAFTER_BLOCK.values().stream().map(RegistryObject::get).collect(Collectors.toList()));
-            res.addAll(Registration.ITEM_STORAGE_BLOCK.values().stream().map(RegistryObject::get).collect(Collectors.toList()));
-            res.addAll(Registration.FLUID_STORAGE_BLOCK.values().stream().map(RegistryObject::get).collect(Collectors.toList()));
+            res.addAll(Registration.CRAFTER_BLOCK.values().stream().map(RegistryObject::get).toList());
+            res.addAll(Registration.ITEM_STORAGE_BLOCK.values().stream().map(RegistryObject::get).toList());
+            res.addAll(Registration.FLUID_STORAGE_BLOCK.values().stream().map(RegistryObject::get).toList());
             res.addAll(Arrays.asList(Registration.ADVANCED_EXPORTER.get(), Registration.ADVANCED_IMPORTER.get()));
             return res;
         }

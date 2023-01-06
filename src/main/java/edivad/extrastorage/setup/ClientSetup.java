@@ -64,9 +64,8 @@ public class ClientSetup
         {
             AbstractContainerMenu container = Minecraft.getInstance().player.containerMenu;
 
-            if (container instanceof AdvancedCrafterContainerMenu)
+            if (container instanceof AdvancedCrafterContainerMenu actualContainer)
             {
-                AdvancedCrafterContainerMenu actualContainer = (AdvancedCrafterContainerMenu) container;
                 int slots = actualContainer.getBlockEntity().getTier().getSlots();
                 for (int i = 0; i < slots; i++)
                     if (container.getSlot(i).getItem() == pattern)

@@ -281,10 +281,23 @@ public class AdvancedCrafterNetworkNode extends NetworkNode implements ICrafting
         return patternsInventory;
     }
 
+    @Nullable
+    @Override
+    public Component getCustomName() {
+        return displayName;
+    }
+
     @Override
     public Component getName() {
         if (displayName != null)
             return displayName;
+        ICraftingPatternContainer root = getRootContainer();
+        if (root != null) {
+            Component displayNameOfRoot = root.getCustomName();
+            if (displayNameOfRoot != null) {
+                return displayNameOfRoot;
+            }
+        }
         var facing = getConnectedBlockEntity();
         if (facing instanceof Nameable face && face.getName() != null)
             return face.getName();

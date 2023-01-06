@@ -118,12 +118,13 @@ dependencies {
         transitive false
     }
     implementation fg.deobf("mcjty.theoneprobe:theoneprobe:${top_version}") {
-        transitive = false
+        transitive false
     }
-    /*implementation fg.deobf("tschipp.carryon:carryon-1.19:${co_version}") {
-        transitive = false
-    }*/
+    implementation fg.deobf("tschipp.carryon:carryon-1.19.2:${co_version}") {
+        transitive false
+    }
     runtimeOnly fg.deobf("mezz.jei:jei-${minecraft_version}-forge:${jei_version}")
+    //implementation fg.deobf("curse.maven:mekanism-268560:4041164")
 }
 
 // Example for how to get properties into the manifest for reading by the runtime..

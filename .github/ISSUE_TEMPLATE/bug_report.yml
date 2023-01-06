@@ -47,8 +47,8 @@ body:
         Example:
           - **Mod version**: 1.0.0
           - **Refined Storage version**: v1.10.0
-          - **Forge version**: 1.18.1 - 39.0.0
-          - **Minecraft version**: 1.18.1
+          - **Forge version**: 1.18.2 - 40.0.0
+          - **Minecraft version**: 1.18.2
       value: |
           - Mod version:
           - Refined Storage version:

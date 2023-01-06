@@ -116,6 +116,10 @@ repositories {
         name 'Carry On'
         url 'https://maven.blamejared.com/'
     }
+    maven {
+        name 'curseforge'
+        url 'https://www.cursemaven.com'
+    }
 }
 
 dependencies {
@@ -127,10 +131,12 @@ dependencies {
     implementation fg.deobf("mcjty.theoneprobe:theoneprobe:${top_version}") {
         transitive = false
     }
-    /*implementation fg.deobf("tschipp.carryon:carryon-${minecraft_version}:${co_version}") {
+    implementation fg.deobf("tschipp.carryon:carryon-${minecraft_version}:${co_version}") {
         transitive = false
-    }*/
+    }
     runtimeOnly fg.deobf("mezz.jei:jei-${minecraft_version}-forge:${jei_version}")
+    runtimeOnly fg.deobf("curse.maven:inventory-sorter-240633:4055080")
+    //runtimeOnly fg.deobf("curse.maven:mekanism-268560:${mekanism_version}")
 }
 
 // Example for how to get properties into the manifest for reading by the runtime..

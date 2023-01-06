@@ -1,9 +1,9 @@
 package edivad.extrastorage.container;
 
 import com.refinedmods.refinedstorage.container.BaseContainerMenu;
-import edivad.extrastorage.setup.Registration;
 import edivad.extrastorage.blockentity.AdvancedCrafterBlockEntity;
 import edivad.extrastorage.blocks.CrafterTier;
+import edivad.extrastorage.setup.Registration;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.items.SlotItemHandler;
 

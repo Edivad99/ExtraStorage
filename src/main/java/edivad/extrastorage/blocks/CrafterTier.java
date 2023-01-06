@@ -1,5 +1,7 @@
 package edivad.extrastorage.blocks;
 
+import java.util.Locale;
+
 public enum CrafterTier
 {
     IRON, GOLD, DIAMOND, NETHERITE;
@@ -30,13 +32,7 @@ public enum CrafterTier
 
     public String getID()
     {
-        return switch(this.ordinal()) {
-            case 0 -> "iron_crafter";
-            case 1 -> "gold_crafter";
-            case 2 -> "diamond_crafter";
-            case 3 -> "netherite_crafter";
-            default -> throw new RuntimeException("Tier not yet implemented");
-        };
+        return this.name().toLowerCase(Locale.ROOT) + "_crafter";
     }
 }
 

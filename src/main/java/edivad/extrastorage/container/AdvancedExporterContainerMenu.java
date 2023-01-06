@@ -5,8 +5,8 @@ import com.refinedmods.refinedstorage.container.BaseContainerMenu;
 import com.refinedmods.refinedstorage.container.slot.filter.FilterSlot;
 import com.refinedmods.refinedstorage.container.slot.filter.FluidFilterSlot;
 import com.refinedmods.refinedstorage.item.UpgradeItem;
-import edivad.extrastorage.setup.Registration;
 import edivad.extrastorage.blockentity.AdvancedExporterBlockEntity;
+import edivad.extrastorage.setup.Registration;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.items.SlotItemHandler;
 

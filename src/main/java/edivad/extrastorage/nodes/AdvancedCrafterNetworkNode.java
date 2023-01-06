@@ -13,10 +13,11 @@ import com.refinedmods.refinedstorage.inventory.item.UpgradeItemHandler;
 import com.refinedmods.refinedstorage.inventory.item.validator.PatternItemValidator;
 import com.refinedmods.refinedstorage.inventory.listener.NetworkNodeInventoryListener;
 import com.refinedmods.refinedstorage.item.UpgradeItem;
-import com.refinedmods.refinedstorage.util.StackUtils;
 import com.refinedmods.refinedstorage.util.LevelUtils;
+import com.refinedmods.refinedstorage.util.StackUtils;
 import edivad.extrastorage.Main;
 import edivad.extrastorage.blocks.CrafterTier;
+import edivad.extrastorage.setup.Config;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -160,10 +161,9 @@ public class AdvancedCrafterNetworkNode extends NetworkNode implements ICrafting
     @Override
     public int getEnergyUsage()
     {
-        int energyPatterns = 2 * patterns.size();
-        int energyUpgrades = upgrades.getEnergyUsage() * (tier.ordinal() + 1);
-        int energyCrafter = 15 * (tier.ordinal() +1);
-        return energyCrafter + energyUpgrades + energyPatterns;
+        int energyPatterns = Config.AdvancedCrafter.INCLUDE_PATTERN_ENERGY.get() ? 2 * patterns.size() : 0;
+        int energyCrafter = Config.AdvancedCrafter.BASE_ENERGY.get() * (tier.ordinal() + 1);
+        return energyCrafter + upgrades.getEnergyUsage() + energyPatterns;
     }
 
     @Override
@@ -295,16 +295,17 @@ public class AdvancedCrafterNetworkNode extends NetworkNode implements ICrafting
     @Override
     public int getMaximumSuccessfulCraftingUpdates()
     {
+        int speed = getTierSpeed();
+        if(hasConnectedInventory())
+            return Math.min(speed, getConnectedInventory().getSlots());
+        return speed;
+    }
+
+    public int getTierSpeed() {
         int upgradesCount = upgrades.getUpgradeCount(UpgradeItem.Type.SPEED);
-        if(upgradesCount < 0 || upgradesCount > 4)
-            return 1;
-        else
-        {
-            if(tier.equals(CrafterTier.IRON))
-                return upgradesCount + tier.getCraftingSpeed();
-            else
-                return (upgradesCount * (tier.getCraftingSpeed() / 5)) + tier.getCraftingSpeed();//PREV Min:1 Max:5
-        }
+        if(tier.equals(CrafterTier.IRON))
+            return upgradesCount + tier.getCraftingSpeed();
+        return (upgradesCount * (tier.getCraftingSpeed() / 5)) + tier.getCraftingSpeed();//PREV Min:1 Max:5
     }
 
     @Nullable

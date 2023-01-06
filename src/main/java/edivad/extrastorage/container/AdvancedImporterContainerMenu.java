@@ -4,8 +4,8 @@ import com.refinedmods.refinedstorage.blockentity.config.IType;
 import com.refinedmods.refinedstorage.container.BaseContainerMenu;
 import com.refinedmods.refinedstorage.container.slot.filter.FilterSlot;
 import com.refinedmods.refinedstorage.container.slot.filter.FluidFilterSlot;
-import edivad.extrastorage.setup.Registration;
 import edivad.extrastorage.blockentity.AdvancedImporterBlockEntity;
+import edivad.extrastorage.setup.Registration;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.items.SlotItemHandler;
 

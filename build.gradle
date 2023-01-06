@@ -59,6 +59,21 @@ minecraft {
                 }
             }
         }
+		
+		gameTestServer {
+            workingDirectory project.file('run')
+
+            property 'forge.logging.markers', 'REGISTRIES'
+            property 'forge.logging.console.level', 'debug'
+
+            property 'forge.enabledGameTestNamespaces', 'extrastorage'
+
+            mods {
+                extrastorage {
+                    source sourceSets.main
+                }
+            }
+        }
 
         data {
             workingDirectory project.file('run')
@@ -91,19 +106,15 @@ repositories {
     }
     maven {
         name 'RS maven'
-        url = uri("https://maven.pkg.github.com/refinedmods/refinedstorage")
+        url = uri('https://maven.pkg.github.com/refinedmods/refinedstorage')
         credentials {
-            username = "anything"
-            password = "\u0067hp_oGjcDFCn8jeTzIj4Ke9pLoEVtpnZMP4VQgaX"
+            username = 'anything'
+            password = '\u0067hp_oGjcDFCn8jeTzIj4Ke9pLoEVtpnZMP4VQgaX'
         }
     }
     maven {
         name 'Carry On'
         url 'https://maven.blamejared.com/'
-    }
-    maven {
-        name 'curseforge'
-        url 'https://www.cursemaven.com'
     }
 }
 
@@ -128,12 +139,12 @@ dependencies {
 jar {
     manifest {
         attributes([
-            "Specification-Title": 'extrastorage',
-            "Specification-Vendor": 'extrastorage',
-            "Specification-Version": '1', // We are version 1 of ourselves
+            "Specification-Title": "extrastorage",
+            "Specification-Vendor": "extrastorage",
+            "Specification-Version": "1",
             "Implementation-Title": project.name,
             "Implementation-Version": project.jar.archiveVersion,
-            "Implementation-Vendor" :'extrastorage',
+            "Implementation-Vendor" : "extrastorage",
             "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
         ])
     }

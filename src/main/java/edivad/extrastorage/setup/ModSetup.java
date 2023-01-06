@@ -54,6 +54,13 @@ public class ModSetup {
         if (ModList.get().isLoaded("theoneprobe")) {
             InterModComms.sendTo("theoneprobe", "getTheOneProbe", TOPIntegration::new);
         }
+        if(ModList.get().isLoaded("inventorysorter")) {
+            Registration.CRAFTER_CONTAINER.values().forEach(v -> InterModComms.sendTo("inventorysorter", "containerblacklist", v::getId));
+            Registration.ITEM_STORAGE_CONTAINER.values().forEach(v -> InterModComms.sendTo("inventorysorter", "containerblacklist", v::getId));
+            Registration.FLUID_STORAGE_CONTAINER.values().forEach(v -> InterModComms.sendTo("inventorysorter", "containerblacklist", v::getId));
+            InterModComms.sendTo("inventorysorter", "containerblacklist", Registration.ADVANCED_EXPORTER_CONTAINER::getId);
+            InterModComms.sendTo("inventorysorter", "containerblacklist", Registration.ADVANCED_IMPORTER_CONTAINER::getId);
+        }
     }
 
     private static INetworkNode readAndReturn(CompoundTag tag, NetworkNode node) {

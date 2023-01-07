@@ -117,10 +117,10 @@ dependencies {
         transitive false
     }
     implementation fg.deobf("mcjty.theoneprobe:theoneprobe:${top_version}") {
-        transitive = false
+        transitive false
     }
     implementation fg.deobf("tschipp.carryon:carryon-${minecraft_version}:${co_version}") {
-        transitive = false
+        transitive false
     }
     runtimeOnly fg.deobf("mezz.jei:jei-${minecraft_version}-forge:${jei_version}")
     runtimeOnly fg.deobf("curse.maven:inventory-sorter-240633:4055080")

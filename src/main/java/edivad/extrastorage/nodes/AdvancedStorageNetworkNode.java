@@ -20,14 +20,10 @@ import net.minecraft.world.level.Level;
 
 public class AdvancedStorageNetworkNode extends StorageNetworkNode {
 
-  public static final ResourceLocation BLOCK_256K_ID = new ResourceLocation(ExtraStorage.MODID,
-      "block_256k");
-  public static final ResourceLocation BLOCK_1024K_ID = new ResourceLocation(ExtraStorage.MODID,
-      "block_1024k");
-  public static final ResourceLocation BLOCK_4096K_ID = new ResourceLocation(ExtraStorage.MODID,
-      "block_4096k");
-  public static final ResourceLocation BLOCK_16384K_ID = new ResourceLocation(ExtraStorage.MODID,
-      "block_16384k");
+  public static final ResourceLocation BLOCK_256K_ID = ExtraStorage.rl("block_256k");
+  public static final ResourceLocation BLOCK_1024K_ID = ExtraStorage.rl("block_1024k");
+  public static final ResourceLocation BLOCK_4096K_ID = ExtraStorage.rl("block_4096k");
+  public static final ResourceLocation BLOCK_16384K_ID = ExtraStorage.rl("block_16384k");
 
   private final ItemStorageType type;
   private IStorageDisk<ItemStack> storage;

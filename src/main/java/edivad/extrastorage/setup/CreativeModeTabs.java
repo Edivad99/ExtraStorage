@@ -21,7 +21,7 @@ public class CreativeModeTabs {
   private static final RegistryObject<CreativeModeTab> MAIN_TAB =
       TABS.register("main_tab", () -> CreativeModeTab.builder()
           .withTabsBefore(new ResourceLocation("refinedstorage", "general"))
-          .title(Component.literal("Extra Storage"))
+          .title(Component.literal(ExtraStorage.MODNAME))
           .icon(() -> new ItemStack(ESBlocks.CRAFTER.get(CrafterTier.GOLD).get()))
           .displayItems((params, output) -> {
             for (var tier : CrafterTier.values()) {

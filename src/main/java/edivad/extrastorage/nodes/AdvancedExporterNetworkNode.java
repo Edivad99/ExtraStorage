@@ -35,7 +35,7 @@ import net.minecraftforge.items.ItemHandlerHelper;
 public class AdvancedExporterNetworkNode extends NetworkNode implements IComparable, IType,
     ICoverable {
 
-  public static final ResourceLocation ID = new ResourceLocation(ExtraStorage.MODID, "advanced_exporter");
+  public static final ResourceLocation ID = ExtraStorage.rl("advanced_exporter");
 
   private static final String NBT_COMPARE = "Compare";
   private static final String NBT_TYPE = "Type";

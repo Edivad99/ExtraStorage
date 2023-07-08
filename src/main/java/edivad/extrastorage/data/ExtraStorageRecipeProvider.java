@@ -172,7 +172,7 @@ public class ExtraStorageRecipeProvider extends RecipeProvider {
         .define('I', RSItems.QUARTZ_ENRICHED_IRON.get())
         .define('R', Items.REDSTONE)
         .unlockedBy("has_previous_part", has(previousPart))
-        .save(consumer, new ResourceLocation(ExtraStorage.MODID, "part/" + result.getId().getPath()));
+        .save(consumer, ExtraStorage.rl("part/" + result.getId().getPath()));
   }
 
   private void partRecipe(RegistryObject<Item> result, Item previousPart,
@@ -186,7 +186,7 @@ public class ExtraStorageRecipeProvider extends RecipeProvider {
         .define('I', RSItems.QUARTZ_ENRICHED_IRON.get())
         .define('R', Items.REDSTONE)
         .unlockedBy("has_previous_part", has(previousPart))
-        .save(consumer, new ResourceLocation(ExtraStorage.MODID, "part/" + result.getId().getPath()));
+        .save(consumer, ExtraStorage.rl("part/" + result.getId().getPath()));
   }
 
   private void diskRecipe(RegistryObject<Item> result, TagKey<Item> part,
@@ -200,15 +200,13 @@ public class ExtraStorageRecipeProvider extends RecipeProvider {
         .define('I', RSItems.QUARTZ_ENRICHED_IRON.get())
         .define('R', Items.REDSTONE)
         .unlockedBy("has_part", has(part))
-        .save(consumer,
-            new ResourceLocation(ExtraStorage.MODID, "disk/shaped/" + result.getId().getPath()));
+        .save(consumer, ExtraStorage.rl("disk/shaped/" + result.getId().getPath()));
 
     ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, result.get())
         .requires(RSItems.STORAGE_HOUSING.get())
         .requires(part)
         .unlockedBy("has_part", has(part))
-        .save(consumer,
-            new ResourceLocation(ExtraStorage.MODID, "disk/shapeless/" + result.getId().getPath()));
+        .save(consumer, ExtraStorage.rl("disk/shapeless/" + result.getId().getPath()));
   }
 
   private void storageBlockRecipe(RegistryObject<Item> result, TagKey<Item> part,
@@ -222,7 +220,6 @@ public class ExtraStorageRecipeProvider extends RecipeProvider {
         .define('P', part)
         .define('E', RSItems.QUARTZ_ENRICHED_IRON.get())
         .unlockedBy("has_part", has(part))
-        .save(consumer,
-            new ResourceLocation(ExtraStorage.MODID, "storage_block/" + result.getId().getPath()));
+        .save(consumer, ExtraStorage.rl("storage_block/" + result.getId().getPath()));
   }
 }

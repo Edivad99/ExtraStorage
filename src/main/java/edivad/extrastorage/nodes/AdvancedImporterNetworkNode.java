@@ -35,7 +35,7 @@ import net.minecraftforge.items.IItemHandlerModifiable;
 public class AdvancedImporterNetworkNode extends NetworkNode implements IComparable,
     IWhitelistBlacklist, IType, ICoverable {
 
-  public static final ResourceLocation ID = new ResourceLocation(ExtraStorage.MODID, "advanced_importer");
+  public static final ResourceLocation ID = ExtraStorage.rl("advanced_importer");
 
   private static final String NBT_COMPARE = "Compare";
   private static final String NBT_MODE = "Mode";

@@ -16,7 +16,6 @@ import edivad.extrastorage.nodes.AdvancedImporterNetworkNode;
 import edivad.extrastorage.nodes.AdvancedStorageNetworkNode;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.fml.InterModComms;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod;
@@ -27,7 +26,7 @@ public class ModSetup {
 
   public static void init(final FMLCommonSetupEvent event) {
     for (CrafterTier tier : CrafterTier.values()) {
-      API.instance().getNetworkNodeRegistry().add(new ResourceLocation(ExtraStorage.MODID, tier.getID()),
+      API.instance().getNetworkNodeRegistry().add(ExtraStorage.rl(tier.getID()),
           (tag, world, pos) ->
               readAndReturn(tag, new AdvancedCrafterNetworkNode(world, pos, tier)));
       ESBlockEntities.CRAFTER.get(tier).get().create(BlockPos.ZERO, null).getDataManager()
@@ -35,7 +34,7 @@ public class ModSetup {
     }
     for (ItemStorageType type : ItemStorageType.values()) {
       API.instance().getNetworkNodeRegistry()
-          .add(new ResourceLocation(ExtraStorage.MODID, "block_" + type.getName()),
+          .add(ExtraStorage.rl("block_" + type.getName()),
               (tag, world, pos) ->
                   readAndReturn(tag, new AdvancedStorageNetworkNode(world, pos, type)));
       ESBlockEntities.ITEM_STORAGE.get(type).get().create(BlockPos.ZERO, null).getDataManager()
@@ -43,7 +42,7 @@ public class ModSetup {
     }
     for (FluidStorageType type : FluidStorageType.values()) {
       API.instance().getNetworkNodeRegistry()
-          .add(new ResourceLocation(ExtraStorage.MODID, "block_" + type.getName() + "_fluid"),
+          .add(ExtraStorage.rl("block_" + type.getName() + "_fluid"),
               (tag, world, pos) ->
                   readAndReturn(tag, new AdvancedFluidStorageNetworkNode(world, pos, type)));
       ESBlockEntities.FLUID_STORAGE.get(type).get().create(BlockPos.ZERO, null).getDataManager()

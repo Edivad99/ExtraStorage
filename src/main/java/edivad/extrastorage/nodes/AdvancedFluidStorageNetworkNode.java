@@ -20,14 +20,14 @@ import net.minecraftforge.fluids.FluidStack;
 
 public class AdvancedFluidStorageNetworkNode extends FluidStorageNetworkNode {
 
-  public static final ResourceLocation BLOCK_FLUID_16384K_ID = new ResourceLocation(ExtraStorage.MODID,
-      "block_16384k_fluid");
-  public static final ResourceLocation BLOCK_FLUID_65536K_ID = new ResourceLocation(ExtraStorage.MODID,
-      "block_65536k_fluid");
-  public static final ResourceLocation BLOCK_FLUID_262144K_ID = new ResourceLocation(ExtraStorage.MODID,
-      "block_262144k_fluid");
-  public static final ResourceLocation BLOCK_FLUID_1048576K_ID = new ResourceLocation(ExtraStorage.MODID,
-      "block_1048576k_fluid");
+  public static final ResourceLocation BLOCK_FLUID_16384K_ID =
+      ExtraStorage.rl("block_16384k_fluid");
+  public static final ResourceLocation BLOCK_FLUID_65536K_ID =
+      ExtraStorage.rl("block_65536k_fluid");
+  public static final ResourceLocation BLOCK_FLUID_262144K_ID =
+      ExtraStorage.rl("block_262144k_fluid");
+  public static final ResourceLocation BLOCK_FLUID_1048576K_ID =
+      ExtraStorage.rl("block_1048576k_fluid");
 
   private final FluidStorageType type;
   private IStorageDisk<FluidStack> storage;

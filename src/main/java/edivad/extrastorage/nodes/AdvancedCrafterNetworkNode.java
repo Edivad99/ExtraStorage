@@ -103,7 +103,7 @@ public class AdvancedCrafterNetworkNode extends NetworkNode implements ICrafting
           }
         });
     DEFAULT_NAME = Component.translatable("block." + ExtraStorage.MODID + "." + this.tier.getID());
-    ID = new ResourceLocation(ExtraStorage.MODID, tier.getID());
+    ID = ExtraStorage.rl(tier.getID());
   }
 
   private void invalidate() {

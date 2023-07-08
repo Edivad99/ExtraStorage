@@ -37,7 +37,6 @@
   "item.extrastorage.storagepart_262144k_fluid": "262144k Fluid Storage Part",
   "item.extrastorage.storagepart_4096k": "4096k Storage Part",
   "item.extrastorage.storagepart_65536k_fluid": "65536k Fluid Storage Part",
-  "itemGroup.extrastorage_tab": "Extra Storage",
   "tooltip.extrastorage.baseSpeed": "Base speed: %sx",
   "tooltip.extrastorage.holdShift": "Hold Shift for details",
   "tooltip.extrastorage.slotCrafting": "Slots for patterns: %s",

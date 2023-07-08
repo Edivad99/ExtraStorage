@@ -18,8 +18,6 @@ public class ExtraStorageLanguageProvider extends LanguageProvider {
 
   @Override
   protected void addTranslations() {
-    add("itemGroup." + ExtraStorage.MODID + "_tab", ExtraStorage.MODNAME);
-
     for (ItemStorageType type : ItemStorageType.values()) {
       add(ESItems.ITEM_STORAGE_PART.get(type).get(), type.getName() + " Storage Part");
       add(ESItems.ITEM_DISK.get(type).get(), type.getName() + " Storage Disk");

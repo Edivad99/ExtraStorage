@@ -1,5 +1,6 @@
 {
   "type": "minecraft:crafting_shaped",
+  "category": "misc",
   "key": {
     "a": {
       "item": "minecraft:redstone_torch"
@@ -18,5 +19,6 @@
   ],
   "result": {
     "item": "extrastorage:advanced_exporter"
-  }
+  },
+  "show_notification": true
 }

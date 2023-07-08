@@ -1,18 +1,18 @@
 {
   "parent": "refinedstorage:block/cube_cutout",
   "textures": {
-    "particle": "extrastorage:blocks/crafter/base/side",
-    "east": "extrastorage:blocks/crafter/base/side",
-    "south": "extrastorage:blocks/crafter/base/side",
-    "west": "extrastorage:blocks/crafter/base/side",
-    "up": "extrastorage:blocks/crafter/base/top",
-    "down": "extrastorage:blocks/crafter/base/bottom",
-    "north": "extrastorage:blocks/crafter/base/side",
-    "cutout_down": "extrastorage:blocks/crafter/base/bottom",
-    "cutout_east": "extrastorage:blocks/crafter/base/cutouts/side_disconnected",
-    "cutout_west": "extrastorage:blocks/crafter/base/cutouts/side_disconnected",
-    "cutout_south": "extrastorage:blocks/crafter/base/cutouts/side_disconnected",
-    "cutout_north": "extrastorage:blocks/crafter/base/cutouts/side_disconnected",
-    "cutout_up": "extrastorage:blocks/crafter/base/cutouts/top_disconnected"
+    "particle": "extrastorage:block/crafter/base/side",
+    "east": "extrastorage:block/crafter/base/side",
+    "south": "extrastorage:block/crafter/base/side",
+    "west": "extrastorage:block/crafter/base/side",
+    "up": "extrastorage:block/crafter/base/top",
+    "down": "extrastorage:block/crafter/base/bottom",
+    "north": "extrastorage:block/crafter/base/side",
+    "cutout_down": "extrastorage:block/crafter/base/bottom",
+    "cutout_east": "extrastorage:block/crafter/base/cutouts/side_disconnected",
+    "cutout_west": "extrastorage:block/crafter/base/cutouts/side_disconnected",
+    "cutout_south": "extrastorage:block/crafter/base/cutouts/side_disconnected",
+    "cutout_north": "extrastorage:block/crafter/base/cutouts/side_disconnected",
+    "cutout_up": "extrastorage:block/crafter/base/cutouts/top_disconnected"
   }
 }

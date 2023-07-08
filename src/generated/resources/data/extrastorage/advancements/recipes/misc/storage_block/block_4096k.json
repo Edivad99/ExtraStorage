@@ -1,0 +1,33 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_part": {
+      "conditions": {
+        "items": [
+          {
+            "tag": "refinedstorage:parts/items/4096k"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "extrastorage:storage_block/block_4096k"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_part",
+      "has_the_recipe"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "extrastorage:storage_block/block_4096k"
+    ]
+  },
+  "sends_telemetry_event": false
+}

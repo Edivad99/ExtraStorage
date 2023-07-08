@@ -3,31 +3,31 @@ package edivad.extrastorage.blocks;
 import java.util.Locale;
 
 public enum CrafterTier {
-    IRON, GOLD, DIAMOND, NETHERITE;
+  IRON, GOLD, DIAMOND, NETHERITE;
 
-    private final int craftingSpeed;
-    private final int rowsOfSlots;
+  private final int craftingSpeed;
+  private final int rowsOfSlots;
 
-    CrafterTier() {
-        craftingSpeed = (int) Math.pow(5, this.ordinal());
-        rowsOfSlots = 3 + 2 * (this.ordinal());
-    }
+  CrafterTier() {
+    craftingSpeed = (int) Math.pow(5, this.ordinal());
+    rowsOfSlots = 3 + 2 * (this.ordinal());
+  }
 
-    public int getCraftingSpeed() {
-        return craftingSpeed;
-    }
+  public int getCraftingSpeed() {
+    return craftingSpeed;
+  }
 
-    public int getRowsOfSlots() {
-        return rowsOfSlots;
-    }
+  public int getRowsOfSlots() {
+    return rowsOfSlots;
+  }
 
-    public int getSlots() {
-        return rowsOfSlots * 9;
-    }
+  public int getSlots() {
+    return rowsOfSlots * 9;
+  }
 
-    public String getID() {
-        return this.name().toLowerCase(Locale.ROOT) + "_crafter";
-    }
+  public String getID() {
+    return this.name().toLowerCase(Locale.ROOT) + "_crafter";
+  }
 }
 
 /*

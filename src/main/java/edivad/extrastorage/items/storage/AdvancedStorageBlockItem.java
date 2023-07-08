@@ -1,5 +1,7 @@
 package edivad.extrastorage.items.storage;
 
+import java.util.List;
+import java.util.UUID;
 import com.refinedmods.refinedstorage.RSBlocks;
 import com.refinedmods.refinedstorage.api.storage.disk.IStorageDisk;
 import com.refinedmods.refinedstorage.api.storage.disk.StorageDiskSyncData;
@@ -24,81 +26,89 @@ import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import java.util.List;
-import java.util.UUID;
-
 public class AdvancedStorageBlockItem extends BaseBlockItem {
-    private final ItemStorageType type;
 
-    public AdvancedStorageBlockItem(AdvancedStorageBlock block, Item.Properties builder) {
-        super(block, builder);
-        this.type = block.getType();
-    }
+  private final ItemStorageType type;
 
-    @OnlyIn(Dist.CLIENT)
-    @Override
-    public void appendHoverText(ItemStack stack, Level level, List<Component> tooltip, TooltipFlag flag) {
-        super.appendHoverText(stack, level, tooltip, flag);
+  public AdvancedStorageBlockItem(AdvancedStorageBlock block, Item.Properties builder) {
+    super(block, builder);
+    this.type = block.getType();
+  }
 
-        if (isValid(stack)) {
-            UUID id = getId(stack);
+  @OnlyIn(Dist.CLIENT)
+  @Override
+  public void appendHoverText(ItemStack stack, Level level, List<Component> tooltip,
+      TooltipFlag flag) {
+    super.appendHoverText(stack, level, tooltip, flag);
 
-            API.instance().getStorageDiskSync().sendRequest(id);
+    if (isValid(stack)) {
+      UUID id = getId(stack);
 
-            StorageDiskSyncData data = API.instance().getStorageDiskSync().getData(id);
-            if (data != null) {
-                if (data.getCapacity() == -1)
-                    tooltip.add(Component.translatable("misc.refinedstorage.storage.stored", API.instance().getQuantityFormatter().format(data.getStored())).setStyle(Styles.GRAY));
-                else
-                    tooltip.add(Component.translatable("misc.refinedstorage.storage.stored_capacity", API.instance().getQuantityFormatter().format(data.getStored()), API.instance().getQuantityFormatter().format(data.getCapacity())).setStyle(Styles.GRAY));
-            }
+      API.instance().getStorageDiskSync().sendRequest(id);
 
-            if (flag.isAdvanced())
-                tooltip.add(Component.literal(id.toString()).setStyle(Styles.GRAY));
+      StorageDiskSyncData data = API.instance().getStorageDiskSync().getData(id);
+      if (data != null) {
+        if (data.getCapacity() == -1) {
+          tooltip.add(Component.translatable("misc.refinedstorage.storage.stored",
+                  API.instance().getQuantityFormatter().format(data.getStored()))
+              .setStyle(Styles.GRAY));
+        } else {
+          tooltip.add(Component.translatable("misc.refinedstorage.storage.stored_capacity",
+                  API.instance().getQuantityFormatter().format(data.getStored()),
+                  API.instance().getQuantityFormatter().format(data.getCapacity()))
+              .setStyle(Styles.GRAY));
         }
+      }
+
+      if (flag.isAdvanced()) {
+        tooltip.add(Component.literal(id.toString()).setStyle(Styles.GRAY));
+      }
     }
+  }
 
-    @Override
-    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
-        ItemStack storageStack = player.getItemInHand(hand);
+  @Override
+  public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
+    ItemStack storageStack = player.getItemInHand(hand);
 
-        if (!level.isClientSide && player.isCrouching()) {
-            UUID diskId = null;
-            IStorageDisk disk = null;
+    if (!level.isClientSide && player.isCrouching()) {
+      UUID diskId = null;
+      IStorageDisk disk = null;
 
-            if (isValid(storageStack)) {
-                diskId = getId(storageStack);
-                disk = API.instance().getStorageDiskManager((ServerLevel) level).get(diskId);
-            }
+      if (isValid(storageStack)) {
+        diskId = getId(storageStack);
+        disk = API.instance().getStorageDiskManager((ServerLevel) level).get(diskId);
+      }
 
-            // Newly created storages won't have a tag yet, so allow invalid disks as well.
-            if (disk == null || disk.getStored() == 0) {
-                ItemStack storagePart = new ItemStack(ExpandedStorageDiskItem.getPartById(type));
+      // Newly created storages won't have a tag yet, so allow invalid disks as well.
+      if (disk == null || disk.getStored() == 0) {
+        ItemStack storagePart = new ItemStack(ExpandedStorageDiskItem.getPartById(type));
 
-                if (!player.getInventory().add(storagePart.copy()))
-                    Containers.dropItemStack(level, player.getX(), player.getY(), player.getZ(), storagePart);
-
-                if (disk != null) {
-                    API.instance().getStorageDiskManager((ServerLevel) level).remove(diskId);
-                    API.instance().getStorageDiskManager((ServerLevel) level).markForSaving();
-                }
-
-                return new InteractionResultHolder<>(InteractionResult.SUCCESS, new ItemStack(RSBlocks.MACHINE_CASING.get()));
-            }
+        if (!player.getInventory().add(storagePart.copy())) {
+          Containers.dropItemStack(level, player.getX(), player.getY(), player.getZ(), storagePart);
         }
-        return new InteractionResultHolder<>(InteractionResult.PASS, storageStack);
-    }
 
-    @Override
-    public int getEntityLifespan(ItemStack itemStack, Level level) {
-        return Integer.MAX_VALUE;
-    }
+        if (disk != null) {
+          API.instance().getStorageDiskManager((ServerLevel) level).remove(diskId);
+          API.instance().getStorageDiskManager((ServerLevel) level).markForSaving();
+        }
 
-    private UUID getId(ItemStack disk) {
-        return disk.getTag().getUUID(AdvancedStorageNetworkNode.NBT_ID);
+        return new InteractionResultHolder<>(InteractionResult.SUCCESS,
+            new ItemStack(RSBlocks.MACHINE_CASING.get()));
+      }
     }
+    return new InteractionResultHolder<>(InteractionResult.PASS, storageStack);
+  }
 
-    private boolean isValid(ItemStack disk) {
-        return disk.hasTag() && disk.getTag().hasUUID(AdvancedStorageNetworkNode.NBT_ID);
-    }
+  @Override
+  public int getEntityLifespan(ItemStack itemStack, Level level) {
+    return Integer.MAX_VALUE;
+  }
+
+  private UUID getId(ItemStack disk) {
+    return disk.getTag().getUUID(AdvancedStorageNetworkNode.NBT_ID);
+  }
+
+  private boolean isValid(ItemStack disk) {
+    return disk.hasTag() && disk.getTag().hasUUID(AdvancedStorageNetworkNode.NBT_ID);
+  }
 }

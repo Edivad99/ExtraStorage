@@ -1,44 +1,49 @@
 package edivad.extrastorage.client.screen;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.refinedmods.refinedstorage.screen.BaseScreen;
 import com.refinedmods.refinedstorage.screen.widget.sidebutton.ExactModeSideButton;
 import com.refinedmods.refinedstorage.screen.widget.sidebutton.RedstoneModeSideButton;
 import com.refinedmods.refinedstorage.screen.widget.sidebutton.TypeSideButton;
 import com.refinedmods.refinedstorage.screen.widget.sidebutton.WhitelistBlacklistSideButton;
 import com.refinedmods.refinedstorage.util.RenderUtils;
-import edivad.extrastorage.Main;
+import edivad.extrastorage.ExtraStorage;
 import edivad.extrastorage.blockentity.AdvancedImporterBlockEntity;
 import edivad.extrastorage.container.AdvancedImporterContainerMenu;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 
 public class AdvancedImporterScreen extends BaseScreen<AdvancedImporterContainerMenu> {
-    public AdvancedImporterScreen(AdvancedImporterContainerMenu container, Inventory inventory, Component title) {
-        super(container, 211, 155, inventory, title);
-    }
+  private static final ResourceLocation TEXTURE =
+      ExtraStorage.rl("textures/gui/advanced_exporter_importer.png");
 
-    @Override
-    public void onPostInit(int x, int y) {
-        addSideButton(new RedstoneModeSideButton(this, AdvancedImporterBlockEntity.REDSTONE_MODE));
-        addSideButton(new TypeSideButton(this, AdvancedImporterBlockEntity.TYPE));
-        addSideButton(new WhitelistBlacklistSideButton(this, AdvancedImporterBlockEntity.WHITELIST_BLACKLIST));
-        addSideButton(new ExactModeSideButton(this, AdvancedImporterBlockEntity.COMPARE));
-    }
+  public AdvancedImporterScreen(AdvancedImporterContainerMenu container, Inventory inventory,
+      Component title) {
+    super(container, 211, 155, inventory, title);
+  }
 
-    @Override
-    public void tick(int x, int y) {
-    }
+  @Override
+  public void onPostInit(int x, int y) {
+    addSideButton(new RedstoneModeSideButton(this, AdvancedImporterBlockEntity.REDSTONE_MODE));
+    addSideButton(new TypeSideButton(this, AdvancedImporterBlockEntity.TYPE));
+    addSideButton(
+        new WhitelistBlacklistSideButton(this, AdvancedImporterBlockEntity.WHITELIST_BLACKLIST));
+    addSideButton(new ExactModeSideButton(this, AdvancedImporterBlockEntity.COMPARE));
+  }
 
-    @Override
-    public void renderBackground(PoseStack poseStack, int x, int y, int mouseX, int mouseY) {
-        bindTexture(Main.MODID, "gui/advanced_exporter_importer.png");
-        blit(poseStack, x, y, 0, 0, imageWidth, imageHeight);
-    }
+  @Override
+  public void tick(int x, int y) {
+  }
 
-    @Override
-    public void renderForeground(PoseStack poseStack, int i, int i1) {
-        renderString(poseStack, 7, 7, RenderUtils.shorten(title.getString(), 26));
-        renderString(poseStack, 7, 60, Component.translatable("container.inventory").getString());
-    }
+  @Override
+  public void renderBackground(GuiGraphics guiGraphics, int x, int y, int mouseX, int mouseY) {
+    guiGraphics.blit(TEXTURE, x, y, 0, 0, imageWidth, imageHeight);
+  }
+
+  @Override
+  public void renderForeground(GuiGraphics guiGraphics, int i, int i1) {
+    renderString(guiGraphics, 7, 7, RenderUtils.shorten(title.getString(), 26));
+    renderString(guiGraphics, 7, 60, Component.translatable("container.inventory").getString());
+  }
 }

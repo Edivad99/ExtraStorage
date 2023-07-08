@@ -1,24 +1,24 @@
 package edivad.extrastorage.items.storage.fluid;
 
 public enum FluidStorageType {
-    TIER_5(16384),
-    TIER_6(65536),
-    TIER_7(262144),
-    TIER_8(1048576);
+  TIER_5(16384),
+  TIER_6(65536),
+  TIER_7(262144),
+  TIER_8(1048576);
 
-    private final int capacity;
-    private final String name;
+  private final int capacity;
+  private final String name;
 
-    FluidStorageType(int capacity) {
-        this.name = capacity + "k";
-        this.capacity = capacity * 1000;
-    }
+  FluidStorageType(int capacity) {
+    this.name = capacity + "k";
+    this.capacity = capacity * 1000;
+  }
 
-    public String getName() {
-        return this.name;
-    }
+  public String getName() {
+    return this.name;
+  }
 
-    public int getCapacity() {
-        return this.capacity;
-    }
+  public int getCapacity() {
+    return this.capacity;
+  }
 }

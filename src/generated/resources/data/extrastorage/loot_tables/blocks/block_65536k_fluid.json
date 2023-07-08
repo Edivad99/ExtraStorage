@@ -21,5 +21,6 @@
       ],
       "rolls": 1.0
     }
-  ]
+  ],
+  "random_sequence": "extrastorage:blocks/block_65536k_fluid"
 }

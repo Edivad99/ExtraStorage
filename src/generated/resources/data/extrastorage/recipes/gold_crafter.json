@@ -1,5 +1,6 @@
 {
   "type": "minecraft:crafting_shaped",
+  "category": "misc",
   "key": {
     "a": {
       "tag": "forge:storage_blocks/gold"
@@ -21,5 +22,6 @@
   ],
   "result": {
     "item": "extrastorage:gold_crafter"
-  }
+  },
+  "show_notification": true
 }

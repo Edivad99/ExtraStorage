@@ -18,7 +18,7 @@ import com.refinedmods.refinedstorage.inventory.listener.NetworkNodeInventoryLis
 import com.refinedmods.refinedstorage.item.UpgradeItem;
 import com.refinedmods.refinedstorage.util.LevelUtils;
 import com.refinedmods.refinedstorage.util.StackUtils;
-import edivad.extrastorage.Main;
+import edivad.extrastorage.ExtraStorage;
 import edivad.extrastorage.blockentity.AdvancedImporterBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -32,208 +32,219 @@ import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
 
-public class AdvancedImporterNetworkNode extends NetworkNode implements IComparable, IWhitelistBlacklist, IType, ICoverable {
-    public static final ResourceLocation ID = new ResourceLocation(Main.MODID, "advanced_importer");
+public class AdvancedImporterNetworkNode extends NetworkNode implements IComparable,
+    IWhitelistBlacklist, IType, ICoverable {
 
-    private static final String NBT_COMPARE = "Compare";
-    private static final String NBT_MODE = "Mode";
-    private static final String NBT_TYPE = "Type";
-    private static final String NBT_FLUID_FILTERS = "FluidFilters";
+  public static final ResourceLocation ID = new ResourceLocation(ExtraStorage.MODID, "advanced_importer");
 
-    private final BaseItemHandler itemFilters = new BaseItemHandler(18).addListener(new NetworkNodeInventoryListener(this));
-    private final FluidInventory fluidFilters = new FluidInventory(18).addListener(new NetworkNodeFluidInventoryListener(this));
-    private final CoverManager coverManager;
+  private static final String NBT_COMPARE = "Compare";
+  private static final String NBT_MODE = "Mode";
+  private static final String NBT_TYPE = "Type";
+  private static final String NBT_FLUID_FILTERS = "FluidFilters";
 
-    private final UpgradeItemHandler upgrades = (UpgradeItemHandler)
-            new UpgradeItemHandler(4, UpgradeItem.Type.SPEED, UpgradeItem.Type.STACK)
-            .addListener(new NetworkNodeInventoryListener(this));
+  private final BaseItemHandler itemFilters = new BaseItemHandler(18).addListener(
+      new NetworkNodeInventoryListener(this));
+  private final FluidInventory fluidFilters = new FluidInventory(18).addListener(
+      new NetworkNodeFluidInventoryListener(this));
+  private final CoverManager coverManager;
 
-    private int compare = IComparer.COMPARE_NBT;
-    private int mode = IWhitelistBlacklist.BLACKLIST;
-    private int type = IType.ITEMS;
+  private final UpgradeItemHandler upgrades = (UpgradeItemHandler)
+      new UpgradeItemHandler(4, UpgradeItem.Type.SPEED, UpgradeItem.Type.STACK)
+          .addListener(new NetworkNodeInventoryListener(this));
 
-    private int currentSlot;
+  private int compare = IComparer.COMPARE_NBT;
+  private int mode = IWhitelistBlacklist.BLACKLIST;
+  private int type = IType.ITEMS;
 
-    public AdvancedImporterNetworkNode(Level level, BlockPos pos) {
-        super(level, pos);
-        this.coverManager = new CoverManager(this);
+  private int currentSlot;
+
+  public AdvancedImporterNetworkNode(Level level, BlockPos pos) {
+    super(level, pos);
+    this.coverManager = new CoverManager(this);
+  }
+
+  @Override
+  public int getEnergyUsage() {
+    return 4 * (RS.SERVER_CONFIG.getImporter().getUsage() + upgrades.getEnergyUsage());
+  }
+
+  @Override
+  public void update() {
+    super.update();
+
+    if (!canUpdate() || !level.isLoaded(pos)) {
+      return;
     }
 
-    @Override
-    public int getEnergyUsage() {
-        return 4 * (RS.SERVER_CONFIG.getImporter().getUsage() + upgrades.getEnergyUsage());
-    }
+    if (type == IType.ITEMS) {
+      BlockEntity facing = getFacingBlockEntity();
+      IItemHandler handler = LevelUtils.getItemHandler(facing, getDirection().getOpposite());
 
-    @Override
-    public void update() {
-        super.update();
+      if (facing instanceof DiskDriveBlockEntity || handler == null) {
+        return;
+      }
 
-        if (!canUpdate() || !level.isLoaded(pos)) {
-            return;
+      if (currentSlot >= handler.getSlots()) {
+        currentSlot = 0;
+      }
+
+      if (handler.getSlots() > 0) {
+        while (currentSlot + 1 < handler.getSlots() && handler.getStackInSlot(currentSlot)
+            .isEmpty()) {
+          currentSlot++;
         }
 
-        if (type == IType.ITEMS) {
-            BlockEntity facing = getFacingBlockEntity();
-            IItemHandler handler = LevelUtils.getItemHandler(facing, getDirection().getOpposite());
+        ItemStack stack = handler.getStackInSlot(currentSlot);
 
-            if (facing instanceof DiskDriveBlockEntity || handler == null) {
-                return;
+        if (!IWhitelistBlacklist.acceptsItem(itemFilters, mode, compare, stack)) {
+          currentSlot++;
+        } else if (ticks % upgrades.getSpeed() == 0) {
+          ItemStack result = handler.extractItem(currentSlot, upgrades.getStackInteractCount(),
+              true);
+
+          if (!result.isEmpty() && network.insertItem(result, result.getCount(), Action.SIMULATE)
+              .isEmpty()) {
+            result = handler.extractItem(currentSlot, upgrades.getStackInteractCount(), false);
+
+            network.insertItemTracked(result, result.getCount());
+          } else {
+            currentSlot++;
+          }
+        }
+      }
+    } else if (type == IType.FLUIDS && ticks % upgrades.getSpeed() == 0) {
+      IFluidHandler handler = LevelUtils.getFluidHandler(getFacingBlockEntity(),
+          getDirection().getOpposite());
+
+      if (handler != null) {
+        FluidStack stack = handler.drain(FluidType.BUCKET_VOLUME,
+            IFluidHandler.FluidAction.SIMULATE);
+
+        if (!stack.isEmpty() &&
+            IWhitelistBlacklist.acceptsFluid(fluidFilters, mode, compare, stack) &&
+            network.insertFluid(stack, stack.getAmount(), Action.SIMULATE).isEmpty()) {
+          FluidStack toDrain = handler.drain(
+              FluidType.BUCKET_VOLUME * upgrades.getStackInteractCount(),
+              IFluidHandler.FluidAction.SIMULATE);
+
+          if (!toDrain.isEmpty()) {
+            FluidStack remainder = network.insertFluidTracked(toDrain, toDrain.getAmount());
+            if (!remainder.isEmpty()) {
+              toDrain.shrink(remainder.getAmount());
             }
 
-            if (currentSlot >= handler.getSlots()) {
-                currentSlot = 0;
-            }
-
-            if (handler.getSlots() > 0) {
-                while (currentSlot + 1 < handler.getSlots() && handler.getStackInSlot(currentSlot).isEmpty()) {
-                    currentSlot++;
-                }
-
-                ItemStack stack = handler.getStackInSlot(currentSlot);
-
-                if (!IWhitelistBlacklist.acceptsItem(itemFilters, mode, compare, stack)) {
-                    currentSlot++;
-                } else if (ticks % upgrades.getSpeed() == 0) {
-                    ItemStack result = handler.extractItem(currentSlot, upgrades.getStackInteractCount(), true);
-
-                    if (!result.isEmpty() && network.insertItem(result, result.getCount(), Action.SIMULATE).isEmpty()) {
-                        result = handler.extractItem(currentSlot, upgrades.getStackInteractCount(), false);
-
-                        network.insertItemTracked(result, result.getCount());
-                    } else {
-                        currentSlot++;
-                    }
-                }
-            }
-        } else if (type == IType.FLUIDS && ticks % upgrades.getSpeed() == 0) {
-            IFluidHandler handler = LevelUtils.getFluidHandler(getFacingBlockEntity(), getDirection().getOpposite());
-
-            if (handler != null) {
-                FluidStack stack = handler.drain(FluidType.BUCKET_VOLUME, IFluidHandler.FluidAction.SIMULATE);
-
-                if (!stack.isEmpty() &&
-                        IWhitelistBlacklist.acceptsFluid(fluidFilters, mode, compare, stack) &&
-                        network.insertFluid(stack, stack.getAmount(), Action.SIMULATE).isEmpty()) {
-                    FluidStack toDrain = handler.drain(FluidType.BUCKET_VOLUME * upgrades.getStackInteractCount(), IFluidHandler.FluidAction.SIMULATE);
-
-                    if (!toDrain.isEmpty()) {
-                        FluidStack remainder = network.insertFluidTracked(toDrain, toDrain.getAmount());
-                        if (!remainder.isEmpty()) {
-                            toDrain.shrink(remainder.getAmount());
-                        }
-
-                        handler.drain(toDrain, IFluidHandler.FluidAction.EXECUTE);
-                    }
-                }
-            }
+            handler.drain(toDrain, IFluidHandler.FluidAction.EXECUTE);
+          }
         }
+      }
     }
+  }
 
-    @Override
-    public int getCompare() {
-        return compare;
-    }
+  @Override
+  public int getCompare() {
+    return compare;
+  }
 
-    @Override
-    public void setCompare(int compare) {
-        this.compare = compare;
-        markDirty();
-    }
+  @Override
+  public void setCompare(int compare) {
+    this.compare = compare;
+    markDirty();
+  }
 
-    @Override
-    public int getWhitelistBlacklistMode() {
-        return mode;
-    }
+  @Override
+  public int getWhitelistBlacklistMode() {
+    return mode;
+  }
 
-    @Override
-    public void setWhitelistBlacklistMode(int mode) {
-        this.mode = mode;
-        markDirty();
-    }
+  @Override
+  public void setWhitelistBlacklistMode(int mode) {
+    this.mode = mode;
+    markDirty();
+  }
 
-    @Override
-    public ResourceLocation getId() {
-        return ID;
-    }
+  @Override
+  public ResourceLocation getId() {
+    return ID;
+  }
 
-    @Override
-    public CompoundTag write(CompoundTag tag) {
-        super.write(tag);
-        tag.put(CoverManager.NBT_COVER_MANAGER, this.coverManager.writeToNbt());
-        StackUtils.writeItems(upgrades, 1, tag);
-        return tag;
-    }
+  @Override
+  public CompoundTag write(CompoundTag tag) {
+    super.write(tag);
+    tag.put(CoverManager.NBT_COVER_MANAGER, this.coverManager.writeToNbt());
+    StackUtils.writeItems(upgrades, 1, tag);
+    return tag;
+  }
 
-    @Override
-    public CompoundTag writeConfiguration(CompoundTag tag) {
-        super.writeConfiguration(tag);
-        tag.putInt(NBT_COMPARE, compare);
-        tag.putInt(NBT_MODE, mode);
-        tag.putInt(NBT_TYPE, type);
-        StackUtils.writeItems(itemFilters, 0, tag);
-        tag.put(NBT_FLUID_FILTERS, fluidFilters.writeToNbt());
-        return tag;
-    }
+  @Override
+  public CompoundTag writeConfiguration(CompoundTag tag) {
+    super.writeConfiguration(tag);
+    tag.putInt(NBT_COMPARE, compare);
+    tag.putInt(NBT_MODE, mode);
+    tag.putInt(NBT_TYPE, type);
+    StackUtils.writeItems(itemFilters, 0, tag);
+    tag.put(NBT_FLUID_FILTERS, fluidFilters.writeToNbt());
+    return tag;
+  }
 
-    @Override
-    public void read(CompoundTag tag) {
-        super.read(tag);
-        if (tag.contains(CoverManager.NBT_COVER_MANAGER)) {
-            this.coverManager.readFromNbt(tag.getCompound(CoverManager.NBT_COVER_MANAGER));
-        }
-        StackUtils.readItems(upgrades, 1, tag);
+  @Override
+  public void read(CompoundTag tag) {
+    super.read(tag);
+    if (tag.contains(CoverManager.NBT_COVER_MANAGER)) {
+      this.coverManager.readFromNbt(tag.getCompound(CoverManager.NBT_COVER_MANAGER));
     }
+    StackUtils.readItems(upgrades, 1, tag);
+  }
 
-    @Override
-    public void readConfiguration(CompoundTag tag) {
-        super.readConfiguration(tag);
-        if (tag.contains(NBT_COMPARE)) {
-            compare = tag.getInt(NBT_COMPARE);
-        }
-        if (tag.contains(NBT_MODE)) {
-            mode = tag.getInt(NBT_MODE);
-        }
-        if (tag.contains(NBT_TYPE)) {
-            type = tag.getInt(NBT_TYPE);
-        }
-        StackUtils.readItems(itemFilters, 0, tag);
-        if (tag.contains(NBT_FLUID_FILTERS)) {
-            fluidFilters.readFromNbt(tag.getCompound(NBT_FLUID_FILTERS));
-        }
+  @Override
+  public void readConfiguration(CompoundTag tag) {
+    super.readConfiguration(tag);
+    if (tag.contains(NBT_COMPARE)) {
+      compare = tag.getInt(NBT_COMPARE);
     }
+    if (tag.contains(NBT_MODE)) {
+      mode = tag.getInt(NBT_MODE);
+    }
+    if (tag.contains(NBT_TYPE)) {
+      type = tag.getInt(NBT_TYPE);
+    }
+    StackUtils.readItems(itemFilters, 0, tag);
+    if (tag.contains(NBT_FLUID_FILTERS)) {
+      fluidFilters.readFromNbt(tag.getCompound(NBT_FLUID_FILTERS));
+    }
+  }
 
-    public UpgradeItemHandler getUpgrades() {
-        return upgrades;
-    }
+  public UpgradeItemHandler getUpgrades() {
+    return upgrades;
+  }
 
-    @Override
-    public IItemHandler getDrops() {
-        return upgrades;
-    }
+  @Override
+  public IItemHandler getDrops() {
+    return upgrades;
+  }
 
-    @Override
-    public int getType() {
-        return level.isClientSide ? AdvancedImporterBlockEntity.TYPE.getValue() : type;
-    }
+  @Override
+  public int getType() {
+    return level.isClientSide ? AdvancedImporterBlockEntity.TYPE.getValue() : type;
+  }
 
-    @Override
-    public void setType(int type) {
-        this.type = type;
-        markDirty();
-    }
+  @Override
+  public void setType(int type) {
+    this.type = type;
+    markDirty();
+  }
 
-    @Override
-    public IItemHandlerModifiable getItemFilters() {
-        return itemFilters;
-    }
+  @Override
+  public IItemHandlerModifiable getItemFilters() {
+    return itemFilters;
+  }
 
-    @Override
-    public FluidInventory getFluidFilters() {
-        return fluidFilters;
-    }
+  @Override
+  public FluidInventory getFluidFilters() {
+    return fluidFilters;
+  }
 
-    @Override
-    public CoverManager getCoverManager() {
-        return coverManager;
-    }
+  @Override
+  public CoverManager getCoverManager() {
+    return coverManager;
+  }
 }

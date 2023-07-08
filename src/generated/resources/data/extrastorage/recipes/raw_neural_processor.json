@@ -1,5 +1,6 @@
 {
   "type": "minecraft:crafting_shaped",
+  "category": "misc",
   "key": {
     "a": {
       "item": "minecraft:crafting_table"
@@ -27,5 +28,6 @@
   ],
   "result": {
     "item": "extrastorage:raw_neural_processor"
-  }
+  },
+  "show_notification": true
 }

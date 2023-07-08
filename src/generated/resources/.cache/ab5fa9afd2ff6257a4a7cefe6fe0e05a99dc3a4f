@@ -1,0 +1,12 @@
+// 1.20.1	2023-07-05T22:54:24.75507	Tags for minecraft:block mod id extrastorage
+fe3f7ee23fde3289fca6c05f56727be63179bad1 data/refinedstorage/tags/blocks/storage_blocks.json
+c518c52794139050a0c6d9e42029cce6b3c05c59 data/refinedstorage/tags/blocks/storage_blocks/fluids.json
+787085a5e51e360dbaf862b5799d3be6a50f05fd data/refinedstorage/tags/blocks/storage_blocks/fluids/1048576k.json
+862ef6a9b35b958fe99d22e67358983c27c38d27 data/refinedstorage/tags/blocks/storage_blocks/fluids/16384k.json
+16d2861dfb2a162c54e1fece8b69ea880438f7c9 data/refinedstorage/tags/blocks/storage_blocks/fluids/262144k.json
+89bfc08acb522d0a508e77e525b0555ef0fe4714 data/refinedstorage/tags/blocks/storage_blocks/fluids/65536k.json
+082303538d87d18379ddc7dd861da1ae55efc5a0 data/refinedstorage/tags/blocks/storage_blocks/items.json
+4a88860ef3b5f297c09d7a8a6fba620b7e3444b5 data/refinedstorage/tags/blocks/storage_blocks/items/1024k.json
+a223b783f4bf4a78d096c620d1d76a402bc11259 data/refinedstorage/tags/blocks/storage_blocks/items/16384k.json
+77ea9ea2f7b0ea5efba389cb585026962fffa6dd data/refinedstorage/tags/blocks/storage_blocks/items/256k.json
+c13e87e32446fb1689f158a25b616546d4feb098 data/refinedstorage/tags/blocks/storage_blocks/items/4096k.json

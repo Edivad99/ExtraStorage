@@ -1,5 +1,5 @@
 modLoader="javafml"
-loaderVersion="[43,)"
+loaderVersion="[47,)"
 license="GNU AGPLv3"
 
 [[mods]]
@@ -15,13 +15,13 @@ description="Extra Storage adds new blocks to Refined Storage"
 [[dependencies.extrastorage]]
     modId="forge"
     mandatory=true
-    versionRange="[43.1.1,)"
+    versionRange="[47,)"
     ordering="NONE"
     side="BOTH"
 [[dependencies.extrastorage]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.19.2,1.20.0)"
+    versionRange="[1.20.1,1.21.0)"
     ordering="NONE"
     side="BOTH"
 [[dependencies.extrastorage]]
@@ -33,6 +33,6 @@ description="Extra Storage adds new blocks to Refined Storage"
 [[dependencies.extrastorage]]
     modId="edivadlib"
     mandatory=true
-    versionRange="[1.2.0,)"
+    versionRange="[2.0.0,)"
     ordering="NONE"
     side="BOTH"

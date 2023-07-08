@@ -2,7 +2,7 @@
     "parent": "block/block",
     "textures": {
         "cable": "refinedstorage:block/cable",
-        "border": "extrastorage:blocks/cable_part_border"
+        "border": "extrastorage:block/cable_part_border"
     },
     "elements": [
         {

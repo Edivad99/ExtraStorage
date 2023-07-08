@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "extrastorage:items/neural_processor"
+    "layer0": "extrastorage:item/neural_processor"
   }
 }

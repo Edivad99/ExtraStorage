@@ -1,15 +1,15 @@
 plugins {
     id 'eclipse'
+    id 'idea'
     id 'maven-publish'
-    id 'net.minecraftforge.gradle' version '5.1.+'
+    id 'net.minecraftforge.gradle' version '[6.0,6.2)'
     id 'org.parchmentmc.librarian.forgegradle' version '1.+'
 }
 
 version = "${mod_version}"
 group = 'edivad.extrastorage'
-archivesBaseName = "ExtraStorage-${minecraft_version}"
+base.archivesName = "ExtraStorage-${minecraft_version}"
 
-// Mojang ships Java 17 to end users in 1.18+, so your mod should target Java 17.
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 println('Java: ' + System.getProperty('java.version') + ' JVM: ' + System.getProperty('java.vm.version') + '(' + System.getProperty('java.vendor') + ') Arch: ' + System.getProperty('os.arch'))
 
@@ -21,60 +21,37 @@ minecraft {
     } else {
         mappings channel: 'official', version: "${minecraft_version}"
     }
-    // makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
+
+    copyIdeResources = true
 
     accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
 
     runs {
-        client {
-            workingDirectory project.file('run/client')
 
-            // Recommended logging data for a userdev environment
-            //property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
+        configureEach {
             property 'forge.logging.markers', 'REGISTRIES'
 
-            // Recommended logging level for the console
             property 'forge.logging.console.level', 'debug'
 
             mods {
-                extrastorage {
+                "${mod_id}" {
                     source sourceSets.main
                 }
             }
         }
 
+        client {
+            workingDirectory project.file('run/client')
+        }
+
         server {
             workingDirectory project.file('run/server')
-
-            // Recommended logging data for a userdev environment
-            property 'forge.logging.markers', 'REGISTRIES'
-
-            // Recommended logging level for the console
-            property 'forge.logging.console.level', 'debug'
-
-            mods {
-                extrastorage {
-                    source sourceSets.main
-                }
-            }
         }
 
         data {
             workingDirectory project.file('run/data')
 
-            // Recommended logging data for a userdev environment
-            property 'forge.logging.markers', 'REGISTRIES'
-
-            // Recommended logging level for the console
-            property 'forge.logging.console.level', 'debug'
-
             args '--mod', 'extrastorage', '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
-
-            mods {
-                extrastorage {
-                    source sourceSets.main
-                }
-            }
         }
     }
 }
@@ -89,7 +66,7 @@ repositories {
     }
     maven {
         name 'JEI'
-        url 'https://dvs1.progwml6.com/files/maven'
+        url 'https://maven.blamejared.com/'
     }
     maven {
         name 'RS maven'
@@ -120,28 +97,28 @@ dependencies {
     implementation fg.deobf("mcjty.theoneprobe:theoneprobe:${top_version}") {
         transitive false
     }
-    implementation fg.deobf("tschipp.carryon:carryon-1.19.2:${co_version}") {
+    /*implementation fg.deobf("tschipp.carryon:carryon-1.19.2:${co_version}") {
         transitive false
-    }
+    }*/
     runtimeOnly fg.deobf("mezz.jei:jei-${minecraft_version}-forge:${jei_version}")
     //implementation fg.deobf("curse.maven:mekanism-268560:4041164")
 }
 
-// Example for how to get properties into the manifest for reading by the runtime..
-jar {
+tasks.named('jar', Jar).configure {
     manifest {
         attributes([
-            "Specification-Title": "extrastorage",
-            "Specification-Vendor": "extrastorage",
-            "Specification-Version": "1",
-            "Implementation-Title": project.name,
-            "Implementation-Version": project.jar.archiveVersion,
-            "Implementation-Vendor" : "extrastorage",
-            "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
+            'Specification-Title'       : 'extrastorage',
+            'Specification-Vendor'      : 'edivad',
+            'Specification-Version'     : '1',
+            'Implementation-Title'      : project.name,
+            'Implementation-Version'    : project.jar.archiveVersion,
+            'Implementation-Vendor'     : 'edivad',
+            'Implementation-Timestamp'  : new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
         ])
     }
+    finalizedBy 'reobfJar'
 }
-jar.finalizedBy('reobfJar')
+
 tasks.withType(JavaCompile).configureEach {
-    options.encoding = 'UTF-8' // Use the UTF-8 charset for Java compilation
+    options.encoding = 'UTF-8'
 }

@@ -4,13 +4,13 @@ license="GNU AGPLv3"
 
 [[mods]]
 modId="extrastorage"
-version="${file.jarVersion}"
-displayName="Extra Storage"
-updateJSONURL="https://raw.githubusercontent.com/Edivad99/mod-version-controll/master/extrastorage_update.json"
+version="${mod_version}"
+displayName="ExtraStorage"
+updateJSONURL = "https://api.modrinth.com/updates/extrastorage/forge_updates.json"
 issueTrackerURL="https://github.com/Edivad99/ExtraStorage/issues"
-displayURL="https://www.curseforge.com/minecraft/mc-mods/extrastorage"
-authors="edivad"
-description="Extra Storage adds new blocks to Refined Storage"
+modUrl="https://www.curseforge.com/minecraft/mc-mods/extrastorage"
+authors="Edivad99"
+description="ExtraStorage adds new blocks to Refined Storage"
 
 [[dependencies.extrastorage]]
     modId="forge"
@@ -27,12 +27,12 @@ description="Extra Storage adds new blocks to Refined Storage"
 [[dependencies.extrastorage]]
     modId="refinedstorage"
     mandatory=true
-    versionRange="[1.11.4,)"
-    ordering="AFTER"
+    versionRange="[1.12.3,)"
+    ordering="NONE"
     side="BOTH"
 [[dependencies.extrastorage]]
     modId="edivadlib"
     mandatory=true
-    versionRange="[2.0.0,)"
+    versionRange="[2.0.1,)"
     ordering="NONE"
     side="BOTH"

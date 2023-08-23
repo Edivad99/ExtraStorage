@@ -43,13 +43,14 @@ public class AdvancedExporterNetworkNode extends NetworkNode implements ICompara
 
   private static final int SLOTS = 18;
 
-  private final BaseItemHandler itemFilters = new BaseItemHandler(SLOTS).addListener(
-      new NetworkNodeInventoryListener(this));
-  private final FluidInventory fluidFilters = new FluidInventory(SLOTS).addListener(
-      new NetworkNodeFluidInventoryListener(this));
+  private final BaseItemHandler itemFilters = new BaseItemHandler(SLOTS)
+      .addListener(new NetworkNodeInventoryListener(this));
+  private final FluidInventory fluidFilters = new FluidInventory(SLOTS)
+      .addListener(new NetworkNodeFluidInventoryListener(this));
   private final CoverManager coverManager;
   private int compare = IComparer.COMPARE_NBT;
-  private int type = IType.ITEMS;  private final UpgradeItemHandler upgrades = (UpgradeItemHandler)
+  private int type = IType.ITEMS;
+  private int filterSlot;  private final UpgradeItemHandler upgrades = (UpgradeItemHandler)
       new UpgradeItemHandler(4, UpgradeItem.Type.SPEED, UpgradeItem.Type.CRAFTING,
           UpgradeItem.Type.STACK, UpgradeItem.Type.REGULATOR)
           .addListener(new NetworkNodeInventoryListener(this))
@@ -80,7 +81,7 @@ public class AdvancedExporterNetworkNode extends NetworkNode implements ICompara
               }
             }
           });
-  private int filterSlot;
+
   public AdvancedExporterNetworkNode(Level level, BlockPos pos) {
     super(level, pos);
     this.coverManager = new CoverManager(this);
@@ -336,6 +337,4 @@ public class AdvancedExporterNetworkNode extends NetworkNode implements ICompara
   public CoverManager getCoverManager() {
     return coverManager;
   }
-
-
 }

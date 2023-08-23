@@ -17,7 +17,7 @@ public class ExtraStorageItemTagsProvider extends ItemTagsProvider {
       CompletableFuture<HolderLookup.Provider> lookupProvider,
       CompletableFuture<TagLookup<Block>> blockTagProvider,
       ExistingFileHelper existingFileHelper) {
-    super(packOutput, lookupProvider, blockTagProvider, ExtraStorage.MODID, existingFileHelper);
+    super(packOutput, lookupProvider, blockTagProvider, ExtraStorage.ID, existingFileHelper);
   }
 
   @Override

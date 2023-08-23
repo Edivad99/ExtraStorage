@@ -77,7 +77,7 @@ public class AdvancedStorageNetworkNode extends StorageNetworkNode {
 
   @Override
   public Component getTitle() {
-    return Component.translatable("block." + ExtraStorage.MODID + ".block_" + type.getName());
+    return Component.translatable("block." + ExtraStorage.ID + ".block_" + type.getName());
   }
 
   @Override

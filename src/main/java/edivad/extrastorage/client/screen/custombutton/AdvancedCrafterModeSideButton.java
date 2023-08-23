@@ -17,7 +17,8 @@ public class AdvancedCrafterModeSideButton extends SideButton {
 
   @Override
   protected void renderButtonIcon(GuiGraphics guiGraphics, int x, int y) {
-    guiGraphics.blit(BaseScreen.ICONS_TEXTURE, x, y, AdvancedCrafterBlockEntity.MODE.getValue() * 16, 0, 16, 16);
+    guiGraphics.blit(BaseScreen.ICONS_TEXTURE, x, y,
+        AdvancedCrafterBlockEntity.MODE.getValue() * 16, 0, 16, 16);
   }
 
   public void onPress() {

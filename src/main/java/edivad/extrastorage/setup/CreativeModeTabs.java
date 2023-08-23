@@ -16,7 +16,7 @@ import net.minecraftforge.registries.RegistryObject;
 public class CreativeModeTabs {
 
   private static final DeferredRegister<CreativeModeTab> TABS =
-      DeferredRegister.create(Registries.CREATIVE_MODE_TAB, ExtraStorage.MODID);
+      DeferredRegister.create(Registries.CREATIVE_MODE_TAB, ExtraStorage.ID);
 
   private static final RegistryObject<CreativeModeTab> MAIN_TAB =
       TABS.register("main_tab", () -> CreativeModeTab.builder()

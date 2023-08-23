@@ -19,12 +19,11 @@ import net.minecraftforge.registries.RegistryObject;
 
 public class ESBlocks {
 
-  private static final DeferredRegister<Block> BLOCKS =
-      DeferredRegister.create(ForgeRegistries.BLOCKS, ExtraStorage.MODID);
-
   public static final Map<ItemStorageType, RegistryObject<AdvancedStorageBlock>> ITEM_STORAGE = new HashMap<>();
   public static final Map<FluidStorageType, RegistryObject<AdvancedFluidStorageBlock>> FLUID_STORAGE = new HashMap<>();
   public static final Map<CrafterTier, RegistryObject<AdvancedCrafterBlock>> CRAFTER = new HashMap<>();
+  private static final DeferredRegister<Block> BLOCKS =
+      DeferredRegister.create(ForgeRegistries.BLOCKS, ExtraStorage.ID);
   public static final RegistryObject<AdvancedExporterBlock> ADVANCED_EXPORTER =
       BLOCKS.register("advanced_exporter", AdvancedExporterBlock::new);
   public static final RegistryObject<AdvancedImporterBlock> ADVANCED_IMPORTER =

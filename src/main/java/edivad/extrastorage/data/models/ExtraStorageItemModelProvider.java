@@ -17,7 +17,7 @@ public class ExtraStorageItemModelProvider extends ItemModelProvider {
 
   public ExtraStorageItemModelProvider(PackOutput packOutput,
       ExistingFileHelper existingFileHelper) {
-    super(packOutput, ExtraStorage.MODID, existingFileHelper);
+    super(packOutput, ExtraStorage.ID, existingFileHelper);
   }
 
   @Override

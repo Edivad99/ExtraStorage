@@ -25,15 +25,11 @@ import net.minecraftforge.registries.RegistryObject;
 
 public class ESContainer {
 
-  private static final DeferredRegister<MenuType<?>> CONTAINERS =
-      DeferredRegister.create(ForgeRegistries.MENU_TYPES, ExtraStorage.MODID);
-
   public static final Map<ItemStorageType, RegistryObject<MenuType<AdvancedStorageBlockContainerMenu>>> ITEM_STORAGE = new HashMap<>();
   public static final Map<FluidStorageType, RegistryObject<MenuType<AdvancedFluidStorageBlockContainerMenu>>> FLUID_STORAGE = new HashMap<>();
-
   public static final Map<CrafterTier, RegistryObject<MenuType<AdvancedCrafterContainerMenu>>> CRAFTER = new HashMap<>();
-
-
+  private static final DeferredRegister<MenuType<?>> CONTAINERS =
+      DeferredRegister.create(ForgeRegistries.MENU_TYPES, ExtraStorage.ID);
   public static final RegistryObject<MenuType<AdvancedExporterContainerMenu>> ADVANCED_EXPORTER =
       CONTAINERS.register("advanced_exporter",
           () -> IForgeMenuType.create((windowId, inv, data) -> {

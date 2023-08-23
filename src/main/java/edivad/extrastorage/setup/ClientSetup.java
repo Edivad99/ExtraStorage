@@ -18,20 +18,15 @@ import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.client.event.ModelEvent;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 
 public class ClientSetup {
 
   private static final BakedModelOverrideRegistry BAKED_MODEL_OVERRIDE_REGISTRY = new BakedModelOverrideRegistry();
 
-  private ClientSetup() {
-  }
-
-  @SubscribeEvent
   public static void init(FMLClientSetupEvent event) {
     //Version checker
-    MinecraftForge.EVENT_BUS.register(new UpdateChecker(ExtraStorage.MODID));
+    MinecraftForge.EVENT_BUS.register(new UpdateChecker(ExtraStorage.ID));
 
     //Special render & GUI
     for (var tier : CrafterTier.values()) {
@@ -64,7 +59,6 @@ public class ClientSetup {
     });
   }
 
-  @SubscribeEvent
   public static void onModelBake(ModelEvent.BakingCompleted e) {
     for (var id : e.getModels().keySet()) {
       var factory = BAKED_MODEL_OVERRIDE_REGISTRY.get(

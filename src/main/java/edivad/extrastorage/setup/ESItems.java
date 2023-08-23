@@ -19,9 +19,6 @@ import net.minecraftforge.registries.RegistryObject;
 
 public class ESItems {
 
-  private static final DeferredRegister<Item> ITEMS =
-      DeferredRegister.create(ForgeRegistries.ITEMS, ExtraStorage.MODID);
-
   public static final Map<ItemStorageType, RegistryObject<Item>> ITEM_STORAGE = new HashMap<>();
   public static final Map<FluidStorageType, RegistryObject<Item>> FLUID_STORAGE = new HashMap<>();
   public static final Map<CrafterTier, RegistryObject<BaseBlockItem>> CRAFTER = new HashMap<>();
@@ -29,6 +26,8 @@ public class ESItems {
   public static final Map<FluidStorageType, RegistryObject<Item>> FLUID_STORAGE_PART = new HashMap<>();
   public static final Map<ItemStorageType, RegistryObject<Item>> ITEM_DISK = new HashMap<>();
   public static final Map<FluidStorageType, RegistryObject<Item>> FLUID_DISK = new HashMap<>();
+  private static final DeferredRegister<Item> ITEMS =
+      DeferredRegister.create(ForgeRegistries.ITEMS, ExtraStorage.ID);
   public static final RegistryObject<Item> ADVANCED_EXPORTER =
       ITEMS.register("advanced_exporter",
           () -> new BaseBlockItem(ESBlocks.ADVANCED_EXPORTER.get(), new Item.Properties()));

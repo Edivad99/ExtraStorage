@@ -23,7 +23,7 @@ import net.minecraftforge.registries.RegistryObject;
 public class ESBlockEntities {
 
   private static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES =
-      DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, ExtraStorage.MODID);
+      DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, ExtraStorage.ID);
 
   public static final Map<ItemStorageType, RegistryObject<BlockEntityType<AdvancedStorageBlockEntity>>> ITEM_STORAGE = new HashMap<>();
   public static final Map<FluidStorageType, RegistryObject<BlockEntityType<AdvancedFluidStorageBlockEntity>>> FLUID_STORAGE = new HashMap<>();

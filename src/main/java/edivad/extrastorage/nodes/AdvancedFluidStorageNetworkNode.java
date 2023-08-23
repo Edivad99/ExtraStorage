@@ -63,8 +63,7 @@ public class AdvancedFluidStorageNetworkNode extends FluidStorageNetworkNode {
 
   @Override
   public void loadStorage(@Nullable Player owner) {
-    IStorageDisk disk = API.instance().getStorageDiskManager((ServerLevel) level)
-        .get(getStorageId());
+    var disk = API.instance().getStorageDiskManager((ServerLevel) level).get(getStorageId());
 
     if (disk == null) {
       disk = API.instance().createDefaultFluidDisk((ServerLevel) level, type.getCapacity(), owner);
@@ -81,7 +80,8 @@ public class AdvancedFluidStorageNetworkNode extends FluidStorageNetworkNode {
 
   @Override
   public Component getTitle() {
-    return Component.translatable("block." + ExtraStorage.MODID + ".block_" + type.getName() + "_fluid");
+    var title = String.format("block.%s.block_%s_fluid", ExtraStorage.ID, type.getName());
+    return Component.translatable(title);
   }
 
   @Override

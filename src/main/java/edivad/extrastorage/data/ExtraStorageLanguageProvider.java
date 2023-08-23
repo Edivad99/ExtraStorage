@@ -13,7 +13,7 @@ import net.minecraftforge.common.data.LanguageProvider;
 public class ExtraStorageLanguageProvider extends LanguageProvider {
 
   public ExtraStorageLanguageProvider(PackOutput packOutput) {
-    super(packOutput, ExtraStorage.MODID, "en_us");
+    super(packOutput, ExtraStorage.ID, "en_us");
   }
 
   @Override

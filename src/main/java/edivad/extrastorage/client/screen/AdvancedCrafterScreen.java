@@ -33,10 +33,11 @@ public class AdvancedCrafterScreen extends BaseScreen<AdvancedCrafterContainerMe
 
   @Override
   public void renderBackground(GuiGraphics guiGraphics, int x, int y, int mouseX, int mouseY) {
-    if (imageHeight <= 256)
+    if (imageHeight <= 256) {
       guiGraphics.blit(texture, x, y, 0, 0, imageWidth, imageHeight);
-    else
+    } else {
       guiGraphics.blit(texture, x, y, 0, 0, imageWidth, imageHeight, 512, 512);
+    }
   }
 
   @Override

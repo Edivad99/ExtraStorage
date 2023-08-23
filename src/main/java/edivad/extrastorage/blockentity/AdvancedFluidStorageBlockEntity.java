@@ -25,7 +25,8 @@ public class AdvancedFluidStorageBlockEntity extends
   public static final BlockEntitySynchronizationParameter<Integer, AdvancedFluidStorageBlockEntity> COMPARE =
       IComparable.createParameter(ExtraStorage.rl("advanced_fluid_storage_compare"));
   public static final BlockEntitySynchronizationParameter<Integer, AdvancedFluidStorageBlockEntity> WHITELIST_BLACKLIST =
-      IWhitelistBlacklist.createParameter(ExtraStorage.rl("advanced_fluid_storage_whitelist_blacklist"));
+      IWhitelistBlacklist.createParameter(
+          ExtraStorage.rl("advanced_fluid_storage_whitelist_blacklist"));
   public static final BlockEntitySynchronizationParameter<AccessType, AdvancedFluidStorageBlockEntity> ACCESS_TYPE =
       IAccessType.createParameter(ExtraStorage.rl("advanced_fluid_storage_access_type"));
   public static final BlockEntitySynchronizationParameter<Long, AdvancedFluidStorageBlockEntity> STORED =

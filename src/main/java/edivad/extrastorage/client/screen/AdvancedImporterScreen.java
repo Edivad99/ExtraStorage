@@ -15,6 +15,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 
 public class AdvancedImporterScreen extends BaseScreen<AdvancedImporterContainerMenu> {
+
   private static final ResourceLocation TEXTURE =
       ExtraStorage.rl("textures/gui/advanced_exporter_importer.png");
 

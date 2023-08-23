@@ -8,6 +8,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
 
 public class ESLootFunctions {
+
   public static LootItemFunctionType STORAGE_BLOCK;
   public static LootItemFunctionType CRAFTER;
 

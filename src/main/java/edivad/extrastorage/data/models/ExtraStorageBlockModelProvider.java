@@ -12,7 +12,7 @@ public class ExtraStorageBlockModelProvider extends BlockStateProvider {
 
   public ExtraStorageBlockModelProvider(PackOutput packOutput,
       ExistingFileHelper existingFileHelper) {
-    super(packOutput, ExtraStorage.MODID, existingFileHelper);
+    super(packOutput, ExtraStorage.ID, existingFileHelper);
   }
 
   @Override

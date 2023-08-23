@@ -5,18 +5,18 @@ import edivad.extrastorage.ExtraStorage;
 
 public class Translations {
 
-  public static final String HOLD_SHIFT = "tooltip." + ExtraStorage.MODID + ".holdShift";
-  public static final String SLOT_CRAFTING = "tooltip." + ExtraStorage.MODID + ".slotCrafting";
-  public static final String BASE_SPEED = "tooltip." + ExtraStorage.MODID + ".baseSpeed";
-  public static final String CURRENT_SPEED = "top." + ExtraStorage.MODID + ".currentSpeed";
-  public static final String LIMITED_SPEED = "top." + ExtraStorage.MODID + ".limitedSpeed";
-  public static final String OCCUPIED_SPACE = "top." + ExtraStorage.MODID + ".occupiedSpace";
+  public static final String HOLD_SHIFT = "tooltip." + ExtraStorage.ID + ".holdShift";
+  public static final String SLOT_CRAFTING = "tooltip." + ExtraStorage.ID + ".slotCrafting";
+  public static final String BASE_SPEED = "tooltip." + ExtraStorage.ID + ".baseSpeed";
+  public static final String CURRENT_SPEED = "top." + ExtraStorage.ID + ".currentSpeed";
+  public static final String LIMITED_SPEED = "top." + ExtraStorage.ID + ".limitedSpeed";
+  public static final String OCCUPIED_SPACE = "top." + ExtraStorage.ID + ".occupiedSpace";
 
   public static final TranslationsAdvancement IRON_CRAFTER = new TranslationsAdvancement(
-      ExtraStorage.MODID,
+      ExtraStorage.ID,
       "iron_crafter");
   public static final TranslationsAdvancement ADVANCED_EXPORTER = new TranslationsAdvancement(
-      ExtraStorage.MODID, "advanced_exporter");
+      ExtraStorage.ID, "advanced_exporter");
   public static final TranslationsAdvancement ADVANCED_IMPORTER = new TranslationsAdvancement(
-      ExtraStorage.MODID, "advanced_importer");
+      ExtraStorage.ID, "advanced_importer");
 }

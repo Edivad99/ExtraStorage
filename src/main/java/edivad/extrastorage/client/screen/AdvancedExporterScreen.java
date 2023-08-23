@@ -15,6 +15,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 
 public class AdvancedExporterScreen extends BaseScreen<AdvancedExporterContainerMenu> {
+
   private static final ResourceLocation TEXTURE =
       ExtraStorage.rl("textures/gui/advanced_exporter_importer.png");
   private boolean hasRegulatorMode;

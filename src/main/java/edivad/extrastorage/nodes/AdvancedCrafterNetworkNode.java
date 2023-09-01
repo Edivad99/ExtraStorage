@@ -53,8 +53,8 @@ public class AdvancedCrafterNetworkNode extends NetworkNode implements ICrafting
   private final BaseItemHandler patternsInventory;
   private final Map<Integer, ICraftingPattern> slot_to_pattern = new HashMap<>();
   private final List<ICraftingPattern> patterns = new ArrayList<>();
-  private final UpgradeItemHandler upgrades = (UpgradeItemHandler) new UpgradeItemHandler(4,
-      UpgradeItem.Type.SPEED)
+  private final UpgradeItemHandler upgrades = (UpgradeItemHandler)
+      new UpgradeItemHandler(4, UpgradeItem.Type.SPEED)
       .addListener(new NetworkNodeInventoryListener(this));
   private final ResourceLocation ID;
   // Used to prevent infinite recursion on getRootContainer() when there's e.g. two crafters facing each other.
@@ -123,8 +123,8 @@ public class AdvancedCrafterNetworkNode extends NetworkNode implements ICrafting
     var patternStack = patternsInventory.getStackInSlot(slot);
 
     if (!patternStack.isEmpty()) {
-      var pattern = ((ICraftingPatternProvider) patternStack.getItem()).create(level, patternStack,
-          this);
+      var pattern = ((ICraftingPatternProvider) patternStack.getItem())
+          .create(level, patternStack, this);
 
       if (pattern.isValid()) {
         slot_to_pattern.put(slot, pattern);
@@ -246,7 +246,7 @@ public class AdvancedCrafterNetworkNode extends NetworkNode implements ICrafting
   @Override
   public int getMaximumSuccessfulCraftingUpdates() {
     int speed = getTierSpeed();
-    if (hasConnectedInventory()) {
+    if (Config.AdvancedCrafter.UNIFORMLY_DISTRIBUTE_PROCESSING.get() && hasConnectedInventory()) {
       return Math.min(speed, getConnectedInventory().getSlots());
     }
     return speed;
@@ -257,8 +257,7 @@ public class AdvancedCrafterNetworkNode extends NetworkNode implements ICrafting
     if (tier.equals(CrafterTier.IRON)) {
       return upgradesCount + tier.getCraftingSpeed();
     }
-    return (upgradesCount * (tier.getCraftingSpeed() / 5))
-        + tier.getCraftingSpeed();//PREV Min:1 Max:5
+    return (upgradesCount * (tier.getCraftingSpeed() / 5)) + tier.getCraftingSpeed();
   }
 
   @Nullable

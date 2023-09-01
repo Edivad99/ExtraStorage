@@ -17,4 +17,4 @@ jobs:
           cache: 'gradle'
 
       - name: Build
-        run: ./gradlew build --no-daemon --max-workers 1
+        run: ./gradlew build --max-workers 1

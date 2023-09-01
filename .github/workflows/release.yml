@@ -26,10 +26,10 @@ jobs:
           cache: 'gradle'
 
       - name: Build
-        run: ./gradlew build --no-daemon --max-workers 1
+        run: ./gradlew build --max-workers 1
 
       - name: Make Changelog
-        run: ./gradlew makeChangelog --no-daemon --max-workers 1
+        run: ./gradlew makeChangelog --max-workers 1
 
       - name: Publish
-        run: ./gradlew publishMods --no-daemon --max-workers 1
+        run: ./gradlew publishMods --max-workers 1

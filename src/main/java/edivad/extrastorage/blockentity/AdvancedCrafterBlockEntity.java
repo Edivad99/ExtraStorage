@@ -44,7 +44,7 @@ public class AdvancedCrafterBlockEntity extends NetworkNodeBlockEntity<AdvancedC
   private final CrafterTier tier;
 
   public AdvancedCrafterBlockEntity(CrafterTier tier, BlockPos pos, BlockState state) {
-    super(ESBlockEntities.CRAFTER.get(tier).get(), pos, state, SPEC);
+    super(ESBlockEntities.CRAFTER.get(tier).get(), pos, state, SPEC, AdvancedCrafterNetworkNode.class);
     this.tier = tier;
   }
 

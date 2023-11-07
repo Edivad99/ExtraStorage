@@ -40,7 +40,7 @@ public class AdvancedExporterBlockEntity extends
       .build();
 
   public AdvancedExporterBlockEntity(BlockPos pos, BlockState state) {
-    super(ESBlockEntities.ADVANCED_EXPORTER.get(), pos, state, SPEC);
+    super(ESBlockEntities.ADVANCED_EXPORTER.get(), pos, state, SPEC, AdvancedExporterNetworkNode.class);
   }
 
   @Override

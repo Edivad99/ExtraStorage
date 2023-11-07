@@ -45,7 +45,7 @@ public class AdvancedFluidStorageBlockEntity extends
   private final FluidStorageType type;
 
   public AdvancedFluidStorageBlockEntity(FluidStorageType type, BlockPos pos, BlockState state) {
-    super(ESBlockEntities.FLUID_STORAGE.get(type).get(), pos, state, SPEC);
+    super(ESBlockEntities.FLUID_STORAGE.get(type).get(), pos, state, SPEC, AdvancedFluidStorageNetworkNode.class);
     this.type = type;
   }
 

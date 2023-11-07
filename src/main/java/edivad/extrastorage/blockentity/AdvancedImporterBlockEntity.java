@@ -45,7 +45,7 @@ public class AdvancedImporterBlockEntity extends
       .build();
 
   public AdvancedImporterBlockEntity(BlockPos pos, BlockState state) {
-    super(ESBlockEntities.ADVANCED_IMPORTER.get(), pos, state, SPEC);
+    super(ESBlockEntities.ADVANCED_IMPORTER.get(), pos, state, SPEC, AdvancedImporterNetworkNode.class);
   }
 
   @Override

@@ -43,7 +43,7 @@ public class AdvancedStorageBlockEntity extends NetworkNodeBlockEntity<AdvancedS
   private final ItemStorageType type;
 
   public AdvancedStorageBlockEntity(ItemStorageType type, BlockPos pos, BlockState state) {
-    super(ESBlockEntities.ITEM_STORAGE.get(type).get(), pos, state, SPEC);
+    super(ESBlockEntities.ITEM_STORAGE.get(type).get(), pos, state, SPEC, AdvancedStorageNetworkNode.class);
     this.type = type;
   }
 

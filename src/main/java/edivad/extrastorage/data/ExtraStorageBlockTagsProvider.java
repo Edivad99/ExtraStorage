@@ -2,6 +2,7 @@ package edivad.extrastorage.data;
 
 import java.util.concurrent.CompletableFuture;
 import edivad.extrastorage.ExtraStorage;
+import edivad.extrastorage.blocks.CrafterTier;
 import edivad.extrastorage.items.storage.fluid.FluidStorageType;
 import edivad.extrastorage.items.storage.item.ItemStorageType;
 import edivad.extrastorage.setup.ESBlocks;
@@ -34,9 +35,24 @@ public class ExtraStorageBlockTagsProvider extends BlockTagsProvider {
       fluidBlocksBuilder.addTag(tag);
     }
 
+    var crafterBuilder = this.tag(ExtraStorageTags.Blocks.CRAFTER);
+    for (var tier : CrafterTier.values()) {
+      crafterBuilder.add(ESBlocks.CRAFTER.get(tier).get());
+    }
+
     //noinspection unchecked
     this.tag(ExtraStorageTags.Blocks.STORAGE_BLOCKS)
         .addTags(ExtraStorageTags.Blocks.ITEM_STORAGE_BLOCKS,
             ExtraStorageTags.Blocks.FLUID_STORAGE_BLOCKS);
+
+    this.tag(ExtraStorageTags.Blocks.CARRY_ON_BLACKLIST)
+        .add(ESBlocks.ADVANCED_EXPORTER.get())
+        .add(ESBlocks.ADVANCED_IMPORTER.get())
+        .addTag(ExtraStorageTags.Blocks.STORAGE_BLOCKS)
+        .addTag(ExtraStorageTags.Blocks.CRAFTER);
+    this.tag(ExtraStorageTags.Blocks.MEKANISM_BLACKLIST)
+        .addTag(ExtraStorageTags.Blocks.CARRY_ON_BLACKLIST);
+    this.tag(ExtraStorageTags.Blocks.RELOCATION_NOT_SUPPORTED)
+        .addTag(ExtraStorageTags.Blocks.CARRY_ON_BLACKLIST);
   }
 }

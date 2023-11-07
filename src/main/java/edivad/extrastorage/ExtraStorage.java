@@ -100,6 +100,8 @@ public class ExtraStorage {
     generator.addProvider(event.includeServer(), new ExtraStorageLootTableProvider(packOutput));
     generator.addProvider(event.includeServer(), new ExtraStorageRecipeProvider(packOutput));
     generator.addProvider(event.includeServer(), new ExtraStorageLanguageProvider(packOutput));
+    /*generator.addProvider(event.includeServer(),
+        new ExtraStorageAdvancementProvider(packOutput, lookupProvider, existingFileHelper));*/
     generator.addProvider(event.includeClient(),
         new ExtraStorageBlockModelProvider(packOutput, existingFileHelper));
     generator.addProvider(event.includeClient(),

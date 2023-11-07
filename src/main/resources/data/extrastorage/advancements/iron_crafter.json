@@ -1,19 +1,22 @@
 {
   "parent": "refinedstorage:autocrafting",
   "display": {
+    "announce_to_chat": false,
     "frame": "challenge",
+    "hidden": false,
     "icon": {
       "item": "extrastorage:iron_crafter"
     },
+    "show_toast": true,
     "title": {
       "translate": "advancements.extrastorage.iron_crafter"
     },
     "description": {
-      "translate": "advancements.extrastorage.iron_crafter.description"
+      "translate": "advancements.extrastorage.iron_crafter.desc"
     }
   },
   "criteria": {
-    "certus": {
+    "inv_changed": {
       "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
@@ -25,5 +28,11 @@
         ]
       }
     }
-  }
+  },
+  "requirements": [
+    [
+      "inv_changed"
+    ]
+  ],
+  "sends_telemetry_event": true
 }

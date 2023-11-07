@@ -1,0 +1,8 @@
+{
+  "values": [
+    "extrastorage:advanced_exporter",
+    "extrastorage:advanced_importer",
+    "#refinedstorage:storage_blocks",
+    "#extrastorage:crafter"
+  ]
+}

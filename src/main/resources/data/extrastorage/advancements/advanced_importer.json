@@ -1,19 +1,22 @@
 {
   "parent": "refinedstorage:importing",
   "display": {
+    "announce_to_chat": false,
     "frame": "goal",
+    "hidden": false,
     "icon": {
       "item": "extrastorage:advanced_importer"
     },
+    "show_toast": true,
     "title": {
       "translate": "advancements.extrastorage.advanced_importer"
     },
     "description": {
-      "translate": "advancements.extrastorage.advanced_importer.description"
+      "translate": "advancements.extrastorage.advanced_importer.desc"
     }
   },
   "criteria": {
-    "certus": {
+    "inv_changed": {
       "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
@@ -25,5 +28,11 @@
         ]
       }
     }
-  }
+  },
+  "requirements": [
+    [
+      "inv_changed"
+    ]
+  ],
+  "sends_telemetry_event": true
 }

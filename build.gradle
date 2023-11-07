@@ -6,15 +6,20 @@ plugins {
     id 'idea'
     id 'net.neoforged.gradle' version '[6.0.18,6.2)'
     id 'org.parchmentmc.librarian.forgegradle' version '1.+'
-    id 'se.bjurr.gitchangelog.git-changelog-gradle-plugin' version '1.80.0'
-    id 'me.modmuss50.mod-publish-plugin' version '0.3.3'
+    id 'se.bjurr.gitchangelog.git-changelog-gradle-plugin' version '1.81.3'
+    id 'me.modmuss50.mod-publish-plugin' version '0.4.1'
 }
 
 version = "$minecraft_version-$mod_version"
 group = 'edivad.extrastorage'
 base.archivesName = 'ExtraStorage'
 
-java.toolchain.languageVersion = JavaLanguageVersion.of(17)
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+        vendor = JvmVendorSpec.JETBRAINS
+    }
+}
 
 println(repeat('*', 60))
 println("Project Version: $version")
@@ -33,6 +38,7 @@ minecraft {
     runs {
         configureEach {
             property 'forge.logging.console.level', 'debug'
+            jvmArgs '-XX:+AllowEnhancedClassRedefinition'
 
             mods {
                 extrastorage {
@@ -57,7 +63,14 @@ minecraft {
     }
 }
 
-sourceSets.main.resources { srcDir 'src/generated/resources' }
+sourceSets {
+    main {
+        resources {
+            srcDir 'src/generated/resources'
+            exclude '.cache'
+        }
+    }
+}
 
 repositories {
     maven {
@@ -101,7 +114,8 @@ dependencies {
 }
 
 tasks.withType(JavaCompile).configureEach {
-    options.encoding = 'UTF-8' // Use the UTF-8 charset for Java compilation
+    options.encoding = 'UTF-8'
+    options.compilerArgs.addAll(["-Xmaxerrs", "100000"])
 }
 
 tasks.withType(ProcessResources).configureEach {
@@ -124,20 +138,37 @@ tasks.named('jar', Jar).configure {
             'Implementation-Title'      : 'extrastorage',
             'Implementation-Version'    : project.version,
             'Implementation-Vendor'     : 'Edivad99',
-            'Implementation-Commit'     : 'git rev-parse HEAD'.execute().text.trim(),
-            'Implementation-Timestamp'  : new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
+            'Implementation-Commit'     : 'git rev-parse HEAD'.execute().text.trim()
         ])
     }
     finalizedBy 'reobfJar'
 }
 
+tasks.named('wrapper', Wrapper).configure {
+    gradleVersion = '8.4'
+    distributionType = Wrapper.DistributionType.BIN
+}
+
+def penultimateTag = { ->
+    def stdout = new ByteArrayOutputStream()
+    try {
+        project.exec { ExecSpec spec ->
+            spec.commandLine('git', 'describe', '--abbrev=0', '--tags', 'HEAD~').standardOutput(stdout)
+        }.assertNormalExitValue().rethrowFailure()
+    } catch (Exception e) {
+        throw new IllegalStateException("Failed to get the tag; check if 'git' is on the PATH", e)
+    }
+    return stdout.toString()
+}
+
 tasks.register('makeChangelog', GitChangelogTask) {
     fromRepo = projectDir.absolutePath.toString()
-    fromRevision = '0993b5d0ea34a2b5be832da1c060e7b1ce21e788'
+    fromRevision = penultimateTag()
     toRevision = 'HEAD'
     file = file('CHANGELOG.md')
     untaggedName = 'Next release'
     templateContent = file('changelog.mustache').text
+    ignoreCommitsIfMessageMatches = '^.*Merge branch.*$'
 }
 
 publishMods {

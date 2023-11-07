@@ -34,7 +34,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.data.event.GatherDataEvent;
 import net.minecraftforge.fml.InterModComms;
 import net.minecraftforge.fml.ModList;
@@ -55,7 +54,7 @@ public class ExtraStorage {
   public ExtraStorage() {
     var modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
-    if (FMLEnvironment.dist == Dist.CLIENT) {
+    if (FMLEnvironment.dist.isClient()) {
       modEventBus.addListener(ClientSetup::init);
       modEventBus.addListener(ClientSetup::onModelBake);
     }

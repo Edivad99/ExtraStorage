@@ -27,7 +27,7 @@ description="ExtraStorage adds new blocks to Refined Storage"
 [[dependencies.extrastorage]]
     modId="refinedstorage"
     mandatory=true
-    versionRange="[1.12.3,)"
+    versionRange="[1.12.4,)"
     ordering="NONE"
     side="BOTH"
 [[dependencies.extrastorage]]

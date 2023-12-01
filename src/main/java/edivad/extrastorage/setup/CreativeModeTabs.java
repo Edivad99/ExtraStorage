@@ -33,6 +33,18 @@ public class CreativeModeTabs {
             for (var type : FluidStorageType.values()) {
               output.accept(ESItems.FLUID_STORAGE.get(type).get());
             }
+            for (var type : ItemStorageType.values()) {
+              output.accept(ESItems.ITEM_STORAGE_PART.get(type).get());
+            }
+            for (var type : FluidStorageType.values()) {
+              output.accept(ESItems.FLUID_STORAGE_PART.get(type).get());
+            }
+            for (var type : ItemStorageType.values()) {
+              output.accept(ESItems.ITEM_DISK.get(type).get());
+            }
+            for (var type : FluidStorageType.values()) {
+              output.accept(ESItems.FLUID_DISK.get(type).get());
+            }
             output.accept(ESItems.ADVANCED_IMPORTER.get());
             output.accept(ESItems.ADVANCED_EXPORTER.get());
             output.accept(ESItems.RAW_NEURAL_PROCESSOR.get());

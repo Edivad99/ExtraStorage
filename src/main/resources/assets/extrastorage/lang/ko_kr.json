@@ -1,10 +1,10 @@
 {
   "advancements.extrastorage.advanced_exporter": "고급 출력기",
-  "advancements.extrastorage.advanced_exporter.description": "훨씬 더 큰 출력기입니다!",
+  "advancements.extrastorage.advanced_exporter.desc": "훨씬 더 큰 출력기!",
   "advancements.extrastorage.advanced_importer": "고급 입력기",
-  "advancements.extrastorage.advanced_importer.description": "훨씬 더 큰 입력기입니다!",
+  "advancements.extrastorage.advanced_importer.desc": "더 많은 필터!",
   "advancements.extrastorage.iron_crafter": "철 제작기",
-  "advancements.extrastorage.iron_crafter.description": "차세대 제작기입니다!",
+  "advancements.extrastorage.iron_crafter.desc": "차세대 제작기!",
   "block.extrastorage.advanced_exporter": "고급 출력기",
   "block.extrastorage.advanced_importer": "고급 입력기",
   "block.extrastorage.block_1024k": "1024k 저장공간",
@@ -37,8 +37,10 @@
   "item.extrastorage.storagepart_262144k_fluid": "262144k 액체 저장 파트",
   "item.extrastorage.storagepart_4096k": "4096k 저장 파트",
   "item.extrastorage.storagepart_65536k_fluid": "65536k 액체 저장 파트",
-  "itemGroup.extrastorage_tab": "리파인드 스토리지 확장판",
-  "tooltip.extrastorage.baseSpeed": "기반 속도: %sx",
-  "tooltip.extrastorage.holdShift": "자세한 내용을 보려면 Shift 누르기",
-  "tooltip.extrastorage.slotCrafting": "패턴의 슬롯: %s"
+  "tooltip.extrastorage.baseSpeed": "기본 속도: %sx",
+  "tooltip.extrastorage.holdShift": "Shift를 누르면 상세 정보가 표시됩니다",
+  "tooltip.extrastorage.slotCrafting": "패턴 슬롯: %s",
+  "top.extrastorage.currentSpeed": "현재 속도: %sx",
+  "top.extrastorage.limitedSpeed": "현재 속도 (%s에 의해 제한됨): %sx",
+  "top.extrastorage.occupiedSpace": "점유된 공간: %s/%s"
 }

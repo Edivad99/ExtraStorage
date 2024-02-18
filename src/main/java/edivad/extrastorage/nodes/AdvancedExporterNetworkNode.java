@@ -25,12 +25,11 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidType;
-import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.IItemHandlerModifiable;
-import net.minecraftforge.items.ItemHandlerHelper;
+import net.neoforged.neoforge.fluids.FluidType;
+import net.neoforged.neoforge.fluids.capability.IFluidHandler;
+import net.neoforged.neoforge.items.IItemHandler;
+import net.neoforged.neoforge.items.IItemHandlerModifiable;
+import net.neoforged.neoforge.items.ItemHandlerHelper;
 
 public class AdvancedExporterNetworkNode extends NetworkNode implements IComparable, IType,
     ICoverable {
@@ -50,12 +49,11 @@ public class AdvancedExporterNetworkNode extends NetworkNode implements ICompara
   private final CoverManager coverManager;
   private int compare = IComparer.COMPARE_NBT;
   private int type = IType.ITEMS;
-  private int filterSlot;  private final UpgradeItemHandler upgrades = (UpgradeItemHandler)
-      new UpgradeItemHandler(4, UpgradeItem.Type.SPEED, UpgradeItem.Type.CRAFTING,
-          UpgradeItem.Type.STACK, UpgradeItem.Type.REGULATOR)
+  private int filterSlot;
+  private final UpgradeItemHandler upgrades = (UpgradeItemHandler)
+      new UpgradeItemHandler(4, UpgradeItem.Type.SPEED, UpgradeItem.Type.CRAFTING, UpgradeItem.Type.STACK, UpgradeItem.Type.REGULATOR)
           .addListener(new NetworkNodeInventoryListener(this))
-          .addListener((handler, slot, reading) ->
-          {
+          .addListener((handler, slot, reading) -> {
             if (!reading && !getUpgrades().hasUpgrade(UpgradeItem.Type.REGULATOR)) {
               boolean changed = false;
 
@@ -67,7 +65,7 @@ public class AdvancedExporterNetworkNode extends NetworkNode implements ICompara
                   changed = true;
                 }
 
-                FluidStack filteredFluid = fluidFilters.getFluid(i);
+                var filteredFluid = fluidFilters.getFluid(i);
 
                 if (!filteredFluid.isEmpty()
                     && filteredFluid.getAmount() != FluidType.BUCKET_VOLUME) {
@@ -98,7 +96,7 @@ public class AdvancedExporterNetworkNode extends NetworkNode implements ICompara
 
     if (canUpdate() && ticks % upgrades.getSpeed() == 0 && level.isLoaded(pos)) {
       if (type == IType.ITEMS) {
-        IItemHandler handler = LevelUtils.getItemHandler(getFacingBlockEntity(),
+        var handler = LevelUtils.getItemHandler(level, pos.relative(getDirection()),
             getDirection().getOpposite());
 
         if (handler != null) {
@@ -169,7 +167,7 @@ public class AdvancedExporterNetworkNode extends NetworkNode implements ICompara
           filterSlot++;
         }
       } else if (type == IType.FLUIDS) {
-        FluidStack[] fluids = fluidFilters.getFluids();
+        var fluids = fluidFilters.getFluids();
 
         while (filterSlot + 1 < fluids.length && fluids[filterSlot] == null) {
           filterSlot++;
@@ -184,16 +182,16 @@ public class AdvancedExporterNetworkNode extends NetworkNode implements ICompara
           filterSlot = 0;
         }
 
-        IFluidHandler handler = LevelUtils.getFluidHandler(getFacingBlockEntity(),
+        var handler = LevelUtils.getFluidHandler(level, pos.relative(getDirection()),
             getDirection().getOpposite());
 
         if (handler != null) {
-          FluidStack stack = fluids[filterSlot];
+          var stack = fluids[filterSlot];
 
           if (stack != null) {
             int toExtract = FluidType.BUCKET_VOLUME * upgrades.getStackInteractCount();
 
-            FluidStack stackInStorage = network.getFluidStorageCache().getList()
+            var stackInStorage = network.getFluidStorageCache().getList()
                 .get(stack, compare);
 
             if (stackInStorage != null) {
@@ -203,7 +201,7 @@ public class AdvancedExporterNetworkNode extends NetworkNode implements ICompara
                 int found = 0;
 
                 for (int i = 0; i < handler.getTanks(); i++) {
-                  FluidStack stackInConnectedHandler = handler.getFluidInTank(i);
+                  var stackInConnectedHandler = handler.getFluidInTank(i);
 
                   if (API.instance().getComparer()
                       .isEqual(stack, stackInConnectedHandler, compare)) {
@@ -224,7 +222,7 @@ public class AdvancedExporterNetworkNode extends NetworkNode implements ICompara
               }
 
               if (toExtract > 0) {
-                FluidStack took = network.extractFluid(stack, toExtract, compare, Action.SIMULATE);
+                var took = network.extractFluid(stack, toExtract, compare, Action.SIMULATE);
 
                 int filled = handler.fill(took, IFluidHandler.FluidAction.SIMULATE);
 

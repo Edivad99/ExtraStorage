@@ -1,28 +1,17 @@
 package edivad.extrastorage.loottable;
 
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonObject;
 import edivad.extrastorage.blockentity.AdvancedCrafterBlockEntity;
 import edivad.extrastorage.setup.ESLootFunctions;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.LootContext;
-import net.minecraft.world.level.storage.loot.functions.LootItemConditionalFunction;
+import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
-import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 
-public class AdvancedCrafterLootFunction extends LootItemConditionalFunction {
-
-  protected AdvancedCrafterLootFunction(LootItemCondition[] conditions) {
-    super(conditions);
-  }
-
-  public static LootItemConditionalFunction.Builder<?> builder() {
-    return simpleBuilder(AdvancedCrafterLootFunction::new);
-  }
+public class AdvancedCrafterLootFunction implements LootItemFunction {
 
   @Override
-  protected ItemStack run(ItemStack stack, LootContext lootContext) {
+  public ItemStack apply(ItemStack stack, LootContext lootContext) {
     var blockEntity = lootContext.getParamOrNull(LootContextParams.BLOCK_ENTITY);
 
     var removedNode = ((AdvancedCrafterBlockEntity) blockEntity).getRemovedNode();
@@ -39,15 +28,5 @@ public class AdvancedCrafterLootFunction extends LootItemConditionalFunction {
 
   public LootItemFunctionType getType() {
     return ESLootFunctions.CRAFTER;
-  }
-
-  public static class Serializer extends
-      LootItemConditionalFunction.Serializer<AdvancedCrafterLootFunction> {
-
-    @Override
-    public AdvancedCrafterLootFunction deserialize(JsonObject object,
-        JsonDeserializationContext deserializationContext, LootItemCondition[] conditions) {
-      return new AdvancedCrafterLootFunction(conditions);
-    }
   }
 }

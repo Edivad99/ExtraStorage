@@ -15,7 +15,6 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
@@ -27,9 +26,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.network.NetworkHooks;
 
 public class AdvancedCrafterBlock extends NetworkNodeBlock {
 
@@ -56,7 +52,7 @@ public class AdvancedCrafterBlock extends NetworkNodeBlock {
       @Nullable LivingEntity placer, ItemStack stack) {
     super.setPlacedBy(level, pos, state, placer, stack);
     if (!level.isClientSide) {
-      BlockEntity blockEntity = level.getBlockEntity(pos);
+      var blockEntity = level.getBlockEntity(pos);
 
       if (blockEntity instanceof AdvancedCrafterBlockEntity be && stack.hasCustomHoverName()) {
         be.getNode().setDisplayName(stack.getHoverName());
@@ -69,15 +65,12 @@ public class AdvancedCrafterBlock extends NetworkNodeBlock {
   public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player,
       InteractionHand hand, BlockHitResult hit) {
     if (!level.isClientSide) {
-      return NetworkUtils.attempt(level, pos, player, () -> NetworkHooks.openScreen(
-          (ServerPlayer) player,
+      return NetworkUtils.attempt(level, pos, player, () -> player.openMenu(
           new BlockEntityMenuProvider<AdvancedCrafterBlockEntity>(
               ((AdvancedCrafterBlockEntity) level.getBlockEntity(pos)).getNode().getName(),
-              (tile, windowId, inventory, p) -> new AdvancedCrafterContainerMenu(windowId, player,
-                  tile),
+              (tile, windowId, inventory, p) -> new AdvancedCrafterContainerMenu(windowId, player, tile),
               pos
-          ),
-          pos
+          ), pos
       ), Permission.MODIFY, Permission.AUTOCRAFTING);
     }
     return InteractionResult.SUCCESS;
@@ -88,7 +81,6 @@ public class AdvancedCrafterBlock extends NetworkNodeBlock {
     return true;
   }
 
-  @OnlyIn(Dist.CLIENT)
   @Override
   public void appendHoverText(ItemStack stack, BlockGetter blockGetter, List<Component> tooltip,
       TooltipFlag flag) {

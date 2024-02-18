@@ -6,18 +6,18 @@ import edivad.extrastorage.blocks.CrafterTier;
 import edivad.extrastorage.setup.ESBlocks;
 import edivad.extrastorage.tools.Translations;
 import net.minecraft.advancements.Advancement;
-import net.minecraft.advancements.FrameType;
+import net.minecraft.advancements.AdvancementHolder;
+import net.minecraft.advancements.AdvancementType;
 import net.minecraft.advancements.critereon.InventoryChangeTrigger;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.common.data.ExistingFileHelper;
-import net.minecraftforge.common.data.ForgeAdvancementProvider;
+import net.neoforged.neoforge.common.data.AdvancementProvider;
+import net.neoforged.neoforge.common.data.ExistingFileHelper;
 
-public class ExtraStorageAdvancements implements ForgeAdvancementProvider.AdvancementGenerator {
+public class ExtraStorageAdvancements implements AdvancementProvider.AdvancementGenerator {
 
   @Override
-  public void generate(HolderLookup.Provider registries, Consumer<Advancement> consumer,
+  public void generate(HolderLookup.Provider registries, Consumer<AdvancementHolder> consumer,
       ExistingFileHelper existingFileHelper) {
     Advancement.Builder.advancement()
         //.parent(new ResourceLocation("refinedstorage", "autocrafting"))
@@ -26,7 +26,7 @@ public class ExtraStorageAdvancements implements ForgeAdvancementProvider.Advanc
             Component.translatable(Translations.IRON_CRAFTER.title()),
             Component.translatable(Translations.IRON_CRAFTER.desc()),
             null,
-            FrameType.CHALLENGE,
+            AdvancementType.CHALLENGE,
             true, false, false)
         .addCriterion("inv_changed",
             InventoryChangeTrigger.TriggerInstance.hasItems(ESBlocks.CRAFTER.get(CrafterTier.IRON).get()))

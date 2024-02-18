@@ -1,7 +1,5 @@
 package edivad.extrastorage.blockentity;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import com.refinedmods.refinedstorage.blockentity.NetworkNodeBlockEntity;
 import com.refinedmods.refinedstorage.blockentity.data.BlockEntitySynchronizationParameter;
 import com.refinedmods.refinedstorage.blockentity.data.BlockEntitySynchronizationSpec;
@@ -15,10 +13,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.items.IItemHandler;
+import net.neoforged.neoforge.items.IItemHandler;
 
 public class AdvancedCrafterBlockEntity extends NetworkNodeBlockEntity<AdvancedCrafterNetworkNode> {
 
@@ -39,8 +34,6 @@ public class AdvancedCrafterBlockEntity extends NetworkNodeBlockEntity<AdvancedC
       .addWatchedParameter(MODE)
       .addParameter(HAS_ROOT)
       .build();
-  private final LazyOptional<IItemHandler> patternsCapability =
-      LazyOptional.of(() -> getNode().getPatternItems());
   private final CrafterTier tier;
 
   public AdvancedCrafterBlockEntity(CrafterTier tier, BlockPos pos, BlockState state) {
@@ -53,16 +46,11 @@ public class AdvancedCrafterBlockEntity extends NetworkNodeBlockEntity<AdvancedC
     return new AdvancedCrafterNetworkNode(level, pos, tier);
   }
 
-  @NotNull
-  @Override
-  public <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap,
-      @Nullable Direction direction) {
-    if (cap == ForgeCapabilities.ITEM_HANDLER) {
-      if (direction != null && !direction.equals(this.getNode().getDirection())) {
-        return patternsCapability.cast();
-      }
+  public IItemHandler getPatterns(Direction direction) {
+    if (!direction.equals(this.getNode().getDirection())) {
+      return getNode().getPatternInventory();
     }
-    return super.getCapability(cap, direction);
+    return null;
   }
 
   public CrafterTier getTier() {

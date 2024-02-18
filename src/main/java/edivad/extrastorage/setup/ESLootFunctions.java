@@ -1,5 +1,6 @@
 package edivad.extrastorage.setup;
 
+import com.mojang.serialization.Codec;
 import edivad.extrastorage.ExtraStorage;
 import edivad.extrastorage.loottable.AdvancedCrafterLootFunction;
 import edivad.extrastorage.loottable.StorageBlockLootFunction;
@@ -16,10 +17,10 @@ public class ESLootFunctions {
     STORAGE_BLOCK =
         Registry.register(BuiltInRegistries.LOOT_FUNCTION_TYPE,
             ExtraStorage.rl("storage_block"),
-            new LootItemFunctionType(new StorageBlockLootFunction.Serializer()));
+            new LootItemFunctionType(Codec.unit(new StorageBlockLootFunction())));
     CRAFTER =
         Registry.register(BuiltInRegistries.LOOT_FUNCTION_TYPE,
             ExtraStorage.rl("crafter"),
-            new LootItemFunctionType(new AdvancedCrafterLootFunction.Serializer()));
+            new LootItemFunctionType(Codec.unit(new AdvancedCrafterLootFunction())));
   }
 }

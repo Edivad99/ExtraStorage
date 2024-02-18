@@ -1,8 +1,5 @@
 package edivad.extrastorage.data.loot.pack;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Set;
 import edivad.extrastorage.loottable.AdvancedCrafterLootFunction;
 import edivad.extrastorage.loottable.StorageBlockLootFunction;
@@ -16,7 +13,7 @@ import net.minecraft.world.level.storage.loot.entries.LootItem;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraft.world.level.storage.loot.predicates.ExplosionCondition;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.neoforge.registries.DeferredHolder;
 
 public class ExtraStorageBlockLoot extends BlockLootSubProvider {
 
@@ -27,14 +24,11 @@ public class ExtraStorageBlockLoot extends BlockLootSubProvider {
   @Override
   protected void generate() {
     ESBlocks.CRAFTER.values().forEach(
-        block -> genBlockItemLootTableWithFunction(block.get(),
-            AdvancedCrafterLootFunction.builder()));
+        block -> genBlockItemLootTableWithFunction(block.get(), AdvancedCrafterLootFunction::new));
     ESBlocks.ITEM_STORAGE.values().forEach(
-        block -> genBlockItemLootTableWithFunction(block.get(),
-            StorageBlockLootFunction.builder()));
+        block -> genBlockItemLootTableWithFunction(block.get(), StorageBlockLootFunction::new));
     ESBlocks.FLUID_STORAGE.values().forEach(
-        block -> genBlockItemLootTableWithFunction(block.get(),
-            StorageBlockLootFunction.builder()));
+        block -> genBlockItemLootTableWithFunction(block.get(), StorageBlockLootFunction::new));
     dropSelf(ESBlocks.ADVANCED_EXPORTER.get());
     dropSelf(ESBlocks.ADVANCED_IMPORTER.get());
   }
@@ -50,13 +44,6 @@ public class ExtraStorageBlockLoot extends BlockLootSubProvider {
 
   @Override
   protected Iterable<Block> getKnownBlocks() {
-    List<Block> res = new ArrayList<>();
-    res.addAll(ESBlocks.CRAFTER.values().stream().map(RegistryObject::get).toList());
-    res.addAll(ESBlocks.ITEM_STORAGE.values().stream().map(RegistryObject::get).toList());
-    res.addAll(
-        ESBlocks.FLUID_STORAGE.values().stream().map(RegistryObject::get).toList());
-    res.addAll(
-        Arrays.asList(ESBlocks.ADVANCED_EXPORTER.get(), ESBlocks.ADVANCED_IMPORTER.get()));
-    return res;
+    return ESBlocks.entries().stream().map(DeferredHolder::get).map(Block.class::cast).toList();
   }
 }

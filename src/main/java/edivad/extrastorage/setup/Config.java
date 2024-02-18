@@ -1,14 +1,14 @@
 package edivad.extrastorage.setup;
 
 import edivad.extrastorage.ExtraStorage;
-import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.fml.ModLoadingContext;
-import net.minecraftforge.fml.config.ModConfig;
+import net.neoforged.fml.ModLoadingContext;
+import net.neoforged.fml.config.ModConfig;
+import net.neoforged.neoforge.common.ModConfigSpec;
 
 public class Config {
 
   public static void init() {
-    var SERVER_BUILDER = new ForgeConfigSpec.Builder();
+    var SERVER_BUILDER = new ModConfigSpec.Builder();
     SERVER_BUILDER.comment(ExtraStorage.MODNAME + "'s config");
     AdvancedCrafter.registerServerConfig(SERVER_BUILDER);
 
@@ -17,11 +17,11 @@ public class Config {
 
   public static class AdvancedCrafter {
 
-    public static ForgeConfigSpec.IntValue BASE_ENERGY;
-    public static ForgeConfigSpec.BooleanValue INCLUDE_PATTERN_ENERGY;
-    public static ForgeConfigSpec.BooleanValue UNIFORMLY_DISTRIBUTE_PROCESSING;
+    public static ModConfigSpec.IntValue BASE_ENERGY;
+    public static ModConfigSpec.BooleanValue INCLUDE_PATTERN_ENERGY;
+    public static ModConfigSpec.BooleanValue UNIFORMLY_DISTRIBUTE_PROCESSING;
 
-    public static void registerServerConfig(ForgeConfigSpec.Builder SERVER_BUILDER) {
+    public static void registerServerConfig(ModConfigSpec.Builder SERVER_BUILDER) {
       SERVER_BUILDER.push("crafters");
 
       BASE_ENERGY = SERVER_BUILDER

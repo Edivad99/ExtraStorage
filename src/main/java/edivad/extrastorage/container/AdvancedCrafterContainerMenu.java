@@ -5,7 +5,7 @@ import edivad.extrastorage.blockentity.AdvancedCrafterBlockEntity;
 import edivad.extrastorage.blocks.CrafterTier;
 import edivad.extrastorage.setup.ESContainer;
 import net.minecraft.world.entity.player.Player;
-import net.minecraftforge.items.SlotItemHandler;
+import net.neoforged.neoforge.items.SlotItemHandler;
 
 public class AdvancedCrafterContainerMenu extends BaseContainerMenu {
 

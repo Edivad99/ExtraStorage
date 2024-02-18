@@ -5,13 +5,13 @@ import edivad.extrastorage.items.storage.fluid.FluidStorageType;
 import edivad.extrastorage.items.storage.item.ItemStorageType;
 import edivad.extrastorage.setup.ESBlocks;
 import edivad.extrastorage.setup.ESItems;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
-import net.minecraftforge.client.model.generators.ItemModelProvider;
-import net.minecraftforge.client.model.generators.ModelFile;
-import net.minecraftforge.common.data.ExistingFileHelper;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.neoforge.client.model.generators.ItemModelProvider;
+import net.neoforged.neoforge.client.model.generators.ModelFile;
+import net.neoforged.neoforge.common.data.ExistingFileHelper;
 
 public class ExtraStorageItemModelProvider extends ItemModelProvider {
 
@@ -45,11 +45,11 @@ public class ExtraStorageItemModelProvider extends ItemModelProvider {
   }
 
   private void parentedBlock(Block block) {
-    String name = ForgeRegistries.BLOCKS.getKey(block).getPath();
+    String name = BuiltInRegistries.BLOCK.getKey(block).getPath();
     getBuilder(name).parent(new ModelFile.UncheckedModelFile(modLoc("block/" + name)));
   }
 
   private String getPath(Item item) {
-    return ForgeRegistries.ITEMS.getKey(item).getPath();
+    return BuiltInRegistries.ITEM.getKey(item).getPath();
   }
 }

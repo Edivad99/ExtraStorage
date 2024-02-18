@@ -26,11 +26,11 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidType;
-import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.IItemHandlerModifiable;
+import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.FluidType;
+import net.neoforged.neoforge.fluids.capability.IFluidHandler;
+import net.neoforged.neoforge.items.IItemHandler;
+import net.neoforged.neoforge.items.IItemHandlerModifiable;
 
 public class AdvancedImporterNetworkNode extends NetworkNode implements IComparable,
     IWhitelistBlacklist, IType, ICoverable {
@@ -78,7 +78,8 @@ public class AdvancedImporterNetworkNode extends NetworkNode implements ICompara
 
     if (type == IType.ITEMS) {
       BlockEntity facing = getFacingBlockEntity();
-      IItemHandler handler = LevelUtils.getItemHandler(facing, getDirection().getOpposite());
+      IItemHandler handler = LevelUtils.getItemHandler(level, pos.relative(getDirection()),
+          getDirection().getOpposite());
 
       if (facing instanceof DiskDriveBlockEntity || handler == null) {
         return;
@@ -113,7 +114,7 @@ public class AdvancedImporterNetworkNode extends NetworkNode implements ICompara
         }
       }
     } else if (type == IType.FLUIDS && ticks % upgrades.getSpeed() == 0) {
-      IFluidHandler handler = LevelUtils.getFluidHandler(getFacingBlockEntity(),
+      IFluidHandler handler = LevelUtils.getFluidHandler(level, pos.relative(getDirection()),
           getDirection().getOpposite());
 
       if (handler != null) {

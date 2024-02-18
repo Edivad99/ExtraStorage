@@ -22,6 +22,5 @@
   ],
   "result": {
     "item": "extrastorage:disk_65536k_fluid"
-  },
-  "show_notification": true
+  }
 }

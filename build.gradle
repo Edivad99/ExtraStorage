@@ -2,12 +2,18 @@ import se.bjurr.gitchangelog.plugin.gradle.GitChangelogTask
 import static org.apache.commons.lang3.StringUtils.repeat
 
 plugins {
+    id 'java-library'
     id 'eclipse'
     id 'idea'
-    id 'net.neoforged.gradle' version '[6.0.18,6.2)'
-    id 'org.parchmentmc.librarian.forgegradle' version '1.+'
-    id 'se.bjurr.gitchangelog.git-changelog-gradle-plugin' version '1.81.3'
-    id 'me.modmuss50.mod-publish-plugin' version '0.4.1'
+    id 'net.neoforged.gradle.userdev' version "$neo_gradle_version"
+    id 'se.bjurr.gitchangelog.git-changelog-gradle-plugin' version '2.1.0'
+    id 'me.modmuss50.mod-publish-plugin' version '0.5.0'
+    id 'com.diffplug.spotless' version '6.25.0'
+}
+
+def isRelease = System.getenv('CURSEFORGE_TOKEN')
+if (!isRelease) {
+    mod_version += '-snapshot'
 }
 
 version = "$minecraft_version-$mod_version"
@@ -17,7 +23,9 @@ base.archivesName = 'ExtraStorage'
 java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(17)
-        vendor = JvmVendorSpec.JETBRAINS
+        if (System.getProperty('idea.active')) {
+            vendor = JvmVendorSpec.JETBRAINS
+        }
     }
 }
 
@@ -28,48 +36,33 @@ println("JVM: ${System.getProperty('java.vm.version')} (${System.getProperty('ja
 println("Arch: ${System.getProperty('os.arch')}")
 println(repeat('*', 60))
 
-minecraft {
-    mappings channel: mappings_channel, version: mappings_version
+minecraft.accessTransformers.file rootProject.file('src/main/resources/META-INF/accesstransformer.cfg')
 
-    copyIdeResources = true
+runs {
+    configureEach {
+        systemProperty 'forge.logging.console.level', 'debug'
 
-    accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
-
-    runs {
-        configureEach {
-            property 'forge.logging.console.level', 'debug'
-            jvmArgs '-XX:+AllowEnhancedClassRedefinition'
-
-            mods {
-                extrastorage {
-                    source sourceSets.main
-                }
-            }
+        modSource project.sourceSets.main
+        if (System.getProperty('idea.active')) {
+            jvmArguments.add("-XX:+AllowEnhancedClassRedefinition")
         }
+    }
 
-        client {
-            workingDirectory project.file('run/client')
-        }
+    client {
+    }
 
-        server {
-            workingDirectory project.file('run/server')
-        }
+    server {
+        programArgument '--nogui'
+    }
 
-        data {
-            workingDirectory project.file('run/data')
-
-            args '--mod', 'extrastorage', '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
-        }
+    data {
+        programArguments.addAll '--mod', 'extrastorage', '--all', '--output', file('src/generated/resources/').getAbsolutePath(), '--existing', file('src/main/resources/').getAbsolutePath()
     }
 }
 
-sourceSets {
-    main {
-        resources {
-            srcDir 'src/generated/resources'
-            exclude '.cache'
-        }
-    }
+sourceSets.main.resources {
+    srcDir 'src/generated/resources'
+    exclude '.cache'
 }
 
 repositories {
@@ -96,35 +89,50 @@ repositories {
 }
 
 dependencies {
-    minecraft group: 'net.neoforged', name: 'forge', version: "$minecraft_version-$neo_version"
+    implementation "net.neoforged:neoforge:$neo_version"
 
-    implementation fg.deobf("curse.maven:edivadlib-638508:$edivadlib_id")
+    implementation "curse.maven:edivadlib-638508:$edivadlib_id"
+    implementation ("com.refinedmods:refinedstorage:$rs_version") {
+        transitive = false
+    }
+    implementation "mcjty.theoneprobe:theoneprobe:$top_version"
 
-    implementation fg.deobf("com.refinedmods:refinedstorage:$rs_version") {
-        transitive false
+    //implementation "tschipp.carryon:carryon-forge-$minecraft_version:$co_version")
+    runtimeOnly "mezz.jei:jei-$minecraft_version-neoforge:$jei_version"
+    //implementation "curse.maven:mekanism-268560:4041164"
+}
+
+spotless {
+    java {
+        target 'src/*/java/**/*.java'
+        importOrder('\\#', 'java|javax|org|com|')
+
+        endWithNewline()
+        trimTrailingWhitespace()
+        removeUnusedImports()
+        indentWithSpaces(2)
     }
-    implementation fg.deobf("mcjty.theoneprobe:theoneprobe:$top_version") {
-        transitive false
-    }
-    /*implementation fg.deobf("tschipp.carryon:carryon-forge-$minecraft_version:$co_version") {
-        transitive false
-    }*/
-    runtimeOnly fg.deobf("mezz.jei:jei-$minecraft_version-forge:$jei_version")
-    //implementation fg.deobf("curse.maven:mekanism-268560:4041164")
 }
 
 tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8'
-    options.compilerArgs.addAll(["-Xmaxerrs", "100000"])
+    options.compilerArgs.addAll(['-Xmaxerrs', '100000'])
 }
 
 tasks.withType(ProcessResources).configureEach {
     var replaceProperties = [
-            mod_version: mod_version
+        minecraft_version               : minecraft_version,
+        minecraft_version_range         : minecraft_version_range,
+        neo_version                     : neo_version,
+        neo_version_range               : neo_version_range,
+        loader_version_range            : loader_version_range,
+        mod_version                     : mod_version,
+        edivadlib_version_range         : edivadlib_version_range,
+        refinedstorage_version_range    : refinedstorage_version_range,
     ]
     inputs.properties replaceProperties
 
-    filesMatching(['META-INF/mods.toml', 'pack.mcmeta']) {
+    filesMatching(['META-INF/mods.toml']) {
         expand replaceProperties + [project: project]
     }
 }
@@ -132,21 +140,15 @@ tasks.withType(ProcessResources).configureEach {
 tasks.named('jar', Jar).configure {
     manifest {
         attributes([
-            'Specification-Title'       : 'extrastorage',
-            'Specification-Vendor'      : 'Edivad99',
-            'Specification-Version'     : '1',
-            'Implementation-Title'      : 'extrastorage',
-            'Implementation-Version'    : project.version,
-            'Implementation-Vendor'     : 'Edivad99',
-            'Implementation-Commit'     : 'git rev-parse HEAD'.execute().text.trim()
+            'Specification-Title'     : 'dimstorage',
+            'Specification-Vendor'    : 'Edivad99',
+            'Specification-Version'   : '1',
+            'Implementation-Title'    : 'dimstorage',
+            'Implementation-Version'  : project.version,
+            'Implementation-Vendor'   : 'Edivad99',
+            'Implementation-Commit'   : 'git rev-parse HEAD'.execute().text.trim(),
         ])
     }
-    finalizedBy 'reobfJar'
-}
-
-tasks.named('wrapper', Wrapper).configure {
-    gradleVersion = '8.4'
-    distributionType = Wrapper.DistributionType.BIN
 }
 
 def penultimateTag = { ->
@@ -180,31 +182,20 @@ publishMods {
     changelog = changelogFile.exists() ? changelogFile.text : 'CHANGELOG.md not found'
 
     modLoaders.add('neoforge')
-    if (minecraft_version.equals('1.20.1')) {
-        modLoaders.add('forge')
-    }
     file = jar.archiveFile
 
     curseforge {
         projectId = '410168'
         accessToken = providers.environmentVariable('CURSEFORGE_TOKEN')
         minecraftVersions.add(minecraft_version)
-        requires {
-            slug = 'edivadlib'
-        }
-        requires {
-            slug = 'refined-storage'
-        }
+        requires('edivadlib')
+        requires('refined-storage')
     }
     modrinth {
         projectId = 'T34cBZKl'
         accessToken = providers.environmentVariable('MODRINTH_TOKEN')
         minecraftVersions.add(minecraft_version)
-        requires {
-            slug = 'edivadlib'
-        }
-        requires {
-            slug = 'refined-storage'
-        }
+        requires('edivadlib')
+        requires('refined-storage')
     }
 }

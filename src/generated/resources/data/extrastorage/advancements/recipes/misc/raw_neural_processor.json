@@ -22,14 +22,13 @@
   },
   "requirements": [
     [
-      "has_raw_advanced_processor",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_raw_advanced_processor"
     ]
   ],
   "rewards": {
     "recipes": [
       "extrastorage:raw_neural_processor"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

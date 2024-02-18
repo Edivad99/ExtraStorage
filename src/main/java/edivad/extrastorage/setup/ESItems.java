@@ -12,32 +12,31 @@ import edivad.extrastorage.items.storage.fluid.FluidStorageType;
 import edivad.extrastorage.items.storage.item.ExpandedStorageDiskItem;
 import edivad.extrastorage.items.storage.item.ItemStorageType;
 import net.minecraft.world.item.Item;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.neoforge.registries.DeferredItem;
+import net.neoforged.neoforge.registries.DeferredRegister;
 
 public class ESItems {
 
-  public static final Map<ItemStorageType, RegistryObject<Item>> ITEM_STORAGE = new HashMap<>();
-  public static final Map<FluidStorageType, RegistryObject<Item>> FLUID_STORAGE = new HashMap<>();
-  public static final Map<CrafterTier, RegistryObject<BaseBlockItem>> CRAFTER = new HashMap<>();
-  public static final Map<ItemStorageType, RegistryObject<Item>> ITEM_STORAGE_PART = new HashMap<>();
-  public static final Map<FluidStorageType, RegistryObject<Item>> FLUID_STORAGE_PART = new HashMap<>();
-  public static final Map<ItemStorageType, RegistryObject<Item>> ITEM_DISK = new HashMap<>();
-  public static final Map<FluidStorageType, RegistryObject<Item>> FLUID_DISK = new HashMap<>();
-  private static final DeferredRegister<Item> ITEMS =
-      DeferredRegister.create(ForgeRegistries.ITEMS, ExtraStorage.ID);
-  public static final RegistryObject<Item> ADVANCED_EXPORTER =
+  public static final Map<ItemStorageType, DeferredItem<Item>> ITEM_STORAGE = new HashMap<>();
+  public static final Map<FluidStorageType, DeferredItem<Item>> FLUID_STORAGE = new HashMap<>();
+  public static final Map<CrafterTier, DeferredItem<BaseBlockItem>> CRAFTER = new HashMap<>();
+  public static final Map<ItemStorageType, DeferredItem<Item>> ITEM_STORAGE_PART = new HashMap<>();
+  public static final Map<FluidStorageType, DeferredItem<Item>> FLUID_STORAGE_PART = new HashMap<>();
+  public static final Map<ItemStorageType, DeferredItem<Item>> ITEM_DISK = new HashMap<>();
+  public static final Map<FluidStorageType, DeferredItem<Item>> FLUID_DISK = new HashMap<>();
+  private static final DeferredRegister.Items ITEMS =
+      DeferredRegister.createItems(ExtraStorage.ID);
+  public static final DeferredItem<Item> ADVANCED_EXPORTER =
       ITEMS.register("advanced_exporter",
           () -> new BaseBlockItem(ESBlocks.ADVANCED_EXPORTER.get(), new Item.Properties()));
-  public static final RegistryObject<Item> ADVANCED_IMPORTER =
+  public static final DeferredItem<Item> ADVANCED_IMPORTER =
       ITEMS.register("advanced_importer",
           () -> new BaseBlockItem(ESBlocks.ADVANCED_IMPORTER.get(), new Item.Properties()));
 
-  public static final RegistryObject<Item> RAW_NEURAL_PROCESSOR =
+  public static final DeferredItem<Item> RAW_NEURAL_PROCESSOR =
       ITEMS.register("raw_neural_processor", () -> new Item(new Item.Properties()));
-  public static final RegistryObject<Item> NEURAL_PROCESSOR =
+  public static final DeferredItem<Item> NEURAL_PROCESSOR =
       ITEMS.register("neural_processor", () -> new Item(new Item.Properties()));
 
   static {

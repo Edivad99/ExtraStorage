@@ -22,14 +22,13 @@
   },
   "requirements": [
     [
-      "has_importer",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_importer"
     ]
   ],
   "rewards": {
     "recipes": [
       "extrastorage:advanced_importer"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

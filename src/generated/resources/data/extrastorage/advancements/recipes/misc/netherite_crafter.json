@@ -22,14 +22,13 @@
   },
   "requirements": [
     [
-      "has_diamond_crafter",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_diamond_crafter"
     ]
   ],
   "rewards": {
     "recipes": [
       "extrastorage:netherite_crafter"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

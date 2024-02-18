@@ -1,7 +1,5 @@
 package edivad.extrastorage.loottable;
 
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonObject;
 import edivad.extrastorage.blockentity.AdvancedFluidStorageBlockEntity;
 import edivad.extrastorage.blockentity.AdvancedStorageBlockEntity;
 import edivad.extrastorage.nodes.AdvancedFluidStorageNetworkNode;
@@ -9,23 +7,14 @@ import edivad.extrastorage.nodes.AdvancedStorageNetworkNode;
 import edivad.extrastorage.setup.ESLootFunctions;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.LootContext;
-import net.minecraft.world.level.storage.loot.functions.LootItemConditionalFunction;
+import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
-import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 
-public class StorageBlockLootFunction extends LootItemConditionalFunction {
-
-  protected StorageBlockLootFunction(LootItemCondition[] conditions) {
-    super(conditions);
-  }
-
-  public static LootItemConditionalFunction.Builder<?> builder() {
-    return simpleBuilder(StorageBlockLootFunction::new);
-  }
+public class StorageBlockLootFunction implements LootItemFunction {
 
   @Override
-  public ItemStack run(ItemStack stack, LootContext lootContext) {
+  public ItemStack apply(ItemStack stack, LootContext lootContext) {
     var blockEntity = lootContext.getParamOrNull(LootContextParams.BLOCK_ENTITY);
     if (blockEntity instanceof AdvancedStorageBlockEntity itemStorageBlockEntity) {
       var removedNode = itemStorageBlockEntity.getRemovedNode();
@@ -49,15 +38,5 @@ public class StorageBlockLootFunction extends LootItemConditionalFunction {
 
   public LootItemFunctionType getType() {
     return ESLootFunctions.STORAGE_BLOCK;
-  }
-
-  public static class Serializer extends
-      LootItemConditionalFunction.Serializer<StorageBlockLootFunction> {
-
-    @Override
-    public StorageBlockLootFunction deserialize(JsonObject object,
-        JsonDeserializationContext deserializationContext, LootItemCondition[] conditions) {
-      return new StorageBlockLootFunction(conditions);
-    }
   }
 }

@@ -13,30 +13,30 @@ import edivad.extrastorage.blockentity.AdvancedStorageBlockEntity;
 import edivad.extrastorage.blocks.CrafterTier;
 import edivad.extrastorage.items.storage.fluid.FluidStorageType;
 import edivad.extrastorage.items.storage.item.ItemStorageType;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.neoforge.registries.DeferredHolder;
+import net.neoforged.neoforge.registries.DeferredRegister;
 
 public class ESBlockEntities {
 
   private static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES =
-      DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, ExtraStorage.ID);
+      DeferredRegister.create(BuiltInRegistries.BLOCK_ENTITY_TYPE, ExtraStorage.ID);
 
-  public static final Map<ItemStorageType, RegistryObject<BlockEntityType<AdvancedStorageBlockEntity>>> ITEM_STORAGE = new HashMap<>();
-  public static final Map<FluidStorageType, RegistryObject<BlockEntityType<AdvancedFluidStorageBlockEntity>>> FLUID_STORAGE = new HashMap<>();
-  public static final Map<CrafterTier, RegistryObject<BlockEntityType<AdvancedCrafterBlockEntity>>> CRAFTER = new HashMap<>();
+  public static final Map<ItemStorageType, DeferredHolder<BlockEntityType<?>, BlockEntityType<AdvancedStorageBlockEntity>>> ITEM_STORAGE = new HashMap<>();
+  public static final Map<FluidStorageType, DeferredHolder<BlockEntityType<?>, BlockEntityType<AdvancedFluidStorageBlockEntity>>> FLUID_STORAGE = new HashMap<>();
+  public static final Map<CrafterTier, DeferredHolder<BlockEntityType<?>, BlockEntityType<AdvancedCrafterBlockEntity>>> CRAFTER = new HashMap<>();
 
-  public static final RegistryObject<BlockEntityType<AdvancedExporterBlockEntity>> ADVANCED_EXPORTER =
+  public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<AdvancedExporterBlockEntity>> ADVANCED_EXPORTER =
       BLOCK_ENTITIES.register("advanced_exporter",
           () -> registerSynchronizationParameters(AdvancedExporterBlockEntity.SPEC,
               BlockEntityType.Builder.of(AdvancedExporterBlockEntity::new,
                       ESBlocks.ADVANCED_EXPORTER.get())
                   .build(null)));
 
-  public static final RegistryObject<BlockEntityType<AdvancedImporterBlockEntity>> ADVANCED_IMPORTER =
+  public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<AdvancedImporterBlockEntity>> ADVANCED_IMPORTER =
       BLOCK_ENTITIES.register("advanced_importer",
           () -> registerSynchronizationParameters(AdvancedImporterBlockEntity.SPEC,
               BlockEntityType.Builder.of(AdvancedImporterBlockEntity::new,

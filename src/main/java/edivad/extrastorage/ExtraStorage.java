@@ -6,6 +6,7 @@ import com.refinedmods.refinedstorage.api.network.node.INetworkNode;
 import com.refinedmods.refinedstorage.apiimpl.API;
 import com.refinedmods.refinedstorage.apiimpl.network.node.NetworkNode;
 import com.refinedmods.refinedstorage.blockentity.data.BlockEntitySynchronizationManager;
+import edivad.extrastorage.blockentity.AdvancedCrafterBlockEntity;
 import edivad.extrastorage.blocks.CrafterTier;
 import edivad.extrastorage.compat.TOPIntegration;
 import edivad.extrastorage.data.ExtraStorageBlockTagsProvider;
@@ -34,14 +35,16 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.data.event.GatherDataEvent;
-import net.minecraftforge.fml.InterModComms;
-import net.minecraftforge.fml.ModList;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.fml.loading.FMLEnvironment;
-import net.minecraftforge.registries.RegisterEvent;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.fml.InterModComms;
+import net.neoforged.fml.ModList;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
+import net.neoforged.neoforge.data.event.GatherDataEvent;
+import net.neoforged.neoforge.registries.RegisterEvent;
 
 @Mod(ExtraStorage.ID)
 public class ExtraStorage {
@@ -51,10 +54,9 @@ public class ExtraStorage {
 
   public static final Logger LOGGER = LogUtils.getLogger();
 
-  public ExtraStorage() {
-    var modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
+  public ExtraStorage(IEventBus modEventBus, Dist dist) {
 
-    if (FMLEnvironment.dist.isClient()) {
+    if (dist.isClient()) {
       modEventBus.addListener(ClientSetup::init);
       modEventBus.addListener(ClientSetup::onModelBake);
     }
@@ -69,6 +71,7 @@ public class ExtraStorage {
     modEventBus.addListener(this::handleCommonSetup);
     modEventBus.addListener(this::handleGatherData);
     modEventBus.addListener(this::onRegister);
+    modEventBus.addListener(this::registerCapabilities);
   }
 
   public static ResourceLocation rl(String path) {
@@ -157,6 +160,13 @@ public class ExtraStorage {
           ESContainer.ADVANCED_EXPORTER::getId);
       InterModComms.sendTo("inventorysorter", "containerblacklist",
           ESContainer.ADVANCED_IMPORTER::getId);
+    }
+  }
+
+  private void registerCapabilities(RegisterCapabilitiesEvent event) {
+    for (var tier : CrafterTier.values()) {
+      event.registerBlockEntity(Capabilities.ItemHandler.BLOCK,
+          ESBlockEntities.CRAFTER.get(tier).get(), AdvancedCrafterBlockEntity::getPatterns);
     }
   }
 }

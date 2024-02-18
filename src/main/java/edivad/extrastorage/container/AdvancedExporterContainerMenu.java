@@ -8,7 +8,7 @@ import com.refinedmods.refinedstorage.item.UpgradeItem;
 import edivad.extrastorage.blockentity.AdvancedExporterBlockEntity;
 import edivad.extrastorage.setup.ESContainer;
 import net.minecraft.world.entity.player.Player;
-import net.minecraftforge.items.SlotItemHandler;
+import net.neoforged.neoforge.items.SlotItemHandler;
 
 public class AdvancedExporterContainerMenu extends BaseContainerMenu {
 

@@ -10,7 +10,6 @@ import edivad.extrastorage.container.AdvancedStorageBlockContainerMenu;
 import edivad.extrastorage.items.storage.item.ItemStorageType;
 import edivad.extrastorage.nodes.AdvancedStorageNetworkNode;
 import net.minecraft.core.BlockPos;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
@@ -20,7 +19,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraftforge.network.NetworkHooks;
 
 public class AdvancedStorageBlock extends NetworkNodeBlock {
 
@@ -39,8 +37,7 @@ public class AdvancedStorageBlock extends NetworkNodeBlock {
   public void setPlacedBy(Level level, BlockPos pos, BlockState state, LivingEntity entity,
       ItemStack stack) {
     if (!level.isClientSide) {
-      AdvancedStorageNetworkNode storage = ((AdvancedStorageBlockEntity) level.getBlockEntity(
-          pos)).getNode();
+      var storage = ((AdvancedStorageBlockEntity) level.getBlockEntity(pos)).getNode();
       if (stack.hasTag() && stack.getTag().hasUUID(AdvancedStorageNetworkNode.NBT_ID)) {
         storage.setStorageId(stack.getTag().getUUID(AdvancedStorageNetworkNode.NBT_ID));
       }
@@ -60,12 +57,11 @@ public class AdvancedStorageBlock extends NetworkNodeBlock {
   public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player,
       InteractionHand handIn, BlockHitResult hit) {
     if (!level.isClientSide) {
-      return NetworkUtils.attemptModify(level, pos, player, () -> NetworkHooks.openScreen(
-          (ServerPlayer) player,
+      return NetworkUtils.attemptModify(level, pos, player, () -> player.openMenu(
           new BlockEntityMenuProvider<AdvancedStorageBlockEntity>(
               ((AdvancedStorageBlockEntity) level.getBlockEntity(pos)).getNode().getTitle(),
-              (tile, windowId, inventory, p) -> new AdvancedStorageBlockContainerMenu(windowId,
-                  player, tile),
+              (tile, windowId, inventory, p) ->
+                  new AdvancedStorageBlockContainerMenu(windowId, player, tile),
               pos
           ), pos));
     }

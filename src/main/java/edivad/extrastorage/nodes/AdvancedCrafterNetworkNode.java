@@ -12,7 +12,6 @@ import com.refinedmods.refinedstorage.api.autocrafting.ICraftingPattern;
 import com.refinedmods.refinedstorage.api.autocrafting.ICraftingPatternContainer;
 import com.refinedmods.refinedstorage.api.autocrafting.ICraftingPatternProvider;
 import com.refinedmods.refinedstorage.api.network.INetwork;
-import com.refinedmods.refinedstorage.api.network.node.INetworkNode;
 import com.refinedmods.refinedstorage.apiimpl.API;
 import com.refinedmods.refinedstorage.apiimpl.network.node.ConnectivityStateChangeCause;
 import com.refinedmods.refinedstorage.apiimpl.network.node.NetworkNode;
@@ -36,10 +35,10 @@ import net.minecraft.world.Nameable;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.IItemHandlerModifiable;
-import net.minecraftforge.items.wrapper.CombinedInvWrapper;
+import net.neoforged.neoforge.fluids.capability.IFluidHandler;
+import net.neoforged.neoforge.items.IItemHandler;
+import net.neoforged.neoforge.items.IItemHandlerModifiable;
+import net.neoforged.neoforge.items.wrapper.CombinedInvWrapper;
 
 public class AdvancedCrafterNetworkNode extends NetworkNode implements ICraftingPatternContainer {
 
@@ -182,6 +181,7 @@ public class AdvancedCrafterNetworkNode extends NetworkNode implements ICrafting
     if (network != null) {
       network.getCraftingManager().invalidate();
     }
+    level.invalidateCapabilities(pos);
   }
 
   @Override
@@ -267,7 +267,7 @@ public class AdvancedCrafterNetworkNode extends NetworkNode implements ICrafting
     if (proxy == null) {
       return null;
     }
-    return LevelUtils.getItemHandler(proxy.getFacingBlockEntity(),
+    return LevelUtils.getItemHandler(level, proxy.getPosition().relative(proxy.getDirection()),
         proxy.getDirection().getOpposite());
   }
 
@@ -278,7 +278,7 @@ public class AdvancedCrafterNetworkNode extends NetworkNode implements ICrafting
     if (proxy == null) {
       return null;
     }
-    return LevelUtils.getFluidHandler(proxy.getFacingBlockEntity(),
+    return LevelUtils.getFluidHandler(level, proxy.getPosition().relative(proxy.getDirection()),
         proxy.getDirection().getOpposite());
   }
 
@@ -379,7 +379,7 @@ public class AdvancedCrafterNetworkNode extends NetworkNode implements ICrafting
       return null;
     }
 
-    INetworkNode facing = API.instance().getNetworkNodeManager((ServerLevel) level)
+    var facing = API.instance().getNetworkNodeManager((ServerLevel) level)
         .getNode(pos.relative(getDirection()));
     if (!(facing instanceof ICraftingPatternContainer container)
         || facing.getNetwork() != network) {
@@ -432,7 +432,9 @@ public class AdvancedCrafterNetworkNode extends NetworkNode implements ICrafting
     var root = getRootContainerNotSelf();
     if (root.isPresent()) {
       root.get().onUsedForProcessing();
-    } else if (mode == CrafterMode.PULSE_INSERTS_NEXT_SET) {
+      return;
+    }
+    if (mode == CrafterMode.PULSE_INSERTS_NEXT_SET) {
       this.locked = true;
       markDirty();
     }

@@ -22,14 +22,13 @@
   },
   "requirements": [
     [
-      "has_part",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_part"
     ]
   ],
   "rewards": {
     "recipes": [
       "extrastorage:neural_processor"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

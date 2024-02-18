@@ -22,6 +22,5 @@
   ],
   "result": {
     "item": "extrastorage:disk_256k"
-  },
-  "show_notification": true
+  }
 }

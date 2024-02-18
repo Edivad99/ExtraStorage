@@ -13,7 +13,6 @@ import edivad.extrastorage.blockentity.AdvancedImporterBlockEntity;
 import edivad.extrastorage.container.AdvancedImporterContainerMenu;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -25,7 +24,6 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.network.NetworkHooks;
 
 public class AdvancedImporterBlock extends CableBlock {
 
@@ -92,12 +90,11 @@ public class AdvancedImporterBlock extends CableBlock {
       InteractionHand hand, BlockHitResult hit) {
     if (!level.isClientSide && CollisionUtils.isInBounds(getLineShape(state), pos,
         hit.getLocation())) {
-      return NetworkUtils.attemptModify(level, pos, player, () -> NetworkHooks.openScreen(
-          (ServerPlayer) player,
+      return NetworkUtils.attemptModify(level, pos, player, () -> player.openMenu(
           new BlockEntityMenuProvider<AdvancedImporterBlockEntity>(
               Component.translatable(this.getDescriptionId()),
-              (blockEntity, windowId, inventory, p) -> new AdvancedImporterContainerMenu(windowId,
-                  player, blockEntity),
+              (blockEntity, windowId, inventory, p) ->
+                  new AdvancedImporterContainerMenu(windowId, player, blockEntity),
               pos
           ),
           pos

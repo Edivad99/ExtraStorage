@@ -22,14 +22,13 @@
   },
   "requirements": [
     [
-      "has_crafter",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_crafter"
     ]
   ],
   "rewards": {
     "recipes": [
       "extrastorage:iron_crafter"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

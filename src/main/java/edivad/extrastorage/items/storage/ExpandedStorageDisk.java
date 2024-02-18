@@ -21,8 +21,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
 public abstract class ExpandedStorageDisk extends Item implements IStorageDiskProvider {
 
@@ -74,7 +72,6 @@ public abstract class ExpandedStorageDisk extends Item implements IStorageDiskPr
     return new InteractionResultHolder<>(InteractionResult.PASS, diskStack);
   }
 
-  @OnlyIn(Dist.CLIENT)
   @Override
   public void appendHoverText(ItemStack stack, Level level, List<Component> tooltip,
       TooltipFlag flag) {

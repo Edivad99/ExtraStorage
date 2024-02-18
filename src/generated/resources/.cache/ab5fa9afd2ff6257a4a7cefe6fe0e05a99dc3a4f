@@ -1,4 +1,4 @@
-// 1.20.1	2023-11-07T20:45:09.833951	Tags for minecraft:block mod id extrastorage
+// 1.20.4	2024-02-18T15:06:50.29122	Tags for minecraft:block mod id extrastorage
 7f6f5a6dbe0462de6efee479784418ea8809217e data/carryon/tags/blocks/block_blacklist.json
 141b4859957bd7306be7617a15ccfe90cb9723a5 data/extrastorage/tags/blocks/crafter.json
 30bff32cab42d4440016e6f03329e6294a3c8650 data/forge/tags/blocks/relocation_not_supported.json

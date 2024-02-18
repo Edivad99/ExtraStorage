@@ -16,9 +16,9 @@ import edivad.extrastorage.items.storage.item.ItemStorageType;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.client.event.ModelEvent;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
+import net.neoforged.neoforge.client.event.ModelEvent;
+import net.neoforged.neoforge.common.NeoForge;
 
 public class ClientSetup {
 
@@ -26,7 +26,7 @@ public class ClientSetup {
 
   public static void init(FMLClientSetupEvent event) {
     //Version checker
-    MinecraftForge.EVENT_BUS.register(new UpdateChecker(ExtraStorage.ID));
+    NeoForge.EVENT_BUS.register(new UpdateChecker(ExtraStorage.ID));
 
     //Special render & GUI
     for (var tier : CrafterTier.values()) {

@@ -22,14 +22,13 @@
   },
   "requirements": [
     [
-      "has_previous_part",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_previous_part"
     ]
   ],
   "rewards": {
     "recipes": [
       "extrastorage:part/storagepart_256k"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

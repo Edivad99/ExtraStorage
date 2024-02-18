@@ -8,7 +8,7 @@ import edivad.extrastorage.setup.ESBlocks;
 import edivad.extrastorage.setup.ESItems;
 import edivad.extrastorage.tools.Translations;
 import net.minecraft.data.PackOutput;
-import net.minecraftforge.common.data.LanguageProvider;
+import net.neoforged.neoforge.common.data.LanguageProvider;
 
 public class ExtraStorageLanguageProvider extends LanguageProvider {
 

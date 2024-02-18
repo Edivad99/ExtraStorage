@@ -20,14 +20,13 @@
   },
   "requirements": [
     [
-      "has_part",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_part"
     ]
   ],
   "rewards": {
     "recipes": [
       "extrastorage:disk/shapeless/disk_65536k_fluid"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

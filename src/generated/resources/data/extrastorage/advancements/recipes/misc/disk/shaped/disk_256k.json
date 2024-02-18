@@ -20,14 +20,13 @@
   },
   "requirements": [
     [
-      "has_part",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_part"
     ]
   ],
   "rewards": {
     "recipes": [
       "extrastorage:disk/shaped/disk_256k"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

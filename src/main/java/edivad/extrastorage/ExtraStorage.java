@@ -68,10 +68,13 @@ public class ExtraStorage {
     CreativeModeTabs.register(modEventBus);
     Config.init();
 
+    if (dist.isClient()) {
+      modEventBus.addListener(ClientSetup::handleClientSetup);
+      modEventBus.addListener(ClientSetup::onModelBake);
+    }
+
     modEventBus.addListener(this::handleCommonSetup);
     modEventBus.addListener(this::handleRegisterMenuScreens);
-    modEventBus.addListener(ClientSetup::handleClientSetup);
-    modEventBus.addListener(ClientSetup::onModelBake);
     modEventBus.addListener(this::handleGatherData);
     modEventBus.addListener(this::onRegister);
     modEventBus.addListener(this::registerCapabilities);

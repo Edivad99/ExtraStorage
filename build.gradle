@@ -95,7 +95,7 @@ dependencies {
     implementation ("com.refinedmods:refinedstorage:$rs_version") {
         transitive = false
     }
-    implementation "mcjty.theoneprobe:theoneprobe:$top_version"
+    compileOnly "mcjty.theoneprobe:theoneprobe:$top_version"
 
     //implementation "tschipp.carryon:carryon-forge-$minecraft_version:$co_version")
     runtimeOnly "mezz.jei:jei-$minecraft_version-neoforge:$jei_version"

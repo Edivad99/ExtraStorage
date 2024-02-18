@@ -8,6 +8,11 @@ import com.refinedmods.refinedstorage.apiimpl.network.node.NetworkNode;
 import com.refinedmods.refinedstorage.blockentity.data.BlockEntitySynchronizationManager;
 import edivad.extrastorage.blockentity.AdvancedCrafterBlockEntity;
 import edivad.extrastorage.blocks.CrafterTier;
+import edivad.extrastorage.client.screen.AdvancedCrafterScreen;
+import edivad.extrastorage.client.screen.AdvancedExporterScreen;
+import edivad.extrastorage.client.screen.AdvancedFluidStorageBlockScreen;
+import edivad.extrastorage.client.screen.AdvancedImporterScreen;
+import edivad.extrastorage.client.screen.AdvancedStorageBlockScreen;
 import edivad.extrastorage.compat.TOPIntegration;
 import edivad.extrastorage.data.ExtraStorageBlockTagsProvider;
 import edivad.extrastorage.data.ExtraStorageItemTagsProvider;
@@ -43,6 +48,7 @@ import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
+import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.neoforged.neoforge.registries.RegisterEvent;
 
@@ -55,12 +61,6 @@ public class ExtraStorage {
   public static final Logger LOGGER = LogUtils.getLogger();
 
   public ExtraStorage(IEventBus modEventBus, Dist dist) {
-
-    if (dist.isClient()) {
-      modEventBus.addListener(ClientSetup::init);
-      modEventBus.addListener(ClientSetup::onModelBake);
-    }
-
     ESBlocks.register(modEventBus);
     ESItems.register(modEventBus);
     ESBlockEntities.register(modEventBus);
@@ -69,6 +69,9 @@ public class ExtraStorage {
     Config.init();
 
     modEventBus.addListener(this::handleCommonSetup);
+    modEventBus.addListener(this::handleRegisterMenuScreens);
+    modEventBus.addListener(ClientSetup::handleClientSetup);
+    modEventBus.addListener(ClientSetup::onModelBake);
     modEventBus.addListener(this::handleGatherData);
     modEventBus.addListener(this::onRegister);
     modEventBus.addListener(this::registerCapabilities);
@@ -161,6 +164,20 @@ public class ExtraStorage {
       InterModComms.sendTo("inventorysorter", "containerblacklist",
           ESContainer.ADVANCED_IMPORTER::getId);
     }
+  }
+
+  private void handleRegisterMenuScreens(RegisterMenuScreensEvent event) {
+    for (var tier : CrafterTier.values()) {
+      event.register(ESContainer.CRAFTER.get(tier).get(), AdvancedCrafterScreen::new);
+    }
+    for (var type : ItemStorageType.values()) {
+      event.register(ESContainer.ITEM_STORAGE.get(type).get(), AdvancedStorageBlockScreen::new);
+    }
+    for (var type : FluidStorageType.values()) {
+      event.register(ESContainer.FLUID_STORAGE.get(type).get(), AdvancedFluidStorageBlockScreen::new);
+    }
+    event.register(ESContainer.ADVANCED_EXPORTER.get(), AdvancedExporterScreen::new);
+    event.register(ESContainer.ADVANCED_IMPORTER.get(), AdvancedImporterScreen::new);
   }
 
   private void registerCapabilities(RegisterCapabilitiesEvent event) {

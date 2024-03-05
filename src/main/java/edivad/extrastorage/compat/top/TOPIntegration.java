@@ -1,11 +1,9 @@
-package edivad.extrastorage.compat;
+package edivad.extrastorage.compat.top;
 
 import java.util.function.Function;
-import com.refinedmods.refinedstorage.apiimpl.network.node.CrafterNetworkNode;
 import com.refinedmods.refinedstorage.blockentity.CrafterBlockEntity;
 import edivad.extrastorage.ExtraStorage;
 import edivad.extrastorage.blockentity.AdvancedCrafterBlockEntity;
-import edivad.extrastorage.nodes.AdvancedCrafterNetworkNode;
 import edivad.extrastorage.tools.Translations;
 import mcjty.theoneprobe.api.IProbeHitData;
 import mcjty.theoneprobe.api.IProbeInfo;
@@ -16,7 +14,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
 public class TOPIntegration implements IProbeInfoProvider, Function<ITheOneProbe, Void> {
@@ -30,19 +27,19 @@ public class TOPIntegration implements IProbeInfoProvider, Function<ITheOneProbe
   @Override
   public void addProbeInfo(ProbeMode probeMode, IProbeInfo probeInfo, Player player, Level level,
       BlockState blockState, IProbeHitData data) {
-    BlockEntity te = level.getBlockEntity(data.getPos());
+    var blockEntity = level.getBlockEntity(data.getPos());
     int patterns, speed, slots;
 
-    if (te instanceof AdvancedCrafterBlockEntity tile) {
-      AdvancedCrafterNetworkNode node = tile.getNode();
+    if (blockEntity instanceof AdvancedCrafterBlockEntity advancedCrafter) {
+      var node = advancedCrafter.getNode();
       patterns = node.getPatterns().size();
       speed = node.getMaximumSuccessfulCraftingUpdates();
-      slots = tile.getTier().getSlots();
+      slots = advancedCrafter.getTier().getSlots();
       probeInfo.horizontal().text(
           Component.translatable(Translations.OCCUPIED_SPACE, String.valueOf(patterns),
               String.valueOf(slots)));
 
-      if (node.getTierSpeed() != node.getMaximumSuccessfulCraftingUpdates()) {
+      if (node.getTierSpeed() != speed) {
         probeInfo.horizontal().text(
             Component.translatable(Translations.LIMITED_SPEED, node.getName().getString(),
                 String.valueOf(speed)));
@@ -50,8 +47,8 @@ public class TOPIntegration implements IProbeInfoProvider, Function<ITheOneProbe
         probeInfo.horizontal()
             .text(Component.translatable(Translations.CURRENT_SPEED, String.valueOf(speed)));
       }
-    } else if (te instanceof CrafterBlockEntity tile) {
-      CrafterNetworkNode node = tile.getNode();
+    } else if (blockEntity instanceof CrafterBlockEntity crafter) {
+      var node = crafter.getNode();
       patterns = node.getPatterns().size();
       speed = node.getMaximumSuccessfulCraftingUpdates();
       slots = 9;

@@ -111,6 +111,8 @@ dependencies {
         transitive false
     }*/
     runtimeOnly fg.deobf("mezz.jei:jei-$minecraft_version-forge:$jei_version")
+    compileOnly fg.deobf("curse.maven:jade-api-324717:$jade_id_api")
+    runtimeOnly fg.deobf("curse.maven:jade-324717:$jade_id")
     //implementation fg.deobf("curse.maven:mekanism-268560:4041164")
 }
 

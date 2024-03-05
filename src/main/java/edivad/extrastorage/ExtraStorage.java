@@ -7,7 +7,7 @@ import com.refinedmods.refinedstorage.apiimpl.API;
 import com.refinedmods.refinedstorage.apiimpl.network.node.NetworkNode;
 import com.refinedmods.refinedstorage.blockentity.data.BlockEntitySynchronizationManager;
 import edivad.extrastorage.blocks.CrafterTier;
-import edivad.extrastorage.compat.TOPIntegration;
+import edivad.extrastorage.compat.top.TOPIntegration;
 import edivad.extrastorage.data.ExtraStorageBlockTagsProvider;
 import edivad.extrastorage.data.ExtraStorageItemTagsProvider;
 import edivad.extrastorage.data.ExtraStorageLanguageProvider;

@@ -13,7 +13,7 @@ import edivad.extrastorage.client.screen.AdvancedExporterScreen;
 import edivad.extrastorage.client.screen.AdvancedFluidStorageBlockScreen;
 import edivad.extrastorage.client.screen.AdvancedImporterScreen;
 import edivad.extrastorage.client.screen.AdvancedStorageBlockScreen;
-import edivad.extrastorage.compat.TOPIntegration;
+import edivad.extrastorage.compat.top.TOPIntegration;
 import edivad.extrastorage.data.ExtraStorageBlockTagsProvider;
 import edivad.extrastorage.data.ExtraStorageItemTagsProvider;
 import edivad.extrastorage.data.ExtraStorageLanguageProvider;

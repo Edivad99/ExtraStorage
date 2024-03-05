@@ -53,5 +53,10 @@ public class ExtraStorageLanguageProvider extends LanguageProvider {
     add(Translations.ADVANCED_EXPORTER.desc(), "A much larger exporter!");
     add(Translations.ADVANCED_IMPORTER.title(), "Advanced Importer");
     add(Translations.ADVANCED_IMPORTER.desc(), "Many more filters!");
+
+    add("config.jade.plugin_" + ExtraStorage.ID + ".advanced_crafter",
+        "Enable custom visualization for Advanced Crafter");
+    add("config.jade.plugin_" + ExtraStorage.ID + ".crafter",
+        "Enable custom visualization for Crafter");
   }
 }

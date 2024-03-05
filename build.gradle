@@ -96,6 +96,9 @@ dependencies {
         transitive = false
     }
     compileOnly "mcjty.theoneprobe:theoneprobe:$top_version"
+    //runtimeOnly "mcjty.theoneprobe:theoneprobe:$top_version"
+    compileOnly "curse.maven:jade-api-324717:$jade_id_api"
+    runtimeOnly "curse.maven:jade-324717:$jade_id"
 
     //implementation "tschipp.carryon:carryon-forge-$minecraft_version:$co_version")
     runtimeOnly "mezz.jei:jei-$minecraft_version-neoforge:$jei_version"

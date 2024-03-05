@@ -1,5 +1,6 @@
 package edivad.extrastorage.blockentity;
 
+import org.jetbrains.annotations.Nullable;
 import com.refinedmods.refinedstorage.blockentity.NetworkNodeBlockEntity;
 import com.refinedmods.refinedstorage.blockentity.data.BlockEntitySynchronizationParameter;
 import com.refinedmods.refinedstorage.blockentity.data.BlockEntitySynchronizationSpec;
@@ -46,8 +47,8 @@ public class AdvancedCrafterBlockEntity extends NetworkNodeBlockEntity<AdvancedC
     return new AdvancedCrafterNetworkNode(level, pos, tier);
   }
 
-  public IItemHandler getPatterns(Direction direction) {
-    if (!direction.equals(this.getNode().getDirection())) {
+  public IItemHandler getPatterns(@Nullable Direction direction) {
+    if (direction != null && !direction.equals(this.getNode().getDirection())) {
       return getNode().getPatternInventory();
     }
     return null;

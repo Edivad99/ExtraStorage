@@ -115,7 +115,7 @@ dependencies {
 
 tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8'
-    options.compilerArgs.addAll(["-Xmaxerrs", "100000"])
+    options.compilerArgs.addAll(['-Xmaxerrs', '100000'])
 }
 
 tasks.withType(ProcessResources).configureEach {
@@ -145,7 +145,7 @@ tasks.named('jar', Jar).configure {
 }
 
 tasks.named('wrapper', Wrapper).configure {
-    gradleVersion = '8.4'
+    gradleVersion = '8.6'
     distributionType = Wrapper.DistributionType.BIN
 }
 

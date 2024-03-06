@@ -90,18 +90,18 @@ public class AdvancedCrafterNetworkNode extends NetworkNode implements ICrafting
         return super.insertItem(slot, stack, simulate);
       }
     }
-        .addValidator(new PatternItemValidator(level))
-        .addListener(new NetworkNodeInventoryListener(this))
-        .addListener((handler, slot, reading) -> {
-          if (!reading) {
-            if (!level.isClientSide) {
-              invalidateSlot(slot);
-            }
-            if (network != null) {
-              network.getCraftingManager().invalidate();
-            }
-          }
-        });
+    .addValidator(new PatternItemValidator(level))
+    .addListener(new NetworkNodeInventoryListener(this))
+    .addListener((handler, slot, reading) -> {
+      if (!reading) {
+        if (!level.isClientSide) {
+          invalidateSlot(slot);
+        }
+        if (network != null) {
+          network.getCraftingManager().invalidate();
+        }
+      }
+    });
     DEFAULT_NAME = Component.translatable("block." + ExtraStorage.ID + "." + this.tier.getID());
     ID = ExtraStorage.rl(tier.getID());
   }

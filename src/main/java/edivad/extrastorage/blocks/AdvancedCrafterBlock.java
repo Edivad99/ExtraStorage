@@ -27,8 +27,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.network.NetworkHooks;
 
 public class AdvancedCrafterBlock extends NetworkNodeBlock {
@@ -88,7 +86,6 @@ public class AdvancedCrafterBlock extends NetworkNodeBlock {
     return true;
   }
 
-  @OnlyIn(Dist.CLIENT)
   @Override
   public void appendHoverText(ItemStack stack, BlockGetter blockGetter, List<Component> tooltip,
       TooltipFlag flag) {

@@ -379,18 +379,22 @@ public class AdvancedCrafterNetworkNode extends NetworkNode implements ICrafting
       return null;
     }
 
-    var facing = API.instance().getNetworkNodeManager((ServerLevel) level)
-        .getNode(pos.relative(getDirection()));
-    if (!(facing instanceof ICraftingPatternContainer container)
-        || facing.getNetwork() != network) {
+    //https://github.com/Edivad99/ExtraStorage/issues/80
+    if (pos == null) {
       return this;
     }
 
-    visited = true;
-    var facingContainer = container.getRootContainer();
-    visited = false;
-
-    return facingContainer;
+    var facing = API.instance()
+        .getNetworkNodeManager((ServerLevel) level)
+        .getNode(pos.relative(getDirection()));
+    if (facing instanceof ICraftingPatternContainer container && facing.getNetwork() == network) {
+      visited = true;
+      var facingContainer = container.getRootContainer();
+      visited = false;
+      return facingContainer;
+    } else {
+      return this;
+    }
   }
 
   public Optional<ICraftingPatternContainer> getRootContainerNotSelf() {

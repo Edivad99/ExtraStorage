@@ -138,10 +138,10 @@ tasks.withType(ProcessResources).configureEach {
 tasks.named('jar', Jar).configure {
     manifest {
         attributes([
-            'Specification-Title'     : 'dimstorage',
+            'Specification-Title'     : 'extrastorage',
             'Specification-Vendor'    : 'Edivad99',
             'Specification-Version'   : '1',
-            'Implementation-Title'    : 'dimstorage',
+            'Implementation-Title'    : 'extrastorage',
             'Implementation-Version'  : project.version,
             'Implementation-Vendor'   : 'Edivad99',
             'Implementation-Commit'   : 'git rev-parse HEAD'.execute().text.trim(),

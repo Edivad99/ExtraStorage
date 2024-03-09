@@ -20,7 +20,7 @@ public class AdvancedCrafterComponent implements IBlockComponentProvider {
       var patterns = data.getInt("patterns");
       var speed = data.getInt("speed");
       var slots = data.getInt("slots");
-      var tierSpeed = data.getInt("tierSpeed");
+      var tierSpeed = data.getInt("tier_speed");
       var nodeName = data.getString("node_name");
 
       tooltip.add(Component.translatable(Translations.OCCUPIED_SPACE,

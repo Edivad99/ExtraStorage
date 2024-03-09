@@ -67,10 +67,6 @@ sourceSets.main.resources {
 
 repositories {
     maven {
-        name 'TOP'
-        url 'https://maven.k-4u.nl'
-    }
-    maven {
         name 'JEI/CarryOn'
         url 'https://maven.blamejared.com/'
     }
@@ -95,8 +91,7 @@ dependencies {
     implementation ("com.refinedmods:refinedstorage:$rs_version") {
         transitive = false
     }
-    compileOnly "mcjty.theoneprobe:theoneprobe:$top_version"
-    //runtimeOnly "mcjty.theoneprobe:theoneprobe:$top_version"
+    implementation "curse.maven:the-one-probe-245211:$top_version"
     compileOnly "curse.maven:jade-api-324717:$jade_id_api"
     runtimeOnly "curse.maven:jade-324717:$jade_id"
 

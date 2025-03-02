@@ -1,5 +1,5 @@
 {
-  "parent": "refinedstorage:block/cube_cutout",
+  "parent": "refinedstorage:block/sides_cutout",
   "textures": {
     "particle": "extrastorage:block/crafter/base/side",
     "east": "extrastorage:block/crafter/base/side",

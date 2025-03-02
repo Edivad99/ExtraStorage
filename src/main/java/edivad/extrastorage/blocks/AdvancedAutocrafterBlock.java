@@ -41,7 +41,6 @@ public class AdvancedAutocrafterBlock extends AbstractDirectionalBlock<Direction
   public static final BooleanProperty ACTIVE = BooleanProperty.create("active");
   private static final Component HELP = createTranslation("item", "autocrafter.help");
   private final AbstractBlockEntityTicker<AdvancedAutocrafterBlockEntity> ticker;
-
   private final CrafterTier tier;
 
   public AdvancedAutocrafterBlock(CrafterTier tier) {

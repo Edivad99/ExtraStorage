@@ -36,8 +36,11 @@ public class AdvancedAutocrafterContainerMenu extends AbstractBaseContainerMenu 
   private final Player player;
   @Getter
   private final CrafterTier tier;
+  @Getter
   private final boolean partOfChain;
+  @Getter
   private final boolean headOfChain;
+  @Getter
   private boolean locked;
   private final RateLimiter nameRateLimiter = RateLimiter.create(0.5);
 
@@ -98,18 +101,6 @@ public class AdvancedAutocrafterContainerMenu extends AbstractBaseContainerMenu 
     return !partOfChain;
   }
 
-  public boolean isPartOfChain() {
-    return partOfChain;
-  }
-
-  public boolean isHeadOfChain() {
-    return headOfChain;
-  }
-
-  public boolean isLocked() {
-    return locked;
-  }
-
   public void setListener(@Nullable final Listener listener) {
     this.listener = listener;
   }
@@ -142,22 +133,26 @@ public class AdvancedAutocrafterContainerMenu extends AbstractBaseContainerMenu 
   }
 
   private void addSlots(final FilteredContainer patternContainer, final UpgradeContainer upgradeContainer) {
-    for (int i = 0; i < patternContainer.getContainerSize(); ++i) {
-      addSlot(createPatternSlot(patternContainer, i, player.level()));
+    for (int i = 0; i < tier.getRowsOfSlots(); i++) {
+      for (int j = 0; j < 9; j++) {
+        addSlot(new PatternSlot(patternContainer, (i * 9) + j,
+            PATTERN_SLOT_X + (18 * j), PATTERN_SLOT_Y + (18 * i), player.level()));
+      }
     }
+
     for (int i = 0; i < upgradeContainer.getContainerSize(); ++i) {
       addSlot(new UpgradeSlot(upgradeContainer, i, 187, 6 + (i * 18)));
     }
-    addPlayerInventory(player.getInventory(), 8, 55);
+
+    switch (tier) {
+      case IRON -> addPlayerInventory(player.getInventory(), 8, 91);
+      case GOLD -> addPlayerInventory(player.getInventory(), 8, 127);
+      case DIAMOND -> addPlayerInventory(player.getInventory(), 8, 163);
+      case NETHERITE -> addPlayerInventory(player.getInventory(), 8, 199);
+    }
+
     transferManager.addBiTransfer(player.getInventory(), upgradeContainer);
     transferManager.addBiTransfer(player.getInventory(), patternContainer);
-  }
-
-  private Slot createPatternSlot(final FilteredContainer patternContainer,
-      final int i,
-      final Level level) {
-    final int x = PATTERN_SLOT_X + (18 * i);
-    return new PatternSlot(patternContainer, i, x, PATTERN_SLOT_Y, level);
   }
 
   public boolean containsPattern(final ItemStack stack) {

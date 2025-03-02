@@ -32,7 +32,6 @@ import com.refinedmods.refinedstorage.common.autocrafting.autocrafter.Autocrafte
 import com.refinedmods.refinedstorage.common.autocrafting.autocrafter.AutocrafterData;
 import com.refinedmods.refinedstorage.common.autocrafting.autocrafter.InWorldExternalPatternSinkKey;
 import com.refinedmods.refinedstorage.common.autocrafting.autocrafter.LockMode;
-import com.refinedmods.refinedstorage.common.content.ContentNames;
 import com.refinedmods.refinedstorage.common.content.Items;
 import com.refinedmods.refinedstorage.common.support.AbstractDirectionalBlock;
 import com.refinedmods.refinedstorage.common.support.BlockEntityWithDrops;
@@ -49,6 +48,7 @@ import edivad.extrastorage.fromrs.AutocrafterNetworkNodeContainer;
 import edivad.extrastorage.fromrs.AutocrafterParentContainer;
 import edivad.extrastorage.fromrs.LockModeSettings;
 import edivad.extrastorage.fromrs.TaskSnapshotPersistence;
+import edivad.extrastorage.setup.Config;
 import edivad.extrastorage.setup.ESBlockEntities;
 import lombok.Getter;
 import net.minecraft.core.BlockPos;
@@ -70,13 +70,12 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.neoforged.neoforge.capabilities.Capabilities;
 
 public class AdvancedAutocrafterBlockEntity extends AbstractBaseNetworkNodeContainerBlockEntity<PatternProviderNetworkNode>
     implements ExtendedMenuProvider<AutocrafterData>, BlockEntityWithDrops, PatternInventory.Listener,
     StepBehavior, ExternalPatternSinkKeyProvider, PatternProviderExternalPatternSink,
     PatternProviderListener {
-
-  static final int PATTERNS = 9;
 
   private static final Logger LOGGER = LoggerFactory.getLogger(AdvancedAutocrafterBlockEntity.class);
 
@@ -93,16 +92,19 @@ public class AdvancedAutocrafterBlockEntity extends AbstractBaseNetworkNodeConta
   private final PatternInventory patternContainer;
   @Getter
   private final UpgradeContainer upgradeContainer;
+  @Getter
   private LockMode lockMode = LockMode.NEVER;
+  @Getter
   private boolean visibleToTheAutocrafterManager = true;
   private int ticks;
-  private int steps = getSteps(0);
+  private int steps = getSteps(CrafterTier.IRON, 0);
   private int tickRate = getTickRate(0);
   @Nullable
   private PlatformPatternProviderExternalPatternSink sink;
   @Nullable
   private ExternalPatternSinkKey sinkKey;
   private boolean wasPowered;
+  @Getter
   private boolean locked;
 
   @Getter
@@ -123,7 +125,7 @@ public class AdvancedAutocrafterBlockEntity extends AbstractBaseNetworkNodeConta
       mainNetworkNode.setEnergyUsage(baseEnergyUsage + patternEnergyUsage + upgradeEnergyUsage);
       final int amountOfSpeedUpgrades = c.getAmount(Items.INSTANCE.getSpeedUpgrade());
       tickRate = getTickRate(amountOfSpeedUpgrades);
-      steps = getSteps(amountOfSpeedUpgrades);
+      steps = getSteps(tier, amountOfSpeedUpgrades);
       setChanged();
     });
     this.patternContainer.addListener(container -> {
@@ -231,7 +233,7 @@ public class AdvancedAutocrafterBlockEntity extends AbstractBaseNetworkNodeConta
     } else if (connectedMachine != null) {
       return connectedMachine.getBlockState().getBlock().getName();
     }
-    return ContentNames.AUTOCRAFTER;
+    return this.getBlockState().getBlock().getName();
   }
 
   @Nullable
@@ -354,10 +356,6 @@ public class AdvancedAutocrafterBlockEntity extends AbstractBaseNetworkNodeConta
     setChanged();
   }
 
-  public LockMode getLockMode() {
-    return lockMode;
-  }
-
   public void setLockMode(final LockMode lockMode) {
     this.lockMode = lockMode;
     this.locked = false;
@@ -372,10 +370,6 @@ public class AdvancedAutocrafterBlockEntity extends AbstractBaseNetworkNodeConta
   public void setPriority(final int priority) {
     mainNetworkNode.setPriority(priority);
     setChanged();
-  }
-
-  public boolean isVisibleToTheAutocrafterManager() {
-    return visibleToTheAutocrafterManager;
   }
 
   public void setVisibleToTheAutocrafterManager(final boolean visibleToTheAutocrafterManager) {
@@ -431,10 +425,6 @@ public class AdvancedAutocrafterBlockEntity extends AbstractBaseNetworkNodeConta
     setChanged();
   }
 
-  public boolean isLocked() {
-    return locked;
-  }
-
   private boolean calculateLocked() {
     if (level == null) {
       return false;
@@ -485,25 +475,15 @@ public class AdvancedAutocrafterBlockEntity extends AbstractBaseNetworkNodeConta
     return provider.getSteps(pattern);
   }
 
-  private static int getSteps(final int amountOfSpeedUpgrades) {
-    return switch (amountOfSpeedUpgrades) {
-      case 1 -> 2;
-      case 2 -> 3;
-      case 3 -> 4;
-      case 4 -> 5;
-      default -> 1;
-    };
+  private static int getSteps(CrafterTier tier, final int amountOfSpeedUpgrades) {
+    if (tier.equals(CrafterTier.IRON)) {
+      return amountOfSpeedUpgrades + tier.getCraftingSpeed();
+    }
+    return  (amountOfSpeedUpgrades * (tier.getCraftingSpeed() / 5)) + tier.getCraftingSpeed();
   }
 
   private static int getTickRate(final int amountOfSpeedUpgrades) {
-    return switch (amountOfSpeedUpgrades) {
-      case 0 -> 10;
-      case 1 -> 8;
-      case 2 -> 6;
-      case 3 -> 4;
-      case 4 -> 2;
-      default -> 0;
-    };
+    return 10 - (amountOfSpeedUpgrades * 2);
   }
 
   @Nullable

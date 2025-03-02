@@ -64,9 +64,9 @@ public class AdvancedCrafterScreen extends AbstractBaseScreen<AdvancedAutocrafte
   public AdvancedCrafterScreen(AdvancedAutocrafterContainerMenu menu, Inventory inventory,
       Component title) {
     super(menu, inventory, new TextMarquee(title, getTitleMaxWidth(menu)));
-    this.inventoryLabelY = 42;
-    this.imageWidth = 210;
-    this.imageHeight = 137;
+    this.imageWidth = 211;
+    this.imageHeight = 173 + (menu.getTier().ordinal() * 36);
+    this.inventoryLabelY = this.imageHeight - 94;
     this.playerInventory = inventory;
     this.tier = menu.getTier();
     this.texture = ExtraStorage.rl("textures/gui/" + tier.getID() + ".png");
@@ -98,8 +98,15 @@ public class AdvancedCrafterScreen extends AbstractBaseScreen<AdvancedAutocrafte
   }
 
   @Override
-  protected void renderBg(final GuiGraphics graphics, final float delta, final int mouseX, final int mouseY) {
-    super.renderBg(graphics, delta, mouseX, mouseY);
+  protected void renderBg(GuiGraphics graphics, final float delta, final int mouseX, final int mouseY) {
+    int x = (this.width - this.imageWidth) / 2;
+    int y = (this.height - this.imageHeight) / 2;
+    if (imageHeight <= 256) {
+      graphics.blit(texture, x, y, 0, 0, imageWidth, imageHeight);
+    } else {
+      graphics.blit(texture, x, y, 0, 0, imageWidth, imageHeight, 512, 512);
+    }
+    this.renderResourceSlots(graphics);
     if (editName) {
       graphics.blitSprite(NAME_BACKGROUND, leftPos + 7, topPos + 5, 162, 12);
     }
@@ -210,7 +217,7 @@ public class AdvancedCrafterScreen extends AbstractBaseScreen<AdvancedAutocrafte
   }
 
   private boolean saveOrCancel(final int key) {
-    if ((key == GLFW.GLFW_KEY_ENTER || key == GLFW.GLFW_KEY_KP_ENTER)) {
+    if (key == GLFW.GLFW_KEY_ENTER || key == GLFW.GLFW_KEY_KP_ENTER) {
       getMenu().changeName(Objects.requireNonNull(nameField).getValue());
       setEditName(false);
       return true;
@@ -247,7 +254,7 @@ public class AdvancedCrafterScreen extends AbstractBaseScreen<AdvancedAutocrafte
 
   @Override
   protected ResourceLocation getTexture() {
-    return AbstractFilterScreen.TEXTURE;
+    return this.texture;
   }
 
   @Override

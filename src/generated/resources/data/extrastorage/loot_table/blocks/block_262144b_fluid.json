@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "conditions": [
+        {
+          "condition": "minecraft:survives_explosion"
+        }
+      ],
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "function": "extrastorage:storage_block"
+            }
+          ],
+          "name": "extrastorage:block_262144b_fluid"
+        }
+      ],
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "extrastorage:blocks/block_262144b_fluid"
+}

@@ -222,7 +222,7 @@ public class ExtraStorageRecipeProvider extends RecipeProvider {
         .define('M', Blocks.INSTANCE.getMachineCasing())
         .define('R', Items.REDSTONE)
         .define('P', part)
-        .define('I', com.refinedmods.refinedstorage.common.content.Items.INSTANCE.getQuartzEnrichedIron())
+        .define('E', com.refinedmods.refinedstorage.common.content.Items.INSTANCE.getQuartzEnrichedIron())
         .unlockedBy("has_part", has(part))
         .save(consumer, ExtraStorage.rl("storage_block/" + result.getId().getPath()));
   }

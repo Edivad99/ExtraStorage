@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "E": {
+      "item": "refinedstorage:quartz_enriched_iron"
+    },
+    "M": {
+      "item": "refinedstorage:machine_casing"
+    },
+    "P": {
+      "tag": "refinedstorage:parts/fluids/262144b"
+    },
+    "R": {
+      "item": "minecraft:redstone"
+    }
+  },
+  "pattern": [
+    "EPE",
+    "EME",
+    "ERE"
+  ],
+  "result": {
+    "count": 1,
+    "id": "extrastorage:block_262144b_fluid"
+  }
+}

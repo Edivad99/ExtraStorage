@@ -1,16 +1,16 @@
-// 1.20.4	2024-02-18T15:06:50.29122	Tags for minecraft:block mod id extrastorage
-7f6f5a6dbe0462de6efee479784418ea8809217e data/carryon/tags/blocks/block_blacklist.json
-141b4859957bd7306be7617a15ccfe90cb9723a5 data/extrastorage/tags/blocks/crafter.json
-30bff32cab42d4440016e6f03329e6294a3c8650 data/forge/tags/blocks/relocation_not_supported.json
-30bff32cab42d4440016e6f03329e6294a3c8650 data/mekanism/tags/blocks/cardboard_blacklist.json
-fe3f7ee23fde3289fca6c05f56727be63179bad1 data/refinedstorage/tags/blocks/storage_blocks.json
-c518c52794139050a0c6d9e42029cce6b3c05c59 data/refinedstorage/tags/blocks/storage_blocks/fluids.json
-787085a5e51e360dbaf862b5799d3be6a50f05fd data/refinedstorage/tags/blocks/storage_blocks/fluids/1048576k.json
-862ef6a9b35b958fe99d22e67358983c27c38d27 data/refinedstorage/tags/blocks/storage_blocks/fluids/16384k.json
-16d2861dfb2a162c54e1fece8b69ea880438f7c9 data/refinedstorage/tags/blocks/storage_blocks/fluids/262144k.json
-89bfc08acb522d0a508e77e525b0555ef0fe4714 data/refinedstorage/tags/blocks/storage_blocks/fluids/65536k.json
-082303538d87d18379ddc7dd861da1ae55efc5a0 data/refinedstorage/tags/blocks/storage_blocks/items.json
-4a88860ef3b5f297c09d7a8a6fba620b7e3444b5 data/refinedstorage/tags/blocks/storage_blocks/items/1024k.json
-a223b783f4bf4a78d096c620d1d76a402bc11259 data/refinedstorage/tags/blocks/storage_blocks/items/16384k.json
-77ea9ea2f7b0ea5efba389cb585026962fffa6dd data/refinedstorage/tags/blocks/storage_blocks/items/256k.json
-c13e87e32446fb1689f158a25b616546d4feb098 data/refinedstorage/tags/blocks/storage_blocks/items/4096k.json
+// 1.21.1	2025-03-02T18:32:17.403211	Tags for minecraft:block mod id extrastorage
+30bff32cab42d4440016e6f03329e6294a3c8650 data/c/tags/block/relocation_not_supported.json
+7f6f5a6dbe0462de6efee479784418ea8809217e data/carryon/tags/block/block_blacklist.json
+141b4859957bd7306be7617a15ccfe90cb9723a5 data/extrastorage/tags/block/crafter.json
+30bff32cab42d4440016e6f03329e6294a3c8650 data/mekanism/tags/block/cardboard_blacklist.json
+fe3f7ee23fde3289fca6c05f56727be63179bad1 data/refinedstorage/tags/block/storage_blocks.json
+c58d209fd6bfed3e9f2380b14db32c73880c0de0 data/refinedstorage/tags/block/storage_blocks/fluids.json
+0b1eeba2a0e97e7f1609398e3b03ce8357596bcc data/refinedstorage/tags/block/storage_blocks/fluids/1048576b.json
+94946b1f8822525d863018bdead4a14162fd0ae2 data/refinedstorage/tags/block/storage_blocks/fluids/16384b.json
+b777e9a45ebc9b63d86285fe55c312f17a3f2b0d data/refinedstorage/tags/block/storage_blocks/fluids/262144b.json
+171c383dbacbce756265ed64b8a138d26926e111 data/refinedstorage/tags/block/storage_blocks/fluids/65536b.json
+082303538d87d18379ddc7dd861da1ae55efc5a0 data/refinedstorage/tags/block/storage_blocks/items.json
+4a88860ef3b5f297c09d7a8a6fba620b7e3444b5 data/refinedstorage/tags/block/storage_blocks/items/1024k.json
+a223b783f4bf4a78d096c620d1d76a402bc11259 data/refinedstorage/tags/block/storage_blocks/items/16384k.json
+77ea9ea2f7b0ea5efba389cb585026962fffa6dd data/refinedstorage/tags/block/storage_blocks/items/256k.json
+c13e87e32446fb1689f158a25b616546d4feb098 data/refinedstorage/tags/block/storage_blocks/items/4096k.json

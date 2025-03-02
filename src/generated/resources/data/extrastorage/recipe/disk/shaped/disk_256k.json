@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "G": {
+      "tag": "c:glass_blocks"
+    },
+    "I": {
+      "item": "refinedstorage:quartz_enriched_iron"
+    },
+    "R": {
+      "item": "minecraft:redstone"
+    },
+    "S": {
+      "tag": "refinedstorage:parts/items/256k"
+    }
+  },
+  "pattern": [
+    "GRG",
+    "RSR",
+    "III"
+  ],
+  "result": {
+    "count": 1,
+    "id": "extrastorage:disk_256k"
+  }
+}

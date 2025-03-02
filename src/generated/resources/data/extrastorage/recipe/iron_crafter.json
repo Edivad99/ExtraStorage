@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "a": {
+      "tag": "c:ingots/iron"
+    },
+    "b": {
+      "tag": "refinedstorage:autocrafters"
+    },
+    "c": {
+      "tag": "c:chests/wooden"
+    }
+  },
+  "pattern": [
+    "aca",
+    " b ",
+    "a a"
+  ],
+  "result": {
+    "count": 1,
+    "id": "extrastorage:iron_crafter"
+  }
+}

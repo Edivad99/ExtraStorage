@@ -1,0 +1,8 @@
+{
+  "values": [
+    "#refinedstorage:storage_blocks/fluids/16384b",
+    "#refinedstorage:storage_blocks/fluids/65536b",
+    "#refinedstorage:storage_blocks/fluids/262144b",
+    "#refinedstorage:storage_blocks/fluids/1048576b"
+  ]
+}

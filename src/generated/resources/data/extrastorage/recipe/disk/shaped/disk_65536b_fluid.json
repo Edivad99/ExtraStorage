@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "G": {
+      "tag": "c:glass_blocks"
+    },
+    "I": {
+      "item": "refinedstorage:quartz_enriched_iron"
+    },
+    "R": {
+      "item": "minecraft:redstone"
+    },
+    "S": {
+      "tag": "refinedstorage:parts/fluids/65536b"
+    }
+  },
+  "pattern": [
+    "GRG",
+    "RSR",
+    "III"
+  ],
+  "result": {
+    "count": 1,
+    "id": "extrastorage:disk_65536b_fluid"
+  }
+}

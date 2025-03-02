@@ -1,0 +1,8 @@
+{
+  "values": [
+    "#refinedstorage:disks/fluids/16384b",
+    "#refinedstorage:disks/fluids/65536b",
+    "#refinedstorage:disks/fluids/262144b",
+    "#refinedstorage:disks/fluids/1048576b"
+  ]
+}

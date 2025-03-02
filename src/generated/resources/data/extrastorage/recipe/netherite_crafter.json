@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "a": {
+      "tag": "c:storage_blocks/netherite"
+    },
+    "b": {
+      "item": "extrastorage:diamond_crafter"
+    },
+    "c": {
+      "item": "extrastorage:neural_processor"
+    },
+    "d": {
+      "tag": "c:chests/wooden"
+    }
+  },
+  "pattern": [
+    "ada",
+    "cbc",
+    "a a"
+  ],
+  "result": {
+    "count": 1,
+    "id": "extrastorage:netherite_crafter"
+  }
+}

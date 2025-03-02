@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "a": {
+      "item": "minecraft:redstone_torch"
+    },
+    "b": {
+      "item": "refinedstorage:importer"
+    },
+    "c": {
+      "item": "refinedstorage:improved_processor"
+    }
+  },
+  "pattern": [
+    " a ",
+    "cbc",
+    " a "
+  ],
+  "result": {
+    "count": 1,
+    "id": "extrastorage:advanced_importer"
+  }
+}

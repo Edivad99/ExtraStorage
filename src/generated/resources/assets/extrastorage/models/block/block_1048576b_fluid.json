@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/cube_all",
+  "textures": {
+    "all": "extrastorage:block/storage/1048576b_fluid_storage_block"
+  }
+}

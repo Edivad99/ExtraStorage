@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "D": {
+      "item": "refinedstorage:advanced_processor"
+    },
+    "G": {
+      "tag": "refinedstorage:parts/fluids/262144b"
+    },
+    "I": {
+      "item": "refinedstorage:quartz_enriched_iron"
+    },
+    "R": {
+      "item": "minecraft:redstone"
+    }
+  },
+  "pattern": [
+    "DID",
+    "GRG",
+    "DGD"
+  ],
+  "result": {
+    "count": 1,
+    "id": "extrastorage:storagepart_1048576b_fluid"
+  }
+}

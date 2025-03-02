@@ -1,17 +1,15 @@
 package edivad.extrastorage.fromrs;
 
+import static com.refinedmods.refinedstorage.common.util.IdentifierUtil.createIdentifier;
+import static com.refinedmods.refinedstorage.common.util.IdentifierUtil.createTranslation;
+
+import java.util.List;
 import com.refinedmods.refinedstorage.common.autocrafting.autocrafter.LockMode;
 import com.refinedmods.refinedstorage.common.support.containermenu.ClientProperty;
 import com.refinedmods.refinedstorage.common.support.widget.AbstractSideButtonWidget;
-
-import java.util.List;
-
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
-
-import static com.refinedmods.refinedstorage.common.util.IdentifierUtil.createIdentifier;
-import static com.refinedmods.refinedstorage.common.util.IdentifierUtil.createTranslation;
 
 public class LockModeSideButtonWidget extends AbstractSideButtonWidget {
   private static final String PREFIX = "autocrafter.lock_mode";

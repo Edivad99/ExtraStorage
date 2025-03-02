@@ -1,10 +1,10 @@
 package edivad.extrastorage.fromrs;
 
+import static com.refinedmods.refinedstorage.common.util.IdentifierUtil.createIdentifier;
+
 import com.refinedmods.refinedstorage.common.autocrafting.autocrafter.LockMode;
 import com.refinedmods.refinedstorage.common.support.containermenu.PropertyType;
 import com.refinedmods.refinedstorage.common.support.containermenu.PropertyTypes;
-
-import static com.refinedmods.refinedstorage.common.util.IdentifierUtil.createIdentifier;
 
 public final class AutocrafterPropertyTypes {
   public static final PropertyType<LockMode> LOCK_MODE = new PropertyType<>(

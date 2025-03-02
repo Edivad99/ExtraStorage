@@ -1,5 +1,7 @@
 package edivad.extrastorage.container;
 
+import static com.refinedmods.refinedstorage.common.util.IdentifierUtil.createTranslation;
+
 import com.refinedmods.refinedstorage.common.api.storage.StorageBlockData;
 import com.refinedmods.refinedstorage.common.api.support.resource.ResourceContainer;
 import com.refinedmods.refinedstorage.common.api.support.resource.ResourceFactory;
@@ -9,7 +11,6 @@ import com.refinedmods.refinedstorage.common.storage.StorageConfigurationContain
 import com.refinedmods.refinedstorage.common.support.containermenu.ResourceSlot;
 import com.refinedmods.refinedstorage.common.support.containermenu.ResourceSlotType;
 import com.refinedmods.refinedstorage.common.support.resource.ResourceContainerImpl;
-import static com.refinedmods.refinedstorage.common.util.IdentifierUtil.createTranslation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.inventory.Slot;

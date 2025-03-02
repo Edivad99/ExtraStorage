@@ -1,12 +1,12 @@
 package edivad.extrastorage.fromrs;
 
+import static com.refinedmods.refinedstorage.common.util.IdentifierUtil.createIdentifier;
+import static com.refinedmods.refinedstorage.common.util.IdentifierUtil.createTranslation;
+
 import com.refinedmods.refinedstorage.common.support.containermenu.ClientProperty;
-import com.refinedmods.refinedstorage.common.support.widget.AbstractSideButtonWidget;
 import com.refinedmods.refinedstorage.common.support.widget.AbstractYesNoSideButtonWidget;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import static com.refinedmods.refinedstorage.common.util.IdentifierUtil.createIdentifier;
-import static com.refinedmods.refinedstorage.common.util.IdentifierUtil.createTranslation;
 import net.minecraft.resources.ResourceLocation;
 
 public class VisibleToTheAutocrafterManagerSideButtonWidget extends AbstractYesNoSideButtonWidget {

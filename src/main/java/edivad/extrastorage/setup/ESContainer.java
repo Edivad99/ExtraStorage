@@ -7,7 +7,6 @@ import com.refinedmods.refinedstorage.common.autocrafting.autocrafter.Autocrafte
 import com.refinedmods.refinedstorage.common.exporter.ExporterData;
 import com.refinedmods.refinedstorage.common.support.resource.ResourceContainerData;
 import edivad.extrastorage.ExtraStorage;
-import edivad.extrastorage.blockentity.AdvancedAutocrafterBlockEntity;
 import edivad.extrastorage.blocks.CrafterTier;
 import edivad.extrastorage.container.AdvancedAutocrafterContainerMenu;
 import edivad.extrastorage.container.AdvancedExporterContainerMenu;

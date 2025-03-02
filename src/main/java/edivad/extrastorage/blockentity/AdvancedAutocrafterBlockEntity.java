@@ -1,5 +1,7 @@
 package edivad.extrastorage.blockentity;
 
+import static com.refinedmods.refinedstorage.common.support.AbstractDirectionalBlock.tryExtractDirection;
+
 import java.util.Collection;
 import java.util.List;
 import org.jetbrains.annotations.Nullable;
@@ -40,7 +42,6 @@ import com.refinedmods.refinedstorage.common.support.network.AbstractBaseNetwork
 import com.refinedmods.refinedstorage.common.upgrade.UpgradeContainer;
 import com.refinedmods.refinedstorage.common.upgrade.UpgradeDestinations;
 import com.refinedmods.refinedstorage.common.util.ContainerUtil;
-import static com.refinedmods.refinedstorage.common.support.AbstractDirectionalBlock.tryExtractDirection;
 import edivad.extrastorage.blocks.CrafterTier;
 import edivad.extrastorage.container.AdvancedAutocrafterContainerMenu;
 import edivad.extrastorage.fromrs.AutocrafterConnectionStrategy;

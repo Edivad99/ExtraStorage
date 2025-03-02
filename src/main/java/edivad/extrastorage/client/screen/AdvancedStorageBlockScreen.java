@@ -1,8 +1,9 @@
 package edivad.extrastorage.client.screen;
 
+import static com.refinedmods.refinedstorage.common.util.IdentifierUtil.createIdentifier;
+
 import com.refinedmods.refinedstorage.common.api.support.resource.ResourceRendering;
 import com.refinedmods.refinedstorage.common.storage.AbstractProgressStorageScreen;
-import static com.refinedmods.refinedstorage.common.util.IdentifierUtil.createIdentifier;
 import edivad.extrastorage.container.AdvancedStorageBlockContainerMenu;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;

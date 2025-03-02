@@ -1,12 +1,12 @@
 package edivad.extrastorage.fromrs;
 
+import static com.refinedmods.refinedstorage.common.util.IdentifierUtil.createIdentifier;
+import static com.refinedmods.refinedstorage.common.util.IdentifierUtil.createTranslation;
+
 import java.util.List;
 import com.refinedmods.refinedstorage.common.support.amount.PriorityScreen;
 import com.refinedmods.refinedstorage.common.support.containermenu.ClientProperty;
 import com.refinedmods.refinedstorage.common.support.widget.AbstractSideButtonWidget;
-import static com.refinedmods.refinedstorage.common.util.IdentifierUtil.createIdentifier;
-import static com.refinedmods.refinedstorage.common.util.IdentifierUtil.createTranslation;
-import edivad.extrastorage.client.screen.AdvancedCrafterScreen;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
@@ -57,4 +57,3 @@ public class AutocrafterPrioritySideButtonWidget extends AbstractSideButtonWidge
     return HELP;
   }
 }
-

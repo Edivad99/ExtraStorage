@@ -1,16 +1,14 @@
 package edivad.extrastorage.fromrs;
 
-import com.refinedmods.refinedstorage.common.api.support.network.ConnectionSink;
-import com.refinedmods.refinedstorage.common.support.network.ColoredConnectionStrategy;
+import static com.refinedmods.refinedstorage.common.support.AbstractDirectionalBlock.tryExtractDirection;
 
 import java.util.function.Supplier;
-
+import com.refinedmods.refinedstorage.common.api.support.network.ConnectionSink;
+import com.refinedmods.refinedstorage.common.support.network.ColoredConnectionStrategy;
 import edivad.extrastorage.blocks.AdvancedAutocrafterBlock;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
-
-import static com.refinedmods.refinedstorage.common.support.AbstractDirectionalBlock.tryExtractDirection;
 
 public class AutocrafterConnectionStrategy extends ColoredConnectionStrategy {
   public AutocrafterConnectionStrategy(final Supplier<BlockState> blockStateProvider,

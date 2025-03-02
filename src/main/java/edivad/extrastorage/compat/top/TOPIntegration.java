@@ -2,14 +2,11 @@ package edivad.extrastorage.compat.top;
 
 import java.util.function.Function;
 import edivad.extrastorage.ExtraStorage;
-import edivad.extrastorage.blockentity.AdvancedAutocrafterBlockEntity;
-import edivad.extrastorage.tools.Translations;
 import mcjty.theoneprobe.api.IProbeHitData;
 import mcjty.theoneprobe.api.IProbeInfo;
 import mcjty.theoneprobe.api.IProbeInfoProvider;
 import mcjty.theoneprobe.api.ITheOneProbe;
 import mcjty.theoneprobe.api.ProbeMode;
-import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;

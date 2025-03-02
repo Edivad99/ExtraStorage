@@ -1,5 +1,7 @@
 package edivad.extrastorage.blocks;
 
+import static com.refinedmods.refinedstorage.common.util.IdentifierUtil.createTranslation;
+
 import java.util.List;
 import org.jetbrains.annotations.Nullable;
 import com.refinedmods.refinedstorage.common.content.BlockConstants;
@@ -11,7 +13,6 @@ import com.refinedmods.refinedstorage.common.support.NetworkNodeBlockItem;
 import com.refinedmods.refinedstorage.common.support.direction.DefaultDirectionType;
 import com.refinedmods.refinedstorage.common.support.direction.DirectionType;
 import com.refinedmods.refinedstorage.common.support.network.NetworkNodeBlockEntityTicker;
-import static com.refinedmods.refinedstorage.common.util.IdentifierUtil.createTranslation;
 import edivad.extrastorage.blockentity.AdvancedAutocrafterBlockEntity;
 import edivad.extrastorage.setup.ESBlockEntities;
 import edivad.extrastorage.tools.Translations;

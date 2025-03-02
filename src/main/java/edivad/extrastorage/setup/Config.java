@@ -1,18 +1,19 @@
 package edivad.extrastorage.setup;
 
 import edivad.extrastorage.ExtraStorage;
+import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.ModLoadingContext;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.neoforge.common.ModConfigSpec;
 
 public class Config {
 
-  public static void init() {
+  public static void registerConfig(ModContainer container) {
     var SERVER_BUILDER = new ModConfigSpec.Builder();
     SERVER_BUILDER.comment(ExtraStorage.MODNAME + "'s config");
     AdvancedCrafter.registerServerConfig(SERVER_BUILDER);
 
-    ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, SERVER_BUILDER.build());
+    container.registerConfig(ModConfig.Type.SERVER, SERVER_BUILDER.build());
   }
 
   public static class AdvancedCrafter {

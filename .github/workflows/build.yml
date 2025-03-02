@@ -4,4 +4,4 @@ on: [push, pull_request, workflow_dispatch]
 
 jobs:
   run:
-    uses: Edivad99/EdivadLib/.github/workflows/build-generic.yml@1.20.x
+    uses: Edivad99/EdivadLib/.github/workflows/build-generic.yml@1.21.x

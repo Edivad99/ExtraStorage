@@ -1,8 +1,8 @@
 package edivad.extrastorage.data.models;
 
 import edivad.extrastorage.ExtraStorage;
-import edivad.extrastorage.items.storage.fluid.FluidStorageType;
-import edivad.extrastorage.items.storage.item.ItemStorageType;
+import edivad.extrastorage.items.storage.fluid.AdvancedFluidStorageVariant;
+import edivad.extrastorage.items.storage.item.AdvancedItemStorageVariant;
 import edivad.extrastorage.setup.ESBlocks;
 import edivad.extrastorage.setup.ESItems;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -22,7 +22,7 @@ public class ExtraStorageItemModelProvider extends ItemModelProvider {
 
   @Override
   protected void registerModels() {
-    for (var type : ItemStorageType.values()) {
+    for (var type : AdvancedItemStorageVariant.values()) {
       singleTexture(getPath(ESItems.ITEM_STORAGE_PART.get(type).get()),
           mcLoc("item/generated"), "layer0", modLoc("item/parts/" + type.getName()));
       singleTexture(getPath(ESItems.ITEM_DISK.get(type).get()), mcLoc("item/generated"),
@@ -30,7 +30,7 @@ public class ExtraStorageItemModelProvider extends ItemModelProvider {
       parentedBlock(ESBlocks.ITEM_STORAGE.get(type).get());
     }
 
-    for (var type : FluidStorageType.values()) {
+    for (var type : AdvancedFluidStorageVariant.values()) {
       singleTexture(getPath(ESItems.FLUID_STORAGE_PART.get(type).get()),
           mcLoc("item/generated"), "layer0", modLoc("item/parts/" + type.getName() + "_fluid"));
       singleTexture(getPath(ESItems.FLUID_DISK.get(type).get()), mcLoc("item/generated"),

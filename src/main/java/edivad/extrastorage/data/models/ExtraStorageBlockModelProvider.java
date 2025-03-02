@@ -1,8 +1,8 @@
 package edivad.extrastorage.data.models;
 
 import edivad.extrastorage.ExtraStorage;
-import edivad.extrastorage.items.storage.fluid.FluidStorageType;
-import edivad.extrastorage.items.storage.item.ItemStorageType;
+import edivad.extrastorage.items.storage.fluid.AdvancedFluidStorageVariant;
+import edivad.extrastorage.items.storage.item.AdvancedItemStorageVariant;
 import edivad.extrastorage.setup.ESBlocks;
 import net.minecraft.data.PackOutput;
 import net.neoforged.neoforge.client.model.generators.BlockStateProvider;
@@ -17,12 +17,12 @@ public class ExtraStorageBlockModelProvider extends BlockStateProvider {
 
   @Override
   protected void registerStatesAndModels() {
-    for (var type : ItemStorageType.values()) {
+    for (var type : AdvancedItemStorageVariant.values()) {
       var model = models().cubeAll("block_" + type.getName(),
           modLoc("block/storage/" + type.getName() + "_storage_block"));
       simpleBlock(ESBlocks.ITEM_STORAGE.get(type).get(), model);
     }
-    for (var type : FluidStorageType.values()) {
+    for (var type : AdvancedFluidStorageVariant.values()) {
       var model = models().cubeAll("block_" + type.getName() + "_fluid",
           modLoc("block/storage/" + type.getName() + "_fluid_storage_block"));
       simpleBlock(ESBlocks.FLUID_STORAGE.get(type).get(), model);

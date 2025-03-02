@@ -1,59 +1,47 @@
 package edivad.extrastorage.client.screen;
 
-import com.refinedmods.refinedstorage.item.UpgradeItem;
-import com.refinedmods.refinedstorage.screen.BaseScreen;
-import com.refinedmods.refinedstorage.screen.widget.sidebutton.ExactModeSideButton;
-import com.refinedmods.refinedstorage.screen.widget.sidebutton.RedstoneModeSideButton;
-import com.refinedmods.refinedstorage.screen.widget.sidebutton.TypeSideButton;
-import com.refinedmods.refinedstorage.util.RenderUtils;
+import com.refinedmods.refinedstorage.common.support.AbstractFilterScreen;
+import com.refinedmods.refinedstorage.common.support.containermenu.PropertyTypes;
+import com.refinedmods.refinedstorage.common.support.widget.FuzzyModeSideButtonWidget;
+import com.refinedmods.refinedstorage.common.support.widget.SchedulingModeSideButtonWidget;
 import edivad.extrastorage.ExtraStorage;
-import edivad.extrastorage.blockentity.AdvancedExporterBlockEntity;
 import edivad.extrastorage.container.AdvancedExporterContainerMenu;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 
-public class AdvancedExporterScreen extends BaseScreen<AdvancedExporterContainerMenu> {
+public class AdvancedExporterScreen extends AbstractFilterScreen<AdvancedExporterContainerMenu> {
 
   private static final ResourceLocation TEXTURE =
       ExtraStorage.rl("textures/gui/advanced_exporter_importer.png");
-  private boolean hasRegulatorMode;
 
-  public AdvancedExporterScreen(AdvancedExporterContainerMenu container, Inventory inventory,
+  public AdvancedExporterScreen(AdvancedExporterContainerMenu menu, Inventory inventory,
       Component title) {
-    super(container, 211, 155, inventory, title);
-    this.hasRegulatorMode = hasRegulatorMode();
-  }
-
-  private boolean hasRegulatorMode() {
-    return menu.getBlockEntity().getNode().getUpgrades().hasUpgrade(UpgradeItem.Type.REGULATOR);
+    super(menu, inventory, title);
   }
 
   @Override
-  public void onPostInit(int x, int y) {
-    addSideButton(new RedstoneModeSideButton(this, AdvancedExporterBlockEntity.REDSTONE_MODE));
-    addSideButton(new TypeSideButton(this, AdvancedExporterBlockEntity.TYPE));
-    addSideButton(new ExactModeSideButton(this, AdvancedExporterBlockEntity.COMPARE));
+  protected ResourceLocation getTexture() {
+    return TEXTURE;
   }
 
   @Override
-  public void tick(int x, int y) {
-    boolean updatedHasRegulatorMode = hasRegulatorMode();
-    if (hasRegulatorMode != updatedHasRegulatorMode) {
-      hasRegulatorMode = updatedHasRegulatorMode;
-      menu.initSlots();
+  protected void init() {
+    super.init();
+    addSideButton(new FuzzyModeSideButtonWidget(
+        getMenu().getProperty(PropertyTypes.FUZZY_MODE),
+        () -> FuzzyModeSideButtonWidget.Type.EXTRACTING_STORAGE_NETWORK
+    ));
+    addSideButton(new SchedulingModeSideButtonWidget(getMenu().getProperty(PropertyTypes.SCHEDULING_MODE)));
+  }
+
+  @Override
+  protected void renderTooltip(final GuiGraphics graphics, final int x, final int y) {
+    if (renderExportingIndicators(graphics, leftPos, topPos, x, y, getMenu().getIndicators(),
+        getMenu()::getIndicator)) {
+      return;
     }
-  }
-
-  @Override
-  public void renderBackground(GuiGraphics poseStack, int x, int y, int mouseX, int mouseY) {
-    poseStack.blit(TEXTURE, x, y, 0, 0, imageWidth, imageHeight);
-  }
-
-  @Override
-  public void renderForeground(GuiGraphics guiGraphics, int i, int i1) {
-    renderString(guiGraphics, 7, 7, RenderUtils.shorten(title.getString(), 26));
-    renderString(guiGraphics, 7, 60, Component.translatable("container.inventory").getString());
+    super.renderTooltip(graphics, x, y);
   }
 }

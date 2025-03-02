@@ -5,9 +5,9 @@ plugins {
     id 'java-library'
     id 'eclipse'
     id 'idea'
-    id 'net.neoforged.gradle.userdev' version "$neo_gradle_version"
-    id 'se.bjurr.gitchangelog.git-changelog-gradle-plugin' version '2.1.0'
-    id 'me.modmuss50.mod-publish-plugin' version '0.5.0'
+    id 'net.neoforged.moddev' version "$mod_dev_gradle"
+    id 'se.bjurr.gitchangelog.git-changelog-gradle-plugin' version '3.0.4'
+    id 'me.modmuss50.mod-publish-plugin' version '0.8.3'
     id 'com.diffplug.spotless' version '6.25.0'
 }
 
@@ -22,7 +22,7 @@ base.archivesName = 'ExtraStorage'
 
 java {
     toolchain {
-        languageVersion = JavaLanguageVersion.of(17)
+        languageVersion = JavaLanguageVersion.of(21)
         if (System.getProperty('idea.active')) {
             vendor = JvmVendorSpec.JETBRAINS
         }
@@ -36,33 +36,56 @@ println("JVM: ${System.getProperty('java.vm.version')} (${System.getProperty('ja
 println("Arch: ${System.getProperty('os.arch')}")
 println(repeat('*', 60))
 
-minecraft.accessTransformers.file rootProject.file('src/main/resources/META-INF/accesstransformer.cfg')
-
-runs {
-    configureEach {
-        systemProperty 'forge.logging.console.level', 'debug'
-
-        modSource project.sourceSets.main
-        if (System.getProperty('idea.active')) {
-            jvmArguments.add("-XX:+AllowEnhancedClassRedefinition")
-        }
-    }
-
-    client {
-    }
-
-    server {
-        programArgument '--nogui'
-    }
-
-    data {
-        programArguments.addAll '--mod', 'extrastorage', '--all', '--output', file('src/generated/resources/').getAbsolutePath(), '--existing', file('src/main/resources/').getAbsolutePath()
-    }
-}
-
 sourceSets.main.resources {
     srcDir 'src/generated/resources'
     exclude '.cache'
+}
+
+neoForge {
+    version = project.neo_version
+
+    parchment {
+        mappingsVersion = project.parchment_mappings_version
+        minecraftVersion = project.parchment_minecraft_version
+    }
+
+    validateAccessTransformers = true
+
+    runs {
+        configureEach {
+            logLevel = org.slf4j.event.Level.DEBUG
+            if (System.getProperty('idea.active')) {
+                jvmArguments.add("-XX:+AllowEnhancedClassRedefinition")
+            }
+        }
+
+        client {
+            client()
+            gameDirectory = project.file('runs/client')
+        }
+
+        server {
+            server()
+            gameDirectory = project.file('runs/server')
+            programArgument '--nogui'
+        }
+
+        data {
+            data()
+            gameDirectory = project.file('runs/data')
+            programArguments.addAll '--mod', 'extrastorage', '--all', '--output', file('src/generated/resources/').getAbsolutePath(), '--existing', file('src/main/resources/').getAbsolutePath()
+        }
+    }
+
+    mods {
+        'extrastorage' {
+            sourceSet sourceSets.main
+        }
+    }
+}
+
+configurations {
+    runtimeClasspath.extendsFrom localRuntime
 }
 
 repositories {
@@ -72,7 +95,7 @@ repositories {
     }
     maven {
         name 'RS maven'
-        url = uri('https://maven.pkg.github.com/refinedmods/refinedstorage')
+        url = uri('https://maven.pkg.github.com/refinedmods/refinedstorage2')
         credentials {
             username = 'anything'
             password = '\u0067hp_oGjcDFCn8jeTzIj4Ke9pLoEVtpnZMP4VQgaX'
@@ -85,18 +108,18 @@ repositories {
 }
 
 dependencies {
-    implementation "net.neoforged:neoforge:$neo_version"
+    compileOnly 'org.projectlombok:lombok:1.18.36'
+    annotationProcessor 'org.projectlombok:lombok:1.18.36'
 
     implementation "curse.maven:edivadlib-638508:$edivadlib_id"
-    implementation ("com.refinedmods:refinedstorage:$rs_version") {
+    implementation ("com.refinedmods.refinedstorage:refinedstorage-neoforge:$rs_version") {
         transitive = false
     }
     implementation "curse.maven:the-one-probe-245211:$top_version"
-    compileOnly "curse.maven:jade-api-324717:$jade_id_api"
-    runtimeOnly "curse.maven:jade-324717:$jade_id"
+    implementation "curse.maven:jade-api-324717:$jade_id"
 
     //implementation "tschipp.carryon:carryon-forge-$minecraft_version:$co_version")
-    runtimeOnly "mezz.jei:jei-$minecraft_version-neoforge:$jei_version"
+    localRuntime "mezz.jei:jei-$minecraft_version-neoforge:$jei_version"
     //implementation "curse.maven:mekanism-268560:4041164"
 }
 
@@ -130,9 +153,19 @@ tasks.withType(ProcessResources).configureEach {
     ]
     inputs.properties replaceProperties
 
-    filesMatching(['META-INF/mods.toml']) {
-        expand replaceProperties + [project: project]
+    filesMatching(['META-INF/neoforge.mods.toml']) {
+        expand replaceProperties
     }
+}
+
+def lastCommit = providers.exec {
+    commandLine 'git', 'rev-parse', 'HEAD'
+}.standardOutput.asText.get().trim()
+
+def penultimateTag = () -> {
+    providers.exec {
+        commandLine 'git', 'describe', '--abbrev=0', '--tags', 'HEAD~'
+    }.standardOutput.asText.get().trim()
 }
 
 tasks.named('jar', Jar).configure {
@@ -144,31 +177,19 @@ tasks.named('jar', Jar).configure {
             'Implementation-Title'    : 'extrastorage',
             'Implementation-Version'  : project.version,
             'Implementation-Vendor'   : 'Edivad99',
-            'Implementation-Commit'   : 'git rev-parse HEAD'.execute().text.trim(),
+            'Implementation-Commit'   : lastCommit,
         ])
     }
 }
 
-def penultimateTag = { ->
-    def stdout = new ByteArrayOutputStream()
-    try {
-        project.exec { ExecSpec spec ->
-            spec.commandLine('git', 'describe', '--abbrev=0', '--tags', 'HEAD~').standardOutput(stdout)
-        }.assertNormalExitValue().rethrowFailure()
-    } catch (Exception e) {
-        throw new IllegalStateException("Failed to get the tag; check if 'git' is on the PATH", e)
-    }
-    return stdout.toString()
-}
-
 tasks.register('makeChangelog', GitChangelogTask) {
-    fromRepo = projectDir.absolutePath.toString()
-    fromRevision = penultimateTag()
-    toRevision = 'HEAD'
-    file = file('CHANGELOG.md')
-    untaggedName = 'Next release'
-    templateContent = file('changelog.mustache').text
-    ignoreCommitsIfMessageMatches = '^.*Merge branch.*$'
+    fromRepo.set(projectDir.absolutePath.toString())
+    fromRevision.set(penultimateTag())
+    toRevision.set('HEAD')
+    file.set(file('CHANGELOG.md'));
+    untaggedName.set('Next release')
+    templateContent.set(file('changelog.mustache').text)
+    ignoreCommitsIfMessageMatches.set('^.*Merge branch.*$')
 }
 
 publishMods {

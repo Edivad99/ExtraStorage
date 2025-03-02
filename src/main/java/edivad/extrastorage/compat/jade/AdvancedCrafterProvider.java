@@ -1,7 +1,7 @@
 package edivad.extrastorage.compat.jade;
 
 import edivad.extrastorage.ExtraStorage;
-import edivad.extrastorage.blockentity.AdvancedCrafterBlockEntity;
+import edivad.extrastorage.blockentity.AdvancedAutocrafterBlockEntity;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import snownee.jade.api.BlockAccessor;
@@ -11,13 +11,13 @@ public class AdvancedCrafterProvider implements IServerDataProvider<BlockAccesso
 
   @Override
   public void appendServerData(CompoundTag tag, BlockAccessor blockAccessor) {
-    if (blockAccessor.getBlockEntity() instanceof AdvancedCrafterBlockEntity advancedCrafter) {
-      var node = advancedCrafter.getNode();
+    if (blockAccessor.getBlockEntity() instanceof AdvancedAutocrafterBlockEntity advancedCrafter) {
+      /*var node = advancedCrafter.getNode();
       tag.putInt("patterns", node.getPatterns().size());
       tag.putInt("speed", node.getMaximumSuccessfulCraftingUpdates());
       tag.putInt("slots", advancedCrafter.getTier().getSlots());
       tag.putInt("tier_speed", node.getTierSpeed());
-      tag.putString("node_name", node.getName().getString());
+      tag.putString("node_name", node.getName().getString());*/
     }
   }
 

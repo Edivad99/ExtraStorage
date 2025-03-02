@@ -1,36 +1,76 @@
 package edivad.extrastorage.items.storage.fluid;
 
-import com.refinedmods.refinedstorage.api.storage.StorageType;
-import edivad.extrastorage.items.storage.ExpandedStorageDisk;
+import java.util.Optional;
+import com.refinedmods.refinedstorage.common.api.RefinedStorageApi;
+import com.refinedmods.refinedstorage.common.api.RefinedStorageClientApi;
+import com.refinedmods.refinedstorage.common.api.storage.AbstractStorageContainerItem;
+import com.refinedmods.refinedstorage.common.api.storage.SerializableStorage;
+import com.refinedmods.refinedstorage.common.api.storage.StorageRepository;
+import com.refinedmods.refinedstorage.common.api.support.HelpTooltipComponent;
+import com.refinedmods.refinedstorage.common.content.Items;
+import com.refinedmods.refinedstorage.common.storage.StorageTypes;
+import com.refinedmods.refinedstorage.common.storage.StorageVariant;
+import com.refinedmods.refinedstorage.common.storage.UpgradeableStorageContainer;
+import com.refinedmods.refinedstorage.common.support.resource.FluidResource;
+import com.refinedmods.refinedstorage.common.util.IdentifierUtil;
 import edivad.extrastorage.setup.ESItems;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 
-public class ExpandedStorageDiskFluid extends ExpandedStorageDisk {
+public class ExpandedStorageDiskFluid extends AbstractStorageContainerItem implements
+    UpgradeableStorageContainer {
 
-  private final FluidStorageType type;
+  private final AdvancedFluidStorageVariant variant;
+  private final Component helpText;
 
-  public ExpandedStorageDiskFluid(FluidStorageType type) {
-    super();
-    this.type = type;
-  }
-
-  public static Item getPartById(FluidStorageType type) {
-    return ESItems.FLUID_STORAGE_PART.get(type).get();
-  }
-
-  @Override
-  protected Item getPart() {
-    return getPartById(this.type);
+  public ExpandedStorageDiskFluid(AdvancedFluidStorageVariant variant) {
+    super(
+        new Item.Properties().stacksTo(1).fireResistant(),
+        RefinedStorageApi.INSTANCE.getStorageContainerItemHelper()
+    );
+    this.variant = variant;
+    this.helpText = IdentifierUtil.createTranslation("item", "fluid_storage_disk.help", IdentifierUtil.format(variant.getCapacityInBuckets()));
   }
 
   @Override
-  public int getCapacity(ItemStack itemStack) {
-    return this.type.getCapacity();
+  protected Long getCapacity() {
+    return variant.getCapacityInBuckets();
   }
 
   @Override
-  public StorageType getType() {
-    return StorageType.FLUID;
+  protected String formatAmount(final long amount) {
+    return RefinedStorageClientApi.INSTANCE.getResourceRendering(FluidResource.class).formatAmount(amount);
+  }
+
+  @Override
+  protected SerializableStorage createStorage(final StorageRepository storageRepository) {
+    return StorageTypes.FLUID.create(variant.getCapacityInBuckets(), storageRepository::markAsChanged);
+  }
+
+  @Override
+  protected ItemStack createPrimaryDisassemblyByproduct(final int count) {
+    return new ItemStack(Items.INSTANCE.getStorageHousing(), count);
+  }
+
+  @Override
+  protected ItemStack createSecondaryDisassemblyByproduct(final int count) {
+    return new ItemStack(ESItems.FLUID_STORAGE_PART.get(variant).get(), count);
+  }
+
+  @Override
+  public Optional<TooltipComponent> getTooltipImage(final ItemStack stack) {
+    return Optional.of(new HelpTooltipComponent(helpText));
+  }
+
+  @Override
+  public StorageVariant getVariant() {
+    return variant;
+  }
+
+  @Override
+  public void transferTo(final ItemStack from, final ItemStack to) {
+    helper.markAsToTransfer(from, to);
   }
 }

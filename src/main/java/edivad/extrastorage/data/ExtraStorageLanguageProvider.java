@@ -2,8 +2,8 @@ package edivad.extrastorage.data;
 
 import edivad.extrastorage.ExtraStorage;
 import edivad.extrastorage.blocks.CrafterTier;
-import edivad.extrastorage.items.storage.fluid.FluidStorageType;
-import edivad.extrastorage.items.storage.item.ItemStorageType;
+import edivad.extrastorage.items.storage.fluid.AdvancedFluidStorageVariant;
+import edivad.extrastorage.items.storage.item.AdvancedItemStorageVariant;
 import edivad.extrastorage.setup.ESBlocks;
 import edivad.extrastorage.setup.ESItems;
 import edivad.extrastorage.tools.Translations;
@@ -18,13 +18,13 @@ public class ExtraStorageLanguageProvider extends LanguageProvider {
 
   @Override
   protected void addTranslations() {
-    for (ItemStorageType type : ItemStorageType.values()) {
+    for (AdvancedItemStorageVariant type : AdvancedItemStorageVariant.values()) {
       add(ESItems.ITEM_STORAGE_PART.get(type).get(), type.getName() + " Storage Part");
       add(ESItems.ITEM_DISK.get(type).get(), type.getName() + " Storage Disk");
       add(ESBlocks.ITEM_STORAGE.get(type).get(), type.getName() + " Storage Block");
     }
 
-    for (FluidStorageType type : FluidStorageType.values()) {
+    for (AdvancedFluidStorageVariant type : AdvancedFluidStorageVariant.values()) {
       add(ESItems.FLUID_STORAGE_PART.get(type).get(), type.getName() + " Fluid Storage Part");
       add(ESItems.FLUID_DISK.get(type).get(), type.getName() + " Fluid Storage Disk");
       add(ESBlocks.FLUID_STORAGE.get(type).get(), type.getName() + " Fluid Storage Block");

@@ -1,111 +1,97 @@
 package edivad.extrastorage.items.storage;
 
-import java.util.List;
-import java.util.UUID;
-import com.refinedmods.refinedstorage.RSBlocks;
-import com.refinedmods.refinedstorage.api.storage.disk.IStorageDisk;
-import com.refinedmods.refinedstorage.api.storage.disk.StorageDiskSyncData;
-import com.refinedmods.refinedstorage.apiimpl.API;
-import com.refinedmods.refinedstorage.item.blockitem.BaseBlockItem;
-import com.refinedmods.refinedstorage.render.Styles;
+import java.util.Optional;
+import org.jetbrains.annotations.Nullable;
+import com.refinedmods.refinedstorage.common.api.RefinedStorageApi;
+import com.refinedmods.refinedstorage.common.api.storage.AbstractStorageContainerBlockItem;
+import com.refinedmods.refinedstorage.common.api.storage.SerializableStorage;
+import com.refinedmods.refinedstorage.common.api.storage.StorageRepository;
+import com.refinedmods.refinedstorage.common.api.support.HelpTooltipComponent;
+import com.refinedmods.refinedstorage.common.content.Blocks;
+import com.refinedmods.refinedstorage.common.storage.StorageTypes;
+import com.refinedmods.refinedstorage.common.storage.StorageVariant;
+import com.refinedmods.refinedstorage.common.storage.UpgradeableStorageContainer;
+import com.refinedmods.refinedstorage.common.util.IdentifierUtil;
 import edivad.extrastorage.blocks.AdvancedStorageBlock;
-import edivad.extrastorage.items.storage.item.ExpandedStorageDiskItem;
-import edivad.extrastorage.items.storage.item.ItemStorageType;
-import edivad.extrastorage.nodes.AdvancedStorageNetworkNode;
+import edivad.extrastorage.items.storage.item.AdvancedItemStorageVariant;
+import edivad.extrastorage.setup.ESItems;
 import net.minecraft.network.chat.Component;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.Containers;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
-import net.minecraft.world.InteractionResultHolder;
-import net.minecraft.world.entity.player.Player;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.level.Level;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.block.state.BlockState;
 
-public class AdvancedStorageBlockItem extends BaseBlockItem {
+public class AdvancedStorageBlockItem extends AbstractStorageContainerBlockItem implements
+    UpgradeableStorageContainer {
 
-  private final ItemStorageType type;
+  private final AdvancedItemStorageVariant variant;
+  private final Component helpText;
 
-  public AdvancedStorageBlockItem(AdvancedStorageBlock block, Item.Properties builder) {
-    super(block, builder);
-    this.type = block.getType();
+  public AdvancedStorageBlockItem(AdvancedStorageBlock<?> block, AdvancedItemStorageVariant variant) {
+    super(block,
+        new Item.Properties().stacksTo(1).fireResistant(),
+        RefinedStorageApi.INSTANCE.getStorageContainerItemHelper());
+    this.variant = variant;
+    this.helpText = IdentifierUtil.createTranslation("item", "storage_block.help", IdentifierUtil.format(variant.getCapacity()));
   }
 
   @Override
-  public void appendHoverText(ItemStack stack, Level level, List<Component> tooltip,
-      TooltipFlag flag) {
-    super.appendHoverText(stack, level, tooltip, flag);
+  protected Long getCapacity() {
+    return this.variant.getCapacity();
+  }
 
-    if (isValid(stack)) {
-      UUID id = getId(stack);
+  @Override
+  protected String formatAmount(long amount) {
+    return IdentifierUtil.format(amount);
+  }
 
-      API.instance().getStorageDiskSync().sendRequest(id);
+  @Override
+  protected SerializableStorage createStorage(final StorageRepository storageRepository) {
+    return createStorage(variant, storageRepository::markAsChanged);
+  }
 
-      StorageDiskSyncData data = API.instance().getStorageDiskSync().getData(id);
-      if (data != null) {
-        if (data.getCapacity() == -1) {
-          tooltip.add(Component.translatable("misc.refinedstorage.storage.stored",
-                  API.instance().getQuantityFormatter().format(data.getStored()))
-              .setStyle(Styles.GRAY));
-        } else {
-          tooltip.add(Component.translatable("misc.refinedstorage.storage.stored_capacity",
-                  API.instance().getQuantityFormatter().format(data.getStored()),
-                  API.instance().getQuantityFormatter().format(data.getCapacity()))
-              .setStyle(Styles.GRAY));
-        }
-      }
+  static SerializableStorage createStorage(AdvancedItemStorageVariant type, final Runnable listener) {
+    return StorageTypes.ITEM.create(type.getCapacity(), listener);
+  }
 
-      if (flag.isAdvanced()) {
-        tooltip.add(Component.literal(id.toString()).setStyle(Styles.GRAY));
-      }
+  @Override
+  protected ItemStack createPrimaryDisassemblyByproduct(final int count) {
+    return new ItemStack(Blocks.INSTANCE.getMachineCasing(), count);
+  }
+
+  @Override
+  @Nullable
+  protected ItemStack createSecondaryDisassemblyByproduct(final int count) {
+    return new ItemStack(ESItems.ITEM_STORAGE_PART.get(variant).get(), count);
+  }
+
+  @Override
+  protected boolean placeBlock(final BlockPlaceContext ctx, final BlockState state) {
+    if (ctx.getPlayer() instanceof ServerPlayer serverPlayer && !(RefinedStorageApi.INSTANCE.canPlaceNetworkNode(
+        serverPlayer,
+        ctx.getLevel(),
+        ctx.getClickedPos(),
+        state
+    ))) {
+      return false;
     }
+    return super.placeBlock(ctx, state);
   }
 
   @Override
-  public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
-    ItemStack storageStack = player.getItemInHand(hand);
-
-    if (!level.isClientSide && player.isCrouching()) {
-      UUID diskId = null;
-      IStorageDisk disk = null;
-
-      if (isValid(storageStack)) {
-        diskId = getId(storageStack);
-        disk = API.instance().getStorageDiskManager((ServerLevel) level).get(diskId);
-      }
-
-      // Newly created storages won't have a tag yet, so allow invalid disks as well.
-      if (disk == null || disk.getStored() == 0) {
-        ItemStack storagePart = new ItemStack(ExpandedStorageDiskItem.getPartById(type));
-
-        if (!player.getInventory().add(storagePart.copy())) {
-          Containers.dropItemStack(level, player.getX(), player.getY(), player.getZ(), storagePart);
-        }
-
-        if (disk != null) {
-          API.instance().getStorageDiskManager((ServerLevel) level).remove(diskId);
-          API.instance().getStorageDiskManager((ServerLevel) level).markForSaving();
-        }
-
-        return new InteractionResultHolder<>(InteractionResult.SUCCESS,
-            new ItemStack(RSBlocks.MACHINE_CASING.get()));
-      }
-    }
-    return new InteractionResultHolder<>(InteractionResult.PASS, storageStack);
+  public Optional<TooltipComponent> getTooltipImage(final ItemStack stack) {
+    return Optional.of(new HelpTooltipComponent(helpText));
   }
 
   @Override
-  public int getEntityLifespan(ItemStack itemStack, Level level) {
-    return Integer.MAX_VALUE;
+  public StorageVariant getVariant() {
+    return variant;
   }
 
-  private UUID getId(ItemStack disk) {
-    return disk.getTag().getUUID(AdvancedStorageNetworkNode.NBT_ID);
-  }
-
-  private boolean isValid(ItemStack disk) {
-    return disk.hasTag() && disk.getTag().hasUUID(AdvancedStorageNetworkNode.NBT_ID);
+  @Override
+  public void transferTo(final ItemStack from, final ItemStack to) {
+    helper.markAsToTransfer(from, to);
   }
 }

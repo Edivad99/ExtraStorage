@@ -1,7 +1,7 @@
 package edivad.extrastorage.compat.jade;
 
 import edivad.extrastorage.ExtraStorage;
-import edivad.extrastorage.blockentity.AdvancedCrafterBlockEntity;
+import edivad.extrastorage.blockentity.AdvancedAutocrafterBlockEntity;
 import edivad.extrastorage.tools.Translations;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -15,7 +15,7 @@ public class AdvancedCrafterComponent implements IBlockComponentProvider {
   @Override
   public void appendTooltip(ITooltip tooltip, BlockAccessor blockAccessor,
       IPluginConfig iPluginConfig) {
-    if (blockAccessor.getBlockEntity() instanceof AdvancedCrafterBlockEntity) {
+    if (blockAccessor.getBlockEntity() instanceof AdvancedAutocrafterBlockEntity) {
       var data = blockAccessor.getServerData();
       var patterns = data.getInt("patterns");
       var speed = data.getInt("speed");

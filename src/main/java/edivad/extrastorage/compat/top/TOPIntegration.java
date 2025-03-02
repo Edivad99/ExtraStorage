@@ -1,9 +1,8 @@
 package edivad.extrastorage.compat.top;
 
 import java.util.function.Function;
-import com.refinedmods.refinedstorage.blockentity.CrafterBlockEntity;
 import edivad.extrastorage.ExtraStorage;
-import edivad.extrastorage.blockentity.AdvancedCrafterBlockEntity;
+import edivad.extrastorage.blockentity.AdvancedAutocrafterBlockEntity;
 import edivad.extrastorage.tools.Translations;
 import mcjty.theoneprobe.api.IProbeHitData;
 import mcjty.theoneprobe.api.IProbeInfo;
@@ -30,7 +29,7 @@ public class TOPIntegration implements IProbeInfoProvider, Function<ITheOneProbe
     var blockEntity = level.getBlockEntity(data.getPos());
     int patterns, speed, slots;
 
-    if (blockEntity instanceof AdvancedCrafterBlockEntity advancedCrafter) {
+    /*if (blockEntity instanceof AdvancedAutocrafterBlockEntity advancedCrafter) {
       var node = advancedCrafter.getNode();
       patterns = node.getPatterns().size();
       speed = node.getMaximumSuccessfulCraftingUpdates();
@@ -57,7 +56,7 @@ public class TOPIntegration implements IProbeInfoProvider, Function<ITheOneProbe
               String.valueOf(slots)));
       probeInfo.horizontal()
           .text(Component.translatable(Translations.CURRENT_SPEED, String.valueOf(speed)));
-    }
+    }*/
   }
 
   @Override

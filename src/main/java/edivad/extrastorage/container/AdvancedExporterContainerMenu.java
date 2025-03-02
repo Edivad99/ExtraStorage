@@ -1,88 +1,90 @@
 package edivad.extrastorage.container;
 
-import com.refinedmods.refinedstorage.blockentity.config.IType;
-import com.refinedmods.refinedstorage.container.BaseContainerMenu;
-import com.refinedmods.refinedstorage.container.slot.filter.FilterSlot;
-import com.refinedmods.refinedstorage.container.slot.filter.FluidFilterSlot;
-import com.refinedmods.refinedstorage.item.UpgradeItem;
+import com.refinedmods.refinedstorage.common.api.support.resource.ResourceContainer;
+import com.refinedmods.refinedstorage.common.exporter.ExporterData;
+import com.refinedmods.refinedstorage.common.support.RedstoneMode;
+import com.refinedmods.refinedstorage.common.support.SchedulingModeType;
+import com.refinedmods.refinedstorage.common.support.containermenu.AbstractSimpleFilterContainerMenu;
+import com.refinedmods.refinedstorage.common.support.containermenu.ClientProperty;
+import com.refinedmods.refinedstorage.common.support.containermenu.PropertyTypes;
+import com.refinedmods.refinedstorage.common.support.containermenu.ServerProperty;
+import com.refinedmods.refinedstorage.common.support.exportingindicator.ExportingIndicator;
+import com.refinedmods.refinedstorage.common.support.exportingindicator.ExportingIndicatorListener;
+import com.refinedmods.refinedstorage.common.support.exportingindicator.ExportingIndicators;
+import com.refinedmods.refinedstorage.common.upgrade.UpgradeContainer;
+import com.refinedmods.refinedstorage.common.upgrade.UpgradeDestinations;
+import com.refinedmods.refinedstorage.common.util.IdentifierUtil;
 import edivad.extrastorage.blockentity.AdvancedExporterBlockEntity;
 import edivad.extrastorage.setup.ESContainer;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
-import net.neoforged.neoforge.items.SlotItemHandler;
 
-public class AdvancedExporterContainerMenu extends BaseContainerMenu {
+public class AdvancedExporterContainerMenu extends AbstractSimpleFilterContainerMenu<AdvancedExporterBlockEntity>
+    implements ExportingIndicatorListener {
 
-  private final AdvancedExporterBlockEntity exporterBlockEntity;
-  private boolean hasRegulatorMode;
+  private static final MutableComponent FILTER_HELP = IdentifierUtil.createTranslation("gui", "exporter.filter_help");
 
-  public AdvancedExporterContainerMenu(int windowId, Player player,
-      AdvancedExporterBlockEntity exporterBlockEntity) {
-    super(ESContainer.ADVANCED_EXPORTER.get(), exporterBlockEntity, player, windowId);
-    this.exporterBlockEntity = exporterBlockEntity;
-    this.hasRegulatorMode = hasRegulatorMode();
-    initSlots();
+  private final ExportingIndicators indicators;
+
+  public AdvancedExporterContainerMenu(int windowId, Inventory inventory, ExporterData data) {
+    super(ESContainer.ADVANCED_EXPORTER.get(), windowId, inventory.player, data.resourceContainerData(),
+        UpgradeDestinations.EXPORTER, FILTER_HELP);
+    this.indicators = new ExportingIndicators(data.exportingIndicators());
   }
 
-  private boolean hasRegulatorMode() {
-    return exporterBlockEntity.getNode().getUpgrades().hasUpgrade(UpgradeItem.Type.REGULATOR);
+  public AdvancedExporterContainerMenu(int windowId, Player player, AdvancedExporterBlockEntity exporter,
+      ResourceContainer resourceContainer, UpgradeContainer upgradeContainer, ExportingIndicators indicators) {
+    super(ESContainer.ADVANCED_EXPORTER.get(), windowId, player, resourceContainer,
+        upgradeContainer, exporter, FILTER_HELP);
+    this.indicators = indicators;
+  }
+
+  public ExportingIndicator getIndicator(final int idx) {
+    return indicators.get(idx);
+  }
+
+  public int getIndicators() {
+    return indicators.size();
   }
 
   @Override
   public void broadcastChanges() {
     super.broadcastChanges();
-
-    boolean updatedHasRegulatorMode = hasRegulatorMode();
-    if (hasRegulatorMode != updatedHasRegulatorMode) {
-      hasRegulatorMode = updatedHasRegulatorMode;
-      initSlots();
+    if (player instanceof ServerPlayer serverPlayer) {
+      indicators.detectChanges(serverPlayer);
     }
-  }
-
-  public void initSlots() {
-    this.slots.clear();
-    this.lastSlots.clear();
-
-    this.transferManager.clearTransfers();
-
-    for (int i = 0; i < 4; i++) {
-      addSlot(
-          new SlotItemHandler(exporterBlockEntity.getNode().getUpgrades(), i, 187, 6 + (i * 18)));
-    }
-
-    boolean hasRegulator = exporterBlockEntity.getNode().getUpgrades()
-        .hasUpgrade(UpgradeItem.Type.REGULATOR);
-
-    for (int i = 0; i < 2; i++) {
-      for (int j = 0; j < 9; j++) {
-        int index = (i * 9) + j;
-        int x = 8 + (18 * j);
-        int y = 20 + (18 * i);
-
-        addSlot(new FilterSlot(
-            exporterBlockEntity.getNode().getItemFilters(),
-            index, x, y,
-            hasRegulator ? FilterSlot.FILTER_ALLOW_SIZE : 0
-        ).setEnableHandler(() -> exporterBlockEntity.getNode().getType() == IType.ITEMS));
-
-        addSlot(new FluidFilterSlot(
-            exporterBlockEntity.getNode().getFluidFilters(),
-            index, x, y,
-            hasRegulator ? FluidFilterSlot.FILTER_ALLOW_SIZE : 0
-        ).setEnableHandler(() -> exporterBlockEntity.getNode().getType() == IType.FLUIDS));
-      }
-    }
-
-    addPlayerInventory(8, 73);
-
-    transferManager.addBiTransfer(getPlayer().getInventory(),
-        exporterBlockEntity.getNode().getUpgrades());
-    transferManager.addFilterTransfer(getPlayer().getInventory(),
-        exporterBlockEntity.getNode().getItemFilters(),
-        exporterBlockEntity.getNode().getFluidFilters(), exporterBlockEntity.getNode()::getType);
   }
 
   @Override
-  public AdvancedExporterBlockEntity getBlockEntity() {
-    return exporterBlockEntity;
+  protected void registerClientProperties() {
+    registerProperty(new ClientProperty<>(PropertyTypes.FUZZY_MODE, false));
+    registerProperty(new ClientProperty<>(PropertyTypes.REDSTONE_MODE, RedstoneMode.IGNORE));
+    registerProperty(new ClientProperty<>(PropertyTypes.SCHEDULING_MODE, SchedulingModeType.DEFAULT));
+  }
+
+  @Override
+  protected void registerServerProperties(final AdvancedExporterBlockEntity blockEntity) {
+    registerProperty(new ServerProperty<>(
+        PropertyTypes.FUZZY_MODE,
+        blockEntity::isFuzzyMode,
+        blockEntity::setFuzzyMode
+    ));
+    registerProperty(new ServerProperty<>(
+        PropertyTypes.REDSTONE_MODE,
+        blockEntity::getRedstoneMode,
+        blockEntity::setRedstoneMode
+    ));
+    registerProperty(new ServerProperty<>(
+        PropertyTypes.SCHEDULING_MODE,
+        blockEntity::getSchedulingModeType,
+        blockEntity::setSchedulingModeType
+    ));
+  }
+
+  @Override
+  public void indicatorChanged(final int index, final ExportingIndicator indicator) {
+    indicators.set(index, indicator);
   }
 }

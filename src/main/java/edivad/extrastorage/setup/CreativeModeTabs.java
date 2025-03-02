@@ -1,9 +1,10 @@
 package edivad.extrastorage.setup;
 
+import com.refinedmods.refinedstorage.common.api.RefinedStorageApi;
 import edivad.extrastorage.ExtraStorage;
 import edivad.extrastorage.blocks.CrafterTier;
-import edivad.extrastorage.items.storage.fluid.FluidStorageType;
-import edivad.extrastorage.items.storage.item.ItemStorageType;
+import edivad.extrastorage.items.storage.fluid.AdvancedFluidStorageVariant;
+import edivad.extrastorage.items.storage.item.AdvancedItemStorageVariant;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -20,29 +21,29 @@ public class CreativeModeTabs {
 
   private static final DeferredHolder<CreativeModeTab, CreativeModeTab> MAIN_TAB =
       TABS.register("main_tab", () -> CreativeModeTab.builder()
-          .withTabsBefore(new ResourceLocation("refinedstorage", "general"))
+          .withTabsBefore(RefinedStorageApi.INSTANCE.getCreativeModeTabId())
           .title(Component.literal(ExtraStorage.MODNAME))
           .icon(() -> new ItemStack(ESBlocks.CRAFTER.get(CrafterTier.GOLD).get()))
           .displayItems((params, output) -> {
             for (var tier : CrafterTier.values()) {
               output.accept(ESItems.CRAFTER.get(tier).get());
             }
-            for (var type : ItemStorageType.values()) {
+            for (var type : AdvancedItemStorageVariant.values()) {
               output.accept(ESItems.ITEM_STORAGE.get(type).get());
             }
-            for (var type : FluidStorageType.values()) {
+            for (var type : AdvancedFluidStorageVariant.values()) {
               output.accept(ESItems.FLUID_STORAGE.get(type).get());
             }
-            for (var type : ItemStorageType.values()) {
+            for (var type : AdvancedItemStorageVariant.values()) {
               output.accept(ESItems.ITEM_STORAGE_PART.get(type).get());
             }
-            for (var type : FluidStorageType.values()) {
+            for (var type : AdvancedFluidStorageVariant.values()) {
               output.accept(ESItems.FLUID_STORAGE_PART.get(type).get());
             }
-            for (var type : ItemStorageType.values()) {
+            for (var type : AdvancedItemStorageVariant.values()) {
               output.accept(ESItems.ITEM_DISK.get(type).get());
             }
-            for (var type : FluidStorageType.values()) {
+            for (var type : AdvancedFluidStorageVariant.values()) {
               output.accept(ESItems.FLUID_DISK.get(type).get());
             }
             output.accept(ESItems.ADVANCED_IMPORTER.get());

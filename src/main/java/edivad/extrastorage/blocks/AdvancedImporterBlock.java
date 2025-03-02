@@ -1,106 +1,67 @@
 package edivad.extrastorage.blocks;
 
+import java.util.concurrent.ConcurrentHashMap;
 import org.jetbrains.annotations.Nullable;
-import com.refinedmods.refinedstorage.block.BlockDirection;
-import com.refinedmods.refinedstorage.block.CableBlock;
-import com.refinedmods.refinedstorage.block.shape.ShapeCache;
-import com.refinedmods.refinedstorage.container.factory.BlockEntityMenuProvider;
-import com.refinedmods.refinedstorage.render.ConstantsCable;
-import com.refinedmods.refinedstorage.util.BlockUtils;
-import com.refinedmods.refinedstorage.util.CollisionUtils;
-import com.refinedmods.refinedstorage.util.NetworkUtils;
+import com.refinedmods.refinedstorage.common.support.AbstractBlockEntityTicker;
+import com.refinedmods.refinedstorage.common.support.AbstractDirectionalCableBlock;
+import com.refinedmods.refinedstorage.common.support.BaseBlockItem;
+import com.refinedmods.refinedstorage.common.support.BlockItemProvider;
+import com.refinedmods.refinedstorage.common.support.DirectionalCableBlockShapes;
+import com.refinedmods.refinedstorage.common.support.NetworkNodeBlockItem;
+import com.refinedmods.refinedstorage.common.support.network.NetworkNodeBlockEntityTicker;
+import com.refinedmods.refinedstorage.common.util.IdentifierUtil;
 import edivad.extrastorage.blockentity.AdvancedImporterBlockEntity;
-import edivad.extrastorage.container.AdvancedImporterContainerMenu;
+import edivad.extrastorage.setup.ESBlockEntities;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.shapes.CollisionContext;
-import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-public class AdvancedImporterBlock extends CableBlock {
+public class AdvancedImporterBlock extends AbstractDirectionalCableBlock implements EntityBlock,
+    BlockItemProvider<BaseBlockItem> {
 
-  private static final VoxelShape LINE_NORTH_1 = box(6, 6, 4, 10, 10, 6);
-  private static final VoxelShape LINE_NORTH_2 = box(5, 5, 2, 11, 11, 4);
-  private static final VoxelShape LINE_NORTH_3 = box(3, 3, 0, 13, 13, 2);
-  private static final VoxelShape LINE_NORTH = Shapes.or(LINE_NORTH_1, LINE_NORTH_2, LINE_NORTH_3);
-  private static final VoxelShape LINE_EAST_1 = box(10, 6, 6, 12, 10, 10);
-  private static final VoxelShape LINE_EAST_2 = box(12, 5, 5, 14, 11, 11);
-  private static final VoxelShape LINE_EAST_3 = box(14, 3, 3, 16, 13, 13);
-  private static final VoxelShape LINE_EAST = Shapes.or(LINE_EAST_1, LINE_EAST_2, LINE_EAST_3);
-  private static final VoxelShape LINE_SOUTH_1 = box(6, 6, 10, 10, 10, 12);
-  private static final VoxelShape LINE_SOUTH_2 = box(5, 5, 12, 11, 11, 14);
-  private static final VoxelShape LINE_SOUTH_3 = box(3, 3, 14, 13, 13, 16);
-  private static final VoxelShape LINE_SOUTH = Shapes.or(LINE_SOUTH_1, LINE_SOUTH_2, LINE_SOUTH_3);
-  private static final VoxelShape LINE_WEST_1 = box(4, 6, 6, 6, 10, 10);
-  private static final VoxelShape LINE_WEST_2 = box(2, 5, 5, 4, 11, 11);
-  private static final VoxelShape LINE_WEST_3 = box(0, 3, 3, 2, 13, 13);
-  private static final VoxelShape LINE_WEST = Shapes.or(LINE_WEST_1, LINE_WEST_2, LINE_WEST_3);
-  private static final VoxelShape LINE_UP_1 = box(6, 10, 6, 10, 12, 10);
-  private static final VoxelShape LINE_UP_2 = box(5, 12, 5, 11, 14, 11);
-  private static final VoxelShape LINE_UP_3 = box(3, 14, 3, 13, 16, 13);
-  private static final VoxelShape LINE_UP = Shapes.or(LINE_UP_1, LINE_UP_2, LINE_UP_3);
-  private static final VoxelShape LINE_DOWN_1 = box(6, 4, 6, 10, 6, 10);
-  private static final VoxelShape LINE_DOWN_2 = box(5, 2, 5, 11, 4, 11);
-  private static final VoxelShape LINE_DOWN_3 = box(3, 0, 3, 13, 2, 13);
-  private static final VoxelShape LINE_DOWN = Shapes.or(LINE_DOWN_1, LINE_DOWN_2, LINE_DOWN_3);
+  private static final Component HELP = IdentifierUtil.createTranslation("item", "importer.help");
+  private static final ConcurrentHashMap<DirectionalCacheShapeCacheKey, VoxelShape> SHAPE_CACHE =
+      new ConcurrentHashMap<>();
+  private static final AbstractBlockEntityTicker<AdvancedImporterBlockEntity> TICKER =
+      new NetworkNodeBlockEntityTicker<>(ESBlockEntities.ADVANCED_IMPORTER);
 
   public AdvancedImporterBlock() {
-    super(BlockUtils.DEFAULT_GLASS_PROPERTIES);
+    super(SHAPE_CACHE);
   }
 
-  public BlockDirection getDirection() {
-    return BlockDirection.ANY;
-  }
-
-  public VoxelShape getShape(BlockState state, BlockGetter world, BlockPos pos,
-      CollisionContext ctx) {
-    return ConstantsCable.addCoverVoxelShapes(ShapeCache.getOrCreate(state, s -> {
-      VoxelShape shape = getCableShape(s);
-      shape = Shapes.or(shape, this.getLineShape(s));
-      return shape;
-    }), world, pos);
-  }
-
-  protected VoxelShape getLineShape(BlockState state) {
-    return switch (state.getValue(this.getDirection().getProperty())) {
-      case UP -> LINE_UP;
-      case DOWN -> LINE_DOWN;
-      case NORTH -> LINE_NORTH;
-      case SOUTH -> LINE_SOUTH;
-      case EAST -> LINE_EAST;
-      case WEST -> LINE_WEST;
-    };
-  }
-
-  @Nullable
   @Override
   public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
     return new AdvancedImporterBlockEntity(pos, state);
   }
 
-  public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player,
-      InteractionHand hand, BlockHitResult hit) {
-    if (!level.isClientSide && CollisionUtils.isInBounds(getLineShape(state), pos,
-        hit.getLocation())) {
-      return NetworkUtils.attemptModify(level, pos, player, () -> player.openMenu(
-          new BlockEntityMenuProvider<AdvancedImporterBlockEntity>(
-              Component.translatable(this.getDescriptionId()),
-              (blockEntity, windowId, inventory, p) ->
-                  new AdvancedImporterContainerMenu(windowId, player, blockEntity),
-              pos
-          ),
-          pos
-      ));
-    }
+  @Nullable
+  @Override
+  public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level,
+      BlockState blockState, BlockEntityType<T> type) {
+    return TICKER.get(level, type);
+  }
 
-    return InteractionResult.SUCCESS;
+  @Override
+  protected VoxelShape getExtensionShape(final Direction direction) {
+    return switch (direction) {
+      case NORTH -> DirectionalCableBlockShapes.IMPORTER_NORTH;
+      case EAST -> DirectionalCableBlockShapes.IMPORTER_EAST;
+      case SOUTH -> DirectionalCableBlockShapes.IMPORTER_SOUTH;
+      case WEST -> DirectionalCableBlockShapes.IMPORTER_WEST;
+      case UP -> DirectionalCableBlockShapes.IMPORTER_UP;
+      case DOWN -> DirectionalCableBlockShapes.IMPORTER_DOWN;
+    };
+  }
+
+  @Override
+  public BaseBlockItem createBlockItem() {
+    return new NetworkNodeBlockItem(this, HELP);
   }
 }

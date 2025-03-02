@@ -1,60 +1,62 @@
 package edivad.extrastorage.container;
 
-import com.refinedmods.refinedstorage.blockentity.config.IType;
-import com.refinedmods.refinedstorage.container.BaseContainerMenu;
-import com.refinedmods.refinedstorage.container.slot.filter.FilterSlot;
-import com.refinedmods.refinedstorage.container.slot.filter.FluidFilterSlot;
+import com.refinedmods.refinedstorage.api.resource.filter.FilterMode;
+import com.refinedmods.refinedstorage.common.api.support.resource.ResourceContainer;
+import com.refinedmods.refinedstorage.common.support.RedstoneMode;
+import com.refinedmods.refinedstorage.common.support.containermenu.AbstractSimpleFilterContainerMenu;
+import com.refinedmods.refinedstorage.common.support.containermenu.ClientProperty;
+import com.refinedmods.refinedstorage.common.support.containermenu.PropertyTypes;
+import com.refinedmods.refinedstorage.common.support.containermenu.ServerProperty;
+import com.refinedmods.refinedstorage.common.support.resource.ResourceContainerData;
+import com.refinedmods.refinedstorage.common.upgrade.UpgradeContainer;
+import com.refinedmods.refinedstorage.common.upgrade.UpgradeDestinations;
+import com.refinedmods.refinedstorage.common.util.IdentifierUtil;
 import edivad.extrastorage.blockentity.AdvancedImporterBlockEntity;
 import edivad.extrastorage.setup.ESContainer;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
-import net.neoforged.neoforge.items.SlotItemHandler;
 
-public class AdvancedImporterContainerMenu extends BaseContainerMenu {
+public class AdvancedImporterContainerMenu extends
+    AbstractSimpleFilterContainerMenu<AdvancedImporterBlockEntity> {
 
-  private final AdvancedImporterBlockEntity importerBlockEntity;
+  private static final MutableComponent FILTER_HELP = IdentifierUtil.createTranslation("gui", "importer.filter_help");
 
-  public AdvancedImporterContainerMenu(int windowId, Player player,
-      AdvancedImporterBlockEntity importerBlockEntity) {
-    super(ESContainer.ADVANCED_IMPORTER.get(), importerBlockEntity, player, windowId);
-    this.importerBlockEntity = importerBlockEntity;
-    initSlots();
+  public AdvancedImporterContainerMenu(int windowId, Inventory inventory,
+      ResourceContainerData resourceContainerData) {
+    super(ESContainer.ADVANCED_IMPORTER.get(), windowId, inventory.player, resourceContainerData,
+        UpgradeDestinations.IMPORTER, FILTER_HELP);
   }
 
-  public void initSlots() {
-    for (int i = 0; i < 4; i++) {
-      addSlot(
-          new SlotItemHandler(importerBlockEntity.getNode().getUpgrades(), i, 187, 6 + (i * 18)));
-    }
-
-    for (int i = 0; i < 2; i++) {
-      for (int j = 0; j < 9; j++) {
-        int index = (i * 9) + j;
-        int x = 8 + (18 * j);
-        int y = 20 + (18 * i);
-
-        addSlot(new FilterSlot(
-            importerBlockEntity.getNode().getItemFilters(),
-            index, x, y
-        ).setEnableHandler(() -> importerBlockEntity.getNode().getType() == IType.ITEMS));
-
-        addSlot(new FluidFilterSlot(
-            importerBlockEntity.getNode().getFluidFilters(),
-            index, x, y
-        ).setEnableHandler(() -> importerBlockEntity.getNode().getType() == IType.FLUIDS));
-      }
-    }
-
-    addPlayerInventory(8, 73);
-
-    transferManager.addBiTransfer(getPlayer().getInventory(),
-        importerBlockEntity.getNode().getUpgrades());
-    transferManager.addFilterTransfer(getPlayer().getInventory(),
-        importerBlockEntity.getNode().getItemFilters(),
-        importerBlockEntity.getNode().getFluidFilters(), importerBlockEntity.getNode()::getType);
+  public AdvancedImporterContainerMenu(int windowId, Player player, AdvancedImporterBlockEntity importer,
+      ResourceContainer resourceContainer, UpgradeContainer upgradeContainer) {
+    super(ESContainer.ADVANCED_IMPORTER.get(), windowId, player, resourceContainer,
+        upgradeContainer, importer, FILTER_HELP);
   }
 
   @Override
-  public AdvancedImporterBlockEntity getBlockEntity() {
-    return importerBlockEntity;
+  protected void registerClientProperties() {
+    registerProperty(new ClientProperty<>(PropertyTypes.FILTER_MODE, FilterMode.BLOCK));
+    registerProperty(new ClientProperty<>(PropertyTypes.FUZZY_MODE, false));
+    registerProperty(new ClientProperty<>(PropertyTypes.REDSTONE_MODE, RedstoneMode.IGNORE));
+  }
+
+  @Override
+  protected void registerServerProperties(final AdvancedImporterBlockEntity blockEntity) {
+    registerProperty(new ServerProperty<>(
+        PropertyTypes.FILTER_MODE,
+        blockEntity::getFilterMode,
+        blockEntity::setFilterMode
+    ));
+    registerProperty(new ServerProperty<>(
+        PropertyTypes.FUZZY_MODE,
+        blockEntity::isFuzzyMode,
+        blockEntity::setFuzzyMode
+    ));
+    registerProperty(new ServerProperty<>(
+        PropertyTypes.REDSTONE_MODE,
+        blockEntity::getRedstoneMode,
+        blockEntity::setRedstoneMode
+    ));
   }
 }

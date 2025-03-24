@@ -1,10 +1,10 @@
 package edivad.extrastorage.data.models;
 
 import edivad.extrastorage.ExtraStorage;
-import edivad.extrastorage.items.storage.fluid.AdvancedFluidStorageVariant;
-import edivad.extrastorage.items.storage.item.AdvancedItemStorageVariant;
 import edivad.extrastorage.setup.ESBlocks;
 import edivad.extrastorage.setup.ESItems;
+import edivad.extrastorage.storage.AdvancedFluidStorageVariant;
+import edivad.extrastorage.storage.AdvancedItemStorageVariant;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.world.item.Item;

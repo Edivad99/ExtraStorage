@@ -2,10 +2,10 @@ package edivad.extrastorage.data;
 
 import java.util.concurrent.CompletableFuture;
 import edivad.extrastorage.ExtraStorage;
-import edivad.extrastorage.blocks.CrafterTier;
-import edivad.extrastorage.items.storage.fluid.AdvancedFluidStorageVariant;
-import edivad.extrastorage.items.storage.item.AdvancedItemStorageVariant;
+import edivad.extrastorage.autocrafting.advancedautocrafter.CrafterTier;
 import edivad.extrastorage.setup.ESBlocks;
+import edivad.extrastorage.storage.AdvancedFluidStorageVariant;
+import edivad.extrastorage.storage.AdvancedItemStorageVariant;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.neoforged.neoforge.common.Tags;

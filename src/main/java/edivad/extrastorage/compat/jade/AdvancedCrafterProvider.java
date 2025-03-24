@@ -1,7 +1,7 @@
 package edivad.extrastorage.compat.jade;
 
 import edivad.extrastorage.ExtraStorage;
-import edivad.extrastorage.blockentity.AdvancedAutocrafterBlockEntity;
+import edivad.extrastorage.autocrafting.advancedautocrafter.AdvancedAutocrafterBlockEntity;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import snownee.jade.api.BlockAccessor;

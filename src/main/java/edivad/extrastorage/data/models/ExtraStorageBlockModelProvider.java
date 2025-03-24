@@ -1,9 +1,9 @@
 package edivad.extrastorage.data.models;
 
 import edivad.extrastorage.ExtraStorage;
-import edivad.extrastorage.items.storage.fluid.AdvancedFluidStorageVariant;
-import edivad.extrastorage.items.storage.item.AdvancedItemStorageVariant;
 import edivad.extrastorage.setup.ESBlocks;
+import edivad.extrastorage.storage.AdvancedFluidStorageVariant;
+import edivad.extrastorage.storage.AdvancedItemStorageVariant;
 import net.minecraft.data.PackOutput;
 import net.neoforged.neoforge.client.model.generators.BlockStateProvider;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;

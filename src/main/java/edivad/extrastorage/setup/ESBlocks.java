@@ -5,15 +5,15 @@ import java.util.HashMap;
 import java.util.Map;
 import com.refinedmods.refinedstorage.common.content.BlockConstants;
 import edivad.extrastorage.ExtraStorage;
-import edivad.extrastorage.blocks.AdvancedAutocrafterBlock;
-import edivad.extrastorage.blocks.AdvancedExporterBlock;
-import edivad.extrastorage.blocks.AdvancedFluidStorageBlockProvider;
-import edivad.extrastorage.blocks.AdvancedImporterBlock;
-import edivad.extrastorage.blocks.AdvancedItemStorageBlockProvider;
-import edivad.extrastorage.blocks.AdvancedStorageBlock;
-import edivad.extrastorage.blocks.CrafterTier;
-import edivad.extrastorage.items.storage.fluid.AdvancedFluidStorageVariant;
-import edivad.extrastorage.items.storage.item.AdvancedItemStorageVariant;
+import edivad.extrastorage.advancedexporter.AdvancedExporterBlock;
+import edivad.extrastorage.advancedimporter.AdvancedImporterBlock;
+import edivad.extrastorage.autocrafting.advancedautocrafter.AdvancedAutocrafterBlock;
+import edivad.extrastorage.autocrafting.advancedautocrafter.CrafterTier;
+import edivad.extrastorage.storage.AdvancedFluidStorageVariant;
+import edivad.extrastorage.storage.AdvancedItemStorageVariant;
+import edivad.extrastorage.storage.advancedstorageblock.AdvancedFluidStorageBlockProvider;
+import edivad.extrastorage.storage.advancedstorageblock.AdvancedItemStorageBlockBlockProvider;
+import edivad.extrastorage.storage.advancedstorageblock.AdvancedStorageBlock;
 import net.minecraft.world.level.block.Block;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredBlock;
@@ -38,7 +38,7 @@ public class ESBlocks {
       ITEM_STORAGE.put(type,
           BLOCKS.register("block_" + type.getName(),
               () -> new AdvancedStorageBlock<>(BlockConstants.PROPERTIES,
-                  new AdvancedItemStorageBlockProvider(type))));
+                  new AdvancedItemStorageBlockBlockProvider(type))));
     }
     for (var type : AdvancedFluidStorageVariant.values()) {
       FLUID_STORAGE.put(type,

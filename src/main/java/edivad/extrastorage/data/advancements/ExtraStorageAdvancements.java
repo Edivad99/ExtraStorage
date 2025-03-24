@@ -2,7 +2,7 @@ package edivad.extrastorage.data.advancements;
 
 import java.util.function.Consumer;
 import edivad.extrastorage.ExtraStorage;
-import edivad.extrastorage.blocks.CrafterTier;
+import edivad.extrastorage.autocrafting.advancedautocrafter.CrafterTier;
 import edivad.extrastorage.setup.ESBlocks;
 import edivad.extrastorage.tools.Translations;
 import net.minecraft.advancements.Advancement;

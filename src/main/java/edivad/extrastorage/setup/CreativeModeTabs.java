@@ -2,9 +2,9 @@ package edivad.extrastorage.setup;
 
 import com.refinedmods.refinedstorage.common.api.RefinedStorageApi;
 import edivad.extrastorage.ExtraStorage;
-import edivad.extrastorage.blocks.CrafterTier;
-import edivad.extrastorage.items.storage.fluid.AdvancedFluidStorageVariant;
-import edivad.extrastorage.items.storage.item.AdvancedItemStorageVariant;
+import edivad.extrastorage.autocrafting.advancedautocrafter.CrafterTier;
+import edivad.extrastorage.storage.AdvancedFluidStorageVariant;
+import edivad.extrastorage.storage.AdvancedItemStorageVariant;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.CreativeModeTab;

@@ -8,13 +8,11 @@ import com.refinedmods.refinedstorage.common.api.support.network.AbstractNetwork
 import com.refinedmods.refinedstorage.common.support.resource.FluidResource;
 import com.refinedmods.refinedstorage.common.support.resource.ItemResource;
 import com.refinedmods.refinedstorage.neoforge.api.RefinedStorageNeoForgeApi;
-import edivad.extrastorage.blocks.CrafterTier;
-import edivad.extrastorage.client.screen.AdvancedCrafterScreen;
-import edivad.extrastorage.client.screen.AdvancedExporterScreen;
-import edivad.extrastorage.client.screen.AdvancedImporterScreen;
-import edivad.extrastorage.client.screen.AdvancedStorageBlockScreen;
+import edivad.extrastorage.advancedexporter.AdvancedExporterScreen;
+import edivad.extrastorage.advancedimporter.AdvancedImporterScreen;
+import edivad.extrastorage.autocrafting.advancedautocrafter.AdvancedAutocrafterScreen;
+import edivad.extrastorage.autocrafting.advancedautocrafter.CrafterTier;
 import edivad.extrastorage.compat.top.TOPIntegration;
-import edivad.extrastorage.container.AdvancedStorageBlockContainerMenu;
 import edivad.extrastorage.data.ExtraStorageBlockTagsProvider;
 import edivad.extrastorage.data.ExtraStorageItemTagsProvider;
 import edivad.extrastorage.data.ExtraStorageLanguageProvider;
@@ -22,8 +20,6 @@ import edivad.extrastorage.data.ExtraStorageRecipeProvider;
 import edivad.extrastorage.data.loot.pack.ExtraStorageLootTableProvider;
 import edivad.extrastorage.data.models.ExtraStorageBlockModelProvider;
 import edivad.extrastorage.data.models.ExtraStorageItemModelProvider;
-import edivad.extrastorage.items.storage.fluid.AdvancedFluidStorageVariant;
-import edivad.extrastorage.items.storage.item.AdvancedItemStorageVariant;
 import edivad.extrastorage.setup.ClientSetup;
 import edivad.extrastorage.setup.Config;
 import edivad.extrastorage.setup.CreativeModeTabs;
@@ -32,6 +28,10 @@ import edivad.extrastorage.setup.ESBlocks;
 import edivad.extrastorage.setup.ESContainer;
 import edivad.extrastorage.setup.ESItems;
 import edivad.extrastorage.setup.ESLootFunctions;
+import edivad.extrastorage.storage.AdvancedFluidStorageVariant;
+import edivad.extrastorage.storage.AdvancedItemStorageVariant;
+import edivad.extrastorage.storage.advancedstorageblock.AdvancedStorageBlockContainerMenu;
+import edivad.extrastorage.storage.advancedstorageblock.AdvancedStorageBlockScreen;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
@@ -130,7 +130,7 @@ public class ExtraStorage {
 
   private void handleRegisterMenuScreens(RegisterMenuScreensEvent event) {
     for (var tier : CrafterTier.values()) {
-      event.register(ESContainer.CRAFTER.get(tier).get(), AdvancedCrafterScreen::new);
+      event.register(ESContainer.CRAFTER.get(tier).get(), AdvancedAutocrafterScreen::new);
     }
     for (var type : AdvancedItemStorageVariant.values()) {
       event.register(ESContainer.ITEM_STORAGE.get(type).get(),

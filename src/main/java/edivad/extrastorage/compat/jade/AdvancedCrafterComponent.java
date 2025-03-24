@@ -1,7 +1,7 @@
 package edivad.extrastorage.compat.jade;
 
 import edivad.extrastorage.ExtraStorage;
-import edivad.extrastorage.blockentity.AdvancedAutocrafterBlockEntity;
+import edivad.extrastorage.autocrafting.advancedautocrafter.AdvancedAutocrafterBlockEntity;
 import edivad.extrastorage.tools.Translations;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;

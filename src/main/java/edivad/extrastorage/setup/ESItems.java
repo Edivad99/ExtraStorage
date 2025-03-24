@@ -4,13 +4,13 @@ import java.util.HashMap;
 import java.util.Map;
 import com.refinedmods.refinedstorage.common.support.BaseBlockItem;
 import edivad.extrastorage.ExtraStorage;
-import edivad.extrastorage.blocks.CrafterTier;
-import edivad.extrastorage.items.storage.AdvancedFluidStorageBlockItem;
-import edivad.extrastorage.items.storage.AdvancedStorageBlockItem;
-import edivad.extrastorage.items.storage.fluid.AdvancedFluidStorageVariant;
-import edivad.extrastorage.items.storage.fluid.ExpandedStorageDiskFluid;
-import edivad.extrastorage.items.storage.item.AdvancedItemStorageVariant;
-import edivad.extrastorage.items.storage.item.ExpandedStorageDiskItem;
+import edivad.extrastorage.autocrafting.advancedautocrafter.CrafterTier;
+import edivad.extrastorage.storage.AdvancedFluidStorageVariant;
+import edivad.extrastorage.storage.AdvancedItemStorageVariant;
+import edivad.extrastorage.storage.advancedstorageblock.AdvancedFluidStorageBlockBlockItem;
+import edivad.extrastorage.storage.advancedstorageblock.AdvancedStorageBlockItem;
+import edivad.extrastorage.storage.expandedstoragedisk.ExpandedStorageDiskFluid;
+import edivad.extrastorage.storage.expandedstoragedisk.ExpandedStorageDiskItem;
 import net.minecraft.world.item.Item;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredItem;
@@ -50,7 +50,7 @@ public class ESItems {
     for (var variant : AdvancedFluidStorageVariant.values()) {
       var variantName = variant.getName() + "_fluid";
       FLUID_STORAGE.put(variant, ITEMS.register("block_" + variantName,
-          () -> new AdvancedFluidStorageBlockItem(ESBlocks.FLUID_STORAGE.get(variant).get(), variant)));
+          () -> new AdvancedFluidStorageBlockBlockItem(ESBlocks.FLUID_STORAGE.get(variant).get(), variant)));
       FLUID_STORAGE_PART.put(variant, ITEMS.registerItem("storagepart_" + variantName, Item::new));
       FLUID_DISK.put(variant,
           ITEMS.register("disk_" + variantName, () -> new ExpandedStorageDiskFluid(variant)));

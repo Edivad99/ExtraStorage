@@ -22,6 +22,7 @@ import edivad.extrastorage.data.ExtraStorageRecipeProvider;
 import edivad.extrastorage.data.loot.pack.ExtraStorageLootTableProvider;
 import edivad.extrastorage.data.models.ExtraStorageBlockModelProvider;
 import edivad.extrastorage.data.models.ExtraStorageItemModelProvider;
+import edivad.extrastorage.network.PacketHandler;
 import edivad.extrastorage.setup.ClientSetup;
 import edivad.extrastorage.setup.Config;
 import edivad.extrastorage.setup.CreativeModeTabs;
@@ -62,6 +63,7 @@ public class ExtraStorage {
 
   public ExtraStorage(ModContainer modContainer, Dist dist) {
     var modEventBus = modContainer.getEventBus();
+    PacketHandler.register(modEventBus);
     ESBlocks.register(modEventBus);
     ESItems.register(modEventBus);
     ESBlockEntities.register(modEventBus);

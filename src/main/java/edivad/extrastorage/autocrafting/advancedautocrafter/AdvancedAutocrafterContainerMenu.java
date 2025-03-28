@@ -10,11 +10,12 @@ import com.refinedmods.refinedstorage.common.support.AbstractBaseContainerMenu;
 import com.refinedmods.refinedstorage.common.support.FilteredContainer;
 import com.refinedmods.refinedstorage.common.support.containermenu.ClientProperty;
 import com.refinedmods.refinedstorage.common.support.containermenu.ServerProperty;
-import com.refinedmods.refinedstorage.common.support.packet.c2s.C2SPackets;
-import com.refinedmods.refinedstorage.common.support.packet.s2c.S2CPackets;
 import com.refinedmods.refinedstorage.common.upgrade.UpgradeContainer;
 import com.refinedmods.refinedstorage.common.upgrade.UpgradeDestinations;
 import com.refinedmods.refinedstorage.common.upgrade.UpgradeSlot;
+import edivad.extrastorage.network.to_client.AdvancedAutocrafterLockedUpdatePacket;
+import edivad.extrastorage.network.to_client.AdvancedAutocrafterNameUpdatePacket;
+import edivad.extrastorage.network.to_server.AdvancedAutocrafterNameChangePacket;
 import edivad.extrastorage.setup.ESContainer;
 import lombok.Getter;
 import net.minecraft.network.chat.Component;
@@ -23,6 +24,7 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
+import net.neoforged.neoforge.network.PacketDistributor;
 
 public class AdvancedAutocrafterContainerMenu extends AbstractBaseContainerMenu {
 
@@ -113,7 +115,8 @@ public class AdvancedAutocrafterContainerMenu extends AbstractBaseContainerMenu 
     final boolean newLocked = autocrafter.isLocked();
     if (locked != newLocked) {
       locked = newLocked;
-      S2CPackets.sendAutocrafterLockedUpdate((ServerPlayer) player, locked);
+      PacketDistributor.sendToPlayer((ServerPlayer) player,
+          new AdvancedAutocrafterLockedUpdatePacket(locked));
     }
   }
 
@@ -124,7 +127,8 @@ public class AdvancedAutocrafterContainerMenu extends AbstractBaseContainerMenu 
     final Component newName = autocrafter.getDisplayName();
     if (!newName.equals(name)) {
       this.name = newName;
-      S2CPackets.sendAutocrafterNameUpdate((ServerPlayer) player, newName);
+      PacketDistributor.sendToPlayer((ServerPlayer) player,
+          new AdvancedAutocrafterNameUpdatePacket(newName));
     }
   }
 
@@ -168,7 +172,7 @@ public class AdvancedAutocrafterContainerMenu extends AbstractBaseContainerMenu 
       autocrafter.setCustomName(newName);
       detectNameChange();
     } else {
-      C2SPackets.sendAutocrafterNameChange(newName);
+      PacketDistributor.sendToServer(new AdvancedAutocrafterNameChangePacket(newName));
     }
   }
 

@@ -88,7 +88,8 @@ public class AdvancedAutocrafterBlockEntity extends AbstractBaseNetworkNodeConta
   @Getter
   private boolean visibleToTheAutocrafterManager = true;
   private int ticks;
-  private int steps = getSteps(CrafterTier.IRON, 0);
+  @Getter
+  private int steps;
   private int tickRate = getTickRate(0);
   @Nullable
   private PlatformPatternProviderExternalPatternSink sink;
@@ -109,6 +110,7 @@ public class AdvancedAutocrafterBlockEntity extends AbstractBaseNetworkNodeConta
         new PatternProviderNetworkNode(Platform.INSTANCE.getConfig().getAutocrafter().getEnergyUsage(), tier.getSlots())
     );
     this.tier = tier;
+    this.steps = getSteps(tier, 0);
     this.patternContainer = new PatternInventory(this.tier.getSlots(), this::getLevel);
     this.upgradeContainer = new UpgradeContainer(UpgradeDestinations.AUTOCRAFTER, (c, upgradeEnergyUsage) -> {
       final long baseEnergyUsage = Platform.INSTANCE.getConfig().getAutocrafter().getEnergyUsage();

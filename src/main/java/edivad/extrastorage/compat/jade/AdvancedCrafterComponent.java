@@ -18,19 +18,15 @@ public class AdvancedCrafterComponent implements IBlockComponentProvider {
     if (blockAccessor.getBlockEntity() instanceof AdvancedAutocrafterBlockEntity) {
       var data = blockAccessor.getServerData();
       var patterns = data.getInt("patterns");
-      var speed = data.getInt("speed");
+      //var speed = data.getInt("speed");
       var slots = data.getInt("slots");
       var tierSpeed = data.getInt("tier_speed");
-      var nodeName = data.getString("node_name");
+      //var nodeName = data.getString("node_name");
 
       tooltip.add(Component.translatable(Translations.OCCUPIED_SPACE,
           String.valueOf(patterns), String.valueOf(slots)));
 
-      if (tierSpeed != speed) {
-        tooltip.add(Component.translatable(Translations.LIMITED_SPEED, nodeName, String.valueOf(speed)));
-      } else {
-        tooltip.add(Component.translatable(Translations.CURRENT_SPEED, String.valueOf(speed)));
-      }
+      tooltip.add(Component.translatable(Translations.CURRENT_SPEED, String.valueOf(tierSpeed)));
     }
   }
 

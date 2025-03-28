@@ -1,7 +1,5 @@
 package edivad.extrastorage.compat.jade;
 
-import com.refinedmods.refinedstorage.common.autocrafting.autocrafter.AutocrafterBlock;
-import com.refinedmods.refinedstorage.common.autocrafting.autocrafter.AutocrafterBlockEntity;
 import edivad.extrastorage.ExtraStorage;
 import edivad.extrastorage.autocrafting.advancedautocrafter.AdvancedAutocrafterBlock;
 import edivad.extrastorage.autocrafting.advancedautocrafter.AdvancedAutocrafterBlockEntity;
@@ -16,12 +14,12 @@ public class JadeCompatibility implements IWailaPlugin {
   @Override
   public void register(IWailaCommonRegistration registration) {
     registration.registerBlockDataProvider(new AdvancedCrafterProvider(), AdvancedAutocrafterBlockEntity.class);
-    registration.registerBlockDataProvider(new CrafterProvider(), AutocrafterBlockEntity.class);
+    //registration.registerBlockDataProvider(new CrafterProvider(), AutocrafterBlockEntity.class);
   }
 
   @Override
   public void registerClient(IWailaClientRegistration registration) {
     registration.registerBlockComponent(new AdvancedCrafterComponent(), AdvancedAutocrafterBlock.class);
-    registration.registerBlockComponent(new CrafterComponent(), AutocrafterBlock.class);
+    //registration.registerBlockComponent(new CrafterComponent(), AutocrafterBlock.class);
   }
 }

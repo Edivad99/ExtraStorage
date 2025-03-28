@@ -12,12 +12,14 @@ public class AdvancedCrafterProvider implements IServerDataProvider<BlockAccesso
   @Override
   public void appendServerData(CompoundTag tag, BlockAccessor blockAccessor) {
     if (blockAccessor.getBlockEntity() instanceof AdvancedAutocrafterBlockEntity advancedCrafter) {
-      /*var node = advancedCrafter.getNode();
-      tag.putInt("patterns", node.getPatterns().size());
-      tag.putInt("speed", node.getMaximumSuccessfulCraftingUpdates());
+      int patterns = (int) advancedCrafter.getPatternContainer().getItems().stream()
+          .filter(x -> !x.isEmpty())
+          .count();
+      tag.putInt("patterns", patterns);
+      //tag.putInt("speed", node.getMaximumSuccessfulCraftingUpdates());
       tag.putInt("slots", advancedCrafter.getTier().getSlots());
-      tag.putInt("tier_speed", node.getTierSpeed());
-      tag.putString("node_name", node.getName().getString());*/
+      tag.putInt("tier_speed", advancedCrafter.getSteps());
+      //tag.putString("node_name", node.getName().getString());
     }
   }
 

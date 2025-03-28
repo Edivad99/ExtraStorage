@@ -3,8 +3,10 @@ package edivad.extrastorage;
 import java.util.Arrays;
 import org.slf4j.Logger;
 import com.mojang.logging.LogUtils;
+import com.refinedmods.refinedstorage.common.api.RefinedStorageApi;
 import com.refinedmods.refinedstorage.common.api.RefinedStorageClientApi;
 import com.refinedmods.refinedstorage.common.api.support.network.AbstractNetworkNodeContainerBlockEntity;
+import com.refinedmods.refinedstorage.common.content.Items;
 import com.refinedmods.refinedstorage.common.support.resource.FluidResource;
 import com.refinedmods.refinedstorage.common.support.resource.ItemResource;
 import com.refinedmods.refinedstorage.neoforge.api.RefinedStorageNeoForgeApi;
@@ -32,6 +34,7 @@ import edivad.extrastorage.storage.AdvancedFluidStorageVariant;
 import edivad.extrastorage.storage.AdvancedItemStorageVariant;
 import edivad.extrastorage.storage.advancedstorageblock.AdvancedStorageBlockContainerMenu;
 import edivad.extrastorage.storage.advancedstorageblock.AdvancedStorageBlockScreen;
+import edivad.extrastorage.tools.UpgradeDestinations;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
@@ -126,6 +129,7 @@ public class ExtraStorage {
       InterModComms.sendTo("inventorysorter", "containerblacklist",
           ESContainer.ADVANCED_IMPORTER::getId);
     }
+    this.registerUpgradeMappings();
   }
 
   private void handleRegisterMenuScreens(RegisterMenuScreensEvent event) {
@@ -174,5 +178,21 @@ public class ExtraStorage {
         type,
         (be, side) -> be.getContainerProvider()
     );
+  }
+
+  private void registerUpgradeMappings() {
+    RefinedStorageApi.INSTANCE.getUpgradeRegistry().forDestination(UpgradeDestinations.ADVANCED_IMPORTER)
+        .add(Items.INSTANCE.getSpeedUpgrade(), 4)
+        .add(Items.INSTANCE.getStackUpgrade())
+        .add(Items.INSTANCE.getRegulatorUpgrade(), 4);
+
+    RefinedStorageApi.INSTANCE.getUpgradeRegistry().forDestination(UpgradeDestinations.ADVANCED_EXPORTER)
+        .add(Items.INSTANCE.getSpeedUpgrade(), 4)
+        .add(Items.INSTANCE.getStackUpgrade())
+        .add(Items.INSTANCE.getRegulatorUpgrade(), 4)
+        .add(Items.INSTANCE.getAutocraftingUpgrade());
+
+    RefinedStorageApi.INSTANCE.getUpgradeRegistry().forDestination(UpgradeDestinations.ADVANCED_AUTOCRAFTER)
+        .add(Items.INSTANCE.getSpeedUpgrade(), 4);
   }
 }

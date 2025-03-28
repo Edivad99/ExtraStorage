@@ -30,6 +30,7 @@ import com.refinedmods.refinedstorage.common.support.resource.ResourceContainerI
 import com.refinedmods.refinedstorage.common.upgrade.UpgradeContainer;
 import com.refinedmods.refinedstorage.common.upgrade.UpgradeDestinations;
 import com.refinedmods.refinedstorage.common.util.ContainerUtil;
+import com.refinedmods.refinedstorage.neoforge.support.render.ModelProperties;
 import edivad.extrastorage.setup.ESBlockEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -45,6 +46,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
+import net.neoforged.neoforge.client.model.data.ModelData;
 
 public class AdvancedExporterBlockEntity extends AbstractCableLikeBlockEntity<ExporterNetworkNode>
     implements BlockEntityWithDrops, NetworkNodeExtendedMenuProvider<ExporterData> {
@@ -218,5 +220,10 @@ public class AdvancedExporterBlockEntity extends AbstractCableLikeBlockEntity<Ex
   protected boolean doesBlockStateChangeWarrantNetworkNodeUpdate(final BlockState oldBlockState,
       final BlockState newBlockState) {
     return AbstractDirectionalBlock.didDirectionChange(oldBlockState, newBlockState);
+  }
+
+  @Override
+  public ModelData getModelData() {
+    return ModelData.builder().with(ModelProperties.CABLE_CONNECTIONS, connections).build();
   }
 }

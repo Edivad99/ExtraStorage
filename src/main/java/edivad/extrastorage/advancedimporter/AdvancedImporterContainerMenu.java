@@ -3,7 +3,6 @@ package edivad.extrastorage.advancedimporter;
 import com.refinedmods.refinedstorage.api.resource.filter.FilterMode;
 import com.refinedmods.refinedstorage.common.api.support.resource.ResourceContainer;
 import com.refinedmods.refinedstorage.common.support.RedstoneMode;
-import com.refinedmods.refinedstorage.common.support.containermenu.AbstractSimpleFilterContainerMenu;
 import com.refinedmods.refinedstorage.common.support.containermenu.ClientProperty;
 import com.refinedmods.refinedstorage.common.support.containermenu.PropertyTypes;
 import com.refinedmods.refinedstorage.common.support.containermenu.ServerProperty;
@@ -12,12 +11,13 @@ import com.refinedmods.refinedstorage.common.upgrade.UpgradeContainer;
 import com.refinedmods.refinedstorage.common.upgrade.UpgradeDestinations;
 import com.refinedmods.refinedstorage.common.util.IdentifierUtil;
 import edivad.extrastorage.setup.ESContainer;
+import edivad.extrastorage.tools.AbstractAdvanceFilterContainerMenu;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 
 public class AdvancedImporterContainerMenu extends
-    AbstractSimpleFilterContainerMenu<AdvancedImporterBlockEntity> {
+    AbstractAdvanceFilterContainerMenu<AdvancedImporterBlockEntity> {
 
   private static final MutableComponent FILTER_HELP = IdentifierUtil.createTranslation("gui", "importer.filter_help");
 

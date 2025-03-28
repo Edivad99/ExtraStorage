@@ -131,7 +131,8 @@ public class ExtraStorage {
       InterModComms.sendTo("inventorysorter", "containerblacklist",
           ESContainer.ADVANCED_IMPORTER::getId);
     }
-    this.registerUpgradeMappings();
+    //https://github.com/refinedmods/refinedstorage2/issues/906
+    //this.registerUpgradeMappings();
   }
 
   private void handleRegisterMenuScreens(RegisterMenuScreensEvent event) {

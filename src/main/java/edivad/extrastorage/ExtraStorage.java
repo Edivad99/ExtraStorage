@@ -4,15 +4,9 @@ import java.util.Arrays;
 import org.slf4j.Logger;
 import com.mojang.logging.LogUtils;
 import com.refinedmods.refinedstorage.common.api.RefinedStorageApi;
-import com.refinedmods.refinedstorage.common.api.RefinedStorageClientApi;
 import com.refinedmods.refinedstorage.common.api.support.network.AbstractNetworkNodeContainerBlockEntity;
 import com.refinedmods.refinedstorage.common.content.Items;
-import com.refinedmods.refinedstorage.common.support.resource.FluidResource;
-import com.refinedmods.refinedstorage.common.support.resource.ItemResource;
 import com.refinedmods.refinedstorage.neoforge.api.RefinedStorageNeoForgeApi;
-import edivad.extrastorage.advancedexporter.AdvancedExporterScreen;
-import edivad.extrastorage.advancedimporter.AdvancedImporterScreen;
-import edivad.extrastorage.autocrafting.advancedautocrafter.AdvancedAutocrafterScreen;
 import edivad.extrastorage.autocrafting.advancedautocrafter.CrafterTier;
 import edivad.extrastorage.compat.top.TOPIntegration;
 import edivad.extrastorage.data.ExtraStorageBlockTagsProvider;
@@ -33,14 +27,9 @@ import edivad.extrastorage.setup.ESItems;
 import edivad.extrastorage.setup.ESLootFunctions;
 import edivad.extrastorage.storage.AdvancedFluidStorageVariant;
 import edivad.extrastorage.storage.AdvancedItemStorageVariant;
-import edivad.extrastorage.storage.advancedstorageblock.AdvancedStorageBlockContainerMenu;
-import edivad.extrastorage.storage.advancedstorageblock.AdvancedStorageBlockScreen;
 import edivad.extrastorage.tools.UpgradeDestinations;
-import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.fml.InterModComms;
@@ -49,7 +38,6 @@ import net.neoforged.fml.ModList;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
-import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.neoforged.neoforge.registries.RegisterEvent;
 
@@ -73,10 +61,10 @@ public class ExtraStorage {
 
     if (dist.isClient()) {
       modEventBus.addListener(ClientSetup::handleClientSetup);
+      modEventBus.addListener(ClientSetup::handleRegisterMenuScreens);
     }
 
     modEventBus.addListener(this::handleCommonSetup);
-    modEventBus.addListener(this::handleRegisterMenuScreens);
     modEventBus.addListener(this::handleGatherData);
     modEventBus.addListener(this::onRegister);
     modEventBus.addListener(this::registerCapabilities);
@@ -133,34 +121,6 @@ public class ExtraStorage {
     }
     //https://github.com/refinedmods/refinedstorage2/issues/906
     //this.registerUpgradeMappings();
-  }
-
-  private void handleRegisterMenuScreens(RegisterMenuScreensEvent event) {
-    for (var tier : CrafterTier.values()) {
-      event.register(ESContainer.CRAFTER.get(tier).get(), AdvancedAutocrafterScreen::new);
-    }
-    for (var type : AdvancedItemStorageVariant.values()) {
-      event.register(ESContainer.ITEM_STORAGE.get(type).get(),
-          new MenuScreens.ScreenConstructor<AdvancedStorageBlockContainerMenu, AdvancedStorageBlockScreen>() {
-            @Override
-            public AdvancedStorageBlockScreen create(AdvancedStorageBlockContainerMenu menu, Inventory inventory, Component component) {
-              var resourceRendering = RefinedStorageClientApi.INSTANCE.getResourceRendering(ItemResource.class);
-              return new AdvancedStorageBlockScreen(menu, inventory, component, resourceRendering);
-            }
-          });
-    }
-    for (var type : AdvancedFluidStorageVariant.values()) {
-      event.register(ESContainer.FLUID_STORAGE.get(type).get(),
-          new MenuScreens.ScreenConstructor<AdvancedStorageBlockContainerMenu, AdvancedStorageBlockScreen>() {
-            @Override
-            public AdvancedStorageBlockScreen create(AdvancedStorageBlockContainerMenu menu, Inventory inventory, Component component) {
-              var resourceRendering = RefinedStorageClientApi.INSTANCE.getResourceRendering(FluidResource.class);
-              return new AdvancedStorageBlockScreen(menu, inventory, component, resourceRendering);
-            }
-          });
-    }
-    event.register(ESContainer.ADVANCED_EXPORTER.get(), AdvancedExporterScreen::new);
-    event.register(ESContainer.ADVANCED_IMPORTER.get(), AdvancedImporterScreen::new);
   }
 
   private void registerCapabilities(RegisterCapabilitiesEvent event) {

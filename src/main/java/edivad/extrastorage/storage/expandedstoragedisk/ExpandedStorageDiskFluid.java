@@ -37,7 +37,7 @@ public class ExpandedStorageDiskFluid extends AbstractStorageContainerItem imple
 
   @Override
   protected Long getCapacity() {
-    return variant.getCapacityInBuckets();
+    return variant.getCapacity();
   }
 
   @Override
@@ -47,7 +47,7 @@ public class ExpandedStorageDiskFluid extends AbstractStorageContainerItem imple
 
   @Override
   protected SerializableStorage createStorage(final StorageRepository storageRepository) {
-    return StorageTypes.FLUID.create(variant.getCapacityInBuckets(), storageRepository::markAsChanged);
+    return StorageTypes.FLUID.create(variant.getCapacity(), storageRepository::markAsChanged);
   }
 
   @Override

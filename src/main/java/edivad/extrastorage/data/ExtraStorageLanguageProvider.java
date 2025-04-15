@@ -33,7 +33,7 @@ public class ExtraStorageLanguageProvider extends LanguageProvider {
     for (CrafterTier tier : CrafterTier.values()) {
       String baseName = tier.name().toLowerCase();
       String TierName = baseName.substring(0, 1).toUpperCase() + baseName.substring(1);
-      add(ESItems.CRAFTER.get(tier).get(), TierName + " Crafter");
+      add(ESItems.CRAFTER.get(tier).get(), TierName + " Autocrafter");
     }
 
     add(ESItems.ADVANCED_EXPORTER.get(), "Advanced Exporter");

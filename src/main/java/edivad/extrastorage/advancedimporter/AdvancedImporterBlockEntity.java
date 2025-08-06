@@ -36,6 +36,7 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.StreamEncoder;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -176,7 +177,8 @@ public class AdvancedImporterBlockEntity extends AbstractCableLikeBlockEntity<Im
   @Nullable
   @Override
   public AbstractContainerMenu createMenu(int windowId, Inventory inventory, Player player) {
-    return new AdvancedImporterContainerMenu(windowId, player, this, filter.getFilterContainer(), upgradeContainer);
+    return new AdvancedImporterContainerMenu(windowId, player, this, filter.getFilterContainer(),
+        upgradeContainer, p -> Container.stillValidBlockEntity(this, p));
   }
 
   @Override

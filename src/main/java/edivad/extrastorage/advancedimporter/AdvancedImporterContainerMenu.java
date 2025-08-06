@@ -1,5 +1,6 @@
 package edivad.extrastorage.advancedimporter;
 
+import java.util.function.Predicate;
 import com.refinedmods.refinedstorage.api.resource.filter.FilterMode;
 import com.refinedmods.refinedstorage.common.api.support.resource.ResourceContainer;
 import com.refinedmods.refinedstorage.common.support.RedstoneMode;
@@ -21,16 +22,20 @@ public class AdvancedImporterContainerMenu extends
 
   private static final MutableComponent FILTER_HELP = IdentifierUtil.createTranslation("gui", "importer.filter_help");
 
+  private final Predicate<Player> stillValid;
+
   public AdvancedImporterContainerMenu(int windowId, Inventory inventory,
       ResourceContainerData resourceContainerData) {
     super(ESContainer.ADVANCED_IMPORTER.get(), windowId, inventory.player, resourceContainerData,
         UpgradeDestinations.IMPORTER, FILTER_HELP);
+    this.stillValid = __ -> true;
   }
 
   public AdvancedImporterContainerMenu(int windowId, Player player, AdvancedImporterBlockEntity importer,
-      ResourceContainer resourceContainer, UpgradeContainer upgradeContainer) {
+      ResourceContainer resourceContainer, UpgradeContainer upgradeContainer, Predicate<Player> stillValid) {
     super(ESContainer.ADVANCED_IMPORTER.get(), windowId, player, resourceContainer,
         upgradeContainer, importer, FILTER_HELP);
+    this.stillValid = stillValid;
   }
 
   @Override
@@ -57,5 +62,10 @@ public class AdvancedImporterContainerMenu extends
         blockEntity::getRedstoneMode,
         blockEntity::setRedstoneMode
     ));
+  }
+
+  @Override
+  public boolean stillValid(Player player) {
+    return stillValid.test(player);
   }
 }

@@ -20,6 +20,7 @@ import edivad.extrastorage.setup.ESContainer;
 import lombok.Getter;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.Slot;
@@ -118,6 +119,14 @@ public class AdvancedAutocrafterContainerMenu extends AbstractBaseContainerMenu 
       PacketDistributor.sendToPlayer((ServerPlayer) player,
           new AdvancedAutocrafterLockedUpdatePacket(locked));
     }
+  }
+
+  @Override
+  public boolean stillValid(Player player) {
+    if (autocrafter == null) {
+      return true;
+    }
+    return Container.stillValidBlockEntity(autocrafter, player);
   }
 
   private void detectNameChange() {

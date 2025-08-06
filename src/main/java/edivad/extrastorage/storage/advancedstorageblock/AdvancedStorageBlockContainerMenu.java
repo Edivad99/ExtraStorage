@@ -2,6 +2,7 @@ package edivad.extrastorage.storage.advancedstorageblock;
 
 import static com.refinedmods.refinedstorage.common.util.IdentifierUtil.createTranslation;
 
+import java.util.function.Predicate;
 import com.refinedmods.refinedstorage.common.api.storage.StorageBlockData;
 import com.refinedmods.refinedstorage.common.api.support.resource.ResourceContainer;
 import com.refinedmods.refinedstorage.common.api.support.resource.ResourceFactory;
@@ -20,6 +21,7 @@ public class AdvancedStorageBlockContainerMenu extends AbstractStorageContainerM
   private static final int FILTER_SLOT_X = 8;
   private static final int FILTER_SLOT_Y = 20;
 
+  private final Predicate<Player> stillValid;
   private long stored;
   private long capacity;
 
@@ -29,12 +31,15 @@ public class AdvancedStorageBlockContainerMenu extends AbstractStorageContainerM
     this.stored = storageBlockData.stored();
     this.capacity = storageBlockData.capacity();
     addSlots(player, ResourceContainerImpl.createForFilter(resourceFactory, storageBlockData.resources()));
+    this.stillValid = __ -> true;
   }
 
   public AdvancedStorageBlockContainerMenu(MenuType<?> type, int syncId, Player player,
-      ResourceContainer resourceContainer, StorageConfigurationContainer configContainer) {
+      ResourceContainer resourceContainer, StorageConfigurationContainer configContainer,
+      Predicate<Player> stillValid) {
     super(type, syncId, player, configContainer);
     addSlots(player, resourceContainer);
+    this.stillValid = stillValid;
   }
 
   private void addSlots(final Player player, final ResourceContainer resourceContainer) {
@@ -79,5 +84,10 @@ public class AdvancedStorageBlockContainerMenu extends AbstractStorageContainerM
   @Override
   public long getStored() {
     return stored;
+  }
+
+  @Override
+  public boolean stillValid(Player player) {
+    return stillValid.test(player);
   }
 }

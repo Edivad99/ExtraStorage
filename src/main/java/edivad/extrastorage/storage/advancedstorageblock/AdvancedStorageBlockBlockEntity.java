@@ -31,6 +31,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.StreamEncoder;
+import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
@@ -210,7 +211,8 @@ public class AdvancedStorageBlockBlockEntity extends AbstractBaseNetworkNodeCont
         syncId,
         player,
         filter.getFilterContainer(),
-        configContainer
+        configContainer,
+        p -> Container.stillValidBlockEntity(this, p)
     );
   }
 }

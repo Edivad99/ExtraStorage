@@ -6,6 +6,7 @@ import java.util.Objects;
 import org.jetbrains.annotations.Nullable;
 import org.lwjgl.glfw.GLFW;
 import com.refinedmods.refinedstorage.common.Platform;
+import com.refinedmods.refinedstorage.common.api.autocrafting.PatternOutputRenderingScreen;
 import com.refinedmods.refinedstorage.common.autocrafting.PatternSlot;
 import com.refinedmods.refinedstorage.common.support.AbstractBaseScreen;
 import com.refinedmods.refinedstorage.common.support.tooltip.HelpClientTooltipComponent;
@@ -21,9 +22,10 @@ import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.item.ItemStack;
 
 public class AdvancedAutocrafterScreen extends AbstractBaseScreen<AdvancedAutocrafterContainerMenu>
-    implements AdvancedAutocrafterContainerMenu.Listener {
+    implements AdvancedAutocrafterContainerMenu.Listener, PatternOutputRenderingScreen {
 
   private static final Component EMPTY_PATTERN_SLOT = IdentifierUtil.createTranslationAsHeading(
       "gui", "autocrafter.empty_pattern_slot"
@@ -271,5 +273,10 @@ public class AdvancedAutocrafterScreen extends AbstractBaseScreen<AdvancedAutocr
       return;
     }
     lockModeSideButtonWidget.setWarning(null);
+  }
+
+  @Override
+  public boolean canDisplayOutput(ItemStack stack) {
+    return getMenu().containsPattern(stack);
   }
 }

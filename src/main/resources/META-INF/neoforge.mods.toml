@@ -12,9 +12,6 @@ issueTrackerURL = "https://github.com/Edivad99/ExtraStorage/issues"
   authors = "Edivad99"
   description = "ExtraStorage adds new blocks to Refined Storage"
 
-[[mixins]]
-  config = "extrastorage.mixins.json"
-
 [[dependencies.extrastorage]]
   modId = "neoforge"
   type = "required"

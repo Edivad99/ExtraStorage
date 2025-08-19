@@ -26,7 +26,7 @@ public class AdvancedFluidStorageBlockProvider implements StorageBlockProvider {
 
   @Override
   public SerializableStorage createStorage(Runnable runnable) {
-    return StorageTypes.FLUID.create(variant.getCapacityInBuckets(), runnable);
+    return StorageTypes.FLUID.create(variant.getCapacity(), runnable);
   }
 
   @Override

@@ -49,6 +49,7 @@ final class TaskSnapshotPersistence {
   private static final String PATTERN_TYPE = "type";
   private static final String INGREDIENTS = "ingredients";
   private static final String OUTPUTS = "outputs";
+  private static final String BYPRODUCTS = "byproducts";
   private static final String ID = "id";
   private static final String EXTERNAL_PATTERN = "externalPattern";
   private static final String INTERNAL_PATTERN = "internalPattern";
@@ -69,7 +70,7 @@ final class TaskSnapshotPersistence {
   private TaskSnapshotPersistence() {
   }
 
-  public static CompoundTag encodeSnapshot(final TaskSnapshot snapshot) {
+  static CompoundTag encodeSnapshot(final TaskSnapshot snapshot) {
     final CompoundTag tag = new CompoundTag();
     tag.putUUID(ID, snapshot.id().id());
     final CompoundTag resourceTag = encodeResource(snapshot.resource());
@@ -114,6 +115,11 @@ final class TaskSnapshotPersistence {
       outputs.add(ResourceCodecs.AMOUNT_CODEC.encode(output, NbtOps.INSTANCE, new CompoundTag()).getOrThrow());
     }
     tag.put(OUTPUTS, outputs);
+    final ListTag byproducts = new ListTag();
+    for (final ResourceAmount byproduct : pattern.layout().byproducts()) {
+      byproducts.add(ResourceCodecs.AMOUNT_CODEC.encode(byproduct, NbtOps.INSTANCE, new CompoundTag()).getOrThrow());
+    }
+    tag.put(BYPRODUCTS, byproducts);
     tag.putString(PATTERN_TYPE, pattern.layout().type().name());
     return tag;
   }
@@ -208,7 +214,7 @@ final class TaskSnapshotPersistence {
     return ingredientTag;
   }
 
-  public static TaskSnapshot decodeSnapshot(final CompoundTag tag) {
+  static TaskSnapshot decodeSnapshot(final CompoundTag tag) {
     final UUID id = tag.getUUID(ID);
     final ResourceKey resource = decodeResource(tag.getCompound(RESOURCE));
     final long amount = tag.getLong(AMOUNT);
@@ -287,8 +293,12 @@ final class TaskSnapshotPersistence {
     for (final Tag outputTag : tag.getList(OUTPUTS, Tag.TAG_COMPOUND)) {
       outputs.add(ResourceCodecs.AMOUNT_CODEC.parse(NbtOps.INSTANCE, outputTag).result().orElseThrow());
     }
+    final List<ResourceAmount> byproducts = new ArrayList<>();
+    for (final Tag byproductTag : tag.getList(BYPRODUCTS, Tag.TAG_COMPOUND)) {
+      byproducts.add(ResourceCodecs.AMOUNT_CODEC.parse(NbtOps.INSTANCE, byproductTag).result().orElseThrow());
+    }
     final PatternType type = PatternType.valueOf(tag.getString(PATTERN_TYPE));
-    return new Pattern(id, new PatternLayout(ingredients, outputs, type));
+    return new Pattern(id, new PatternLayout(ingredients, outputs, byproducts, type));
   }
 
   private static Ingredient decodeIngredient(final CompoundTag tag) {

@@ -298,7 +298,13 @@ final class TaskSnapshotPersistence {
       byproducts.add(ResourceCodecs.AMOUNT_CODEC.parse(NbtOps.INSTANCE, byproductTag).result().orElseThrow());
     }
     final PatternType type = PatternType.valueOf(tag.getString(PATTERN_TYPE));
-    return new Pattern(id, new PatternLayout(ingredients, outputs, byproducts, type));
+    if (type.equals(PatternType.INTERNAL)) {
+      return new Pattern(id, PatternLayout.internal(ingredients, outputs, byproducts));
+    } else if (type.equals(PatternType.EXTERNAL)) {
+      return new Pattern(id, PatternLayout.external(ingredients, outputs));
+    } else {
+      throw new IllegalStateException("Unknown pattern type: " + type);
+    }
   }
 
   private static Ingredient decodeIngredient(final CompoundTag tag) {

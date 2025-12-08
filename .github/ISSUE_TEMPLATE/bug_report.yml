@@ -45,10 +45,10 @@ body:
       label: Configuration
       description: |
         Example:
-          - **Mod version**: 1.0.0
-          - **Refined Storage version**: v1.10.0
-          - **Forge version**: 1.19.2 - 43.0.0
-          - **Minecraft version**: 1.19.2
+          - **Mod version**: 5.0.0
+          - **Refined Storage version**: 2.0.0
+          - **NeoForge version**: 1.21.1 - 21.1.50
+          - **Minecraft version**: 1.21.1
       value: |
           - Mod version:
           - Refined Storage version:

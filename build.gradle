@@ -6,9 +6,9 @@ plugins {
     id 'eclipse'
     id 'idea'
     id 'net.neoforged.moddev' version "$mod_dev_gradle"
-    id 'se.bjurr.gitchangelog.git-changelog-gradle-plugin' version '3.0.7'
-    id 'me.modmuss50.mod-publish-plugin' version '0.8.4'
-    id 'com.diffplug.spotless' version '6.25.0'
+    id 'se.bjurr.gitchangelog.git-changelog-gradle-plugin' version '3.1.1'
+    id 'me.modmuss50.mod-publish-plugin' version '1.1.0'
+    id 'com.diffplug.spotless' version '8.0.0'
 }
 
 def isRelease = System.getenv('CURSEFORGE_TOKEN')
@@ -94,12 +94,8 @@ repositories {
         url 'https://maven.blamejared.com/'
     }
     maven {
-        name 'RS maven'
-        url = uri('https://maven.pkg.github.com/refinedmods/refinedstorage2')
-        credentials {
-            username = 'anything'
-            password = '\u0067hp_oGjcDFCn8jeTzIj4Ke9pLoEVtpnZMP4VQgaX'
-        }
+        name 'Refined Storage'
+        url 'https://maven.creeperhost.net'
     }
     maven {
         name 'curseforge'
@@ -131,7 +127,7 @@ spotless {
         endWithNewline()
         trimTrailingWhitespace()
         removeUnusedImports()
-        indentWithSpaces(2)
+        leadingTabsToSpaces(2)
     }
 }
 
@@ -140,7 +136,14 @@ tasks.withType(JavaCompile).configureEach {
     options.compilerArgs.addAll(['-Xmaxerrs', '100000'])
 }
 
-tasks.withType(ProcessResources).configureEach {
+idea {
+    module {
+        downloadSources = true
+        downloadJavadoc = true
+    }
+}
+
+var generateModMetadata = tasks.register("generateModMetadata", ProcessResources) {
     var replaceProperties = [
         minecraft_version               : minecraft_version,
         minecraft_version_range         : minecraft_version_range,
@@ -152,11 +155,12 @@ tasks.withType(ProcessResources).configureEach {
         refinedstorage_version_range    : refinedstorage_version_range,
     ]
     inputs.properties replaceProperties
-
-    filesMatching(['META-INF/neoforge.mods.toml']) {
-        expand replaceProperties
-    }
+    expand replaceProperties
+    from "src/main/templates"
+    into "build/generated/sources/modMetadata"
 }
+sourceSets.main.resources.srcDir generateModMetadata
+neoForge.ideSyncTask generateModMetadata
 
 def lastCommit = providers.exec {
     commandLine 'git', 'rev-parse', 'HEAD'

@@ -41,7 +41,7 @@ public class AdvancedFluidStorageBlockProvider implements StorageBlockProvider {
 
   @Override
   public ResourceFactory getResourceFactory() {
-    return RefinedStorageApi.INSTANCE.getItemResourceFactory();
+    return RefinedStorageApi.INSTANCE.getFluidResourceFactory();
   }
 
   @Override

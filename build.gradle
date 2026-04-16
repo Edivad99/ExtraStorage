@@ -1,3 +1,4 @@
+import java.util.regex.Matcher
 import se.bjurr.gitchangelog.plugin.gradle.GitChangelogTask
 import static org.apache.commons.lang3.StringUtils.repeat
 
@@ -132,6 +133,38 @@ spotless {
         removeUnusedImports()
         leadingTabsToSpaces(2)
     }
+}
+
+tasks.register('generatePackageInfos') {
+  def srcDir = layout.projectDirectory.dir("src/main/java")
+  def javaFiles = project.fileTree(srcDir) { include '**/*.java' }
+
+  inputs.dir(srcDir)
+  outputs.upToDateWhen { false }
+
+  doLast {
+    javaFiles.each { javaFile ->
+      def packageInfoFile = new File(javaFile.parent, 'package-info.java')
+      if (!packageInfoFile.exists()) {
+        def pkgName = javaFile.toString().replaceAll(Matcher.quoteReplacement(File.separator), '/')
+        pkgName = pkgName.substring(pkgName.indexOf('edivad/extrastorage/'), pkgName.lastIndexOf('/'))
+        pkgName = pkgName.replaceAll('/', '.')
+
+        def pkgInfoText = """
+            |@FieldsAreNonnullByDefault
+            |@MethodsReturnNonnullByDefault
+            |@ParametersAreNonnullByDefault
+            |package $pkgName;
+            |
+            |import javax.annotation.ParametersAreNonnullByDefault;
+            |import net.minecraft.FieldsAreNonnullByDefault;
+            |import net.minecraft.MethodsReturnNonnullByDefault;
+        """.stripMargin().trim()
+
+        packageInfoFile.text = pkgInfoText
+      }
+    }
+  }
 }
 
 tasks.withType(JavaCompile).configureEach {

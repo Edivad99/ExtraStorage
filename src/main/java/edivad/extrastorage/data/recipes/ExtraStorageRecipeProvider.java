@@ -1,5 +1,7 @@
-package edivad.extrastorage.data;
+package edivad.extrastorage.data.recipes;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import com.refinedmods.refinedstorage.common.content.Blocks;
 import com.refinedmods.refinedstorage.common.misc.ProcessorItem;
@@ -7,6 +9,9 @@ import com.refinedmods.refinedstorage.common.storage.FluidStorageVariant;
 import com.refinedmods.refinedstorage.common.storage.ItemStorageVariant;
 import edivad.extrastorage.ExtraStorage;
 import edivad.extrastorage.autocrafting.advancedautocrafter.CrafterTier;
+import edivad.extrastorage.data.ExtraStorageTags;
+import edivad.extrastorage.data.recipes.builder.StorageContainerUpgradeRecipeBuilder;
+import edivad.extrastorage.setup.ESBlocks;
 import edivad.extrastorage.setup.ESItems;
 import edivad.extrastorage.storage.AdvancedFluidStorageVariant;
 import edivad.extrastorage.storage.AdvancedItemStorageVariant;
@@ -23,6 +28,7 @@ import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.level.ItemLike;
 import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.registries.DeferredItem;
 
@@ -161,6 +167,9 @@ public class ExtraStorageRecipeProvider extends RecipeProvider {
             ESItems.NEURAL_PROCESSOR.get(),
             1.25F, 200)
         .unlockedBy("has_part", has(ESItems.RAW_NEURAL_PROCESSOR.get())).save(recipeOutput);
+
+    this.registerItemStorageUpgrades(recipeOutput);
+    this.registerFluidStorageUpgrades(recipeOutput);
   }
 
   private void partRecipe(DeferredItem<Item> result, TagKey<Item> previousPart,
@@ -223,5 +232,83 @@ public class ExtraStorageRecipeProvider extends RecipeProvider {
         .define('E', com.refinedmods.refinedstorage.common.content.Items.INSTANCE.getQuartzEnrichedIron())
         .unlockedBy("has_part", has(part))
         .save(consumer, ExtraStorage.rl("storage_block/" + result.getId().getPath()));
+  }
+
+  private void registerItemStorageUpgrades(RecipeOutput recipeOutput) {
+    Set<Ingredient.Value> disks = new HashSet<>();
+
+    for (var value : ItemStorageVariant.values()) {
+      if (value == ItemStorageVariant.CREATIVE) {
+        continue;
+      }
+      disks.add(new Ingredient.ItemValue(
+          com.refinedmods.refinedstorage.common.content.Items.INSTANCE.getItemStorageDisk(value).getDefaultInstance()));
+    }
+
+    for (var value : AdvancedItemStorageVariant.values()) {
+      var disk = ESItems.ITEM_DISK.get(value);
+      StorageContainerUpgradeRecipeBuilder.shapeless(disk)
+          .addDisk(Ingredient.fromValues(disks.stream()))
+          .addPart(Ingredient.of(ESItems.ITEM_STORAGE_PART.get(value)))
+          .save(recipeOutput);
+      disks.add(new Ingredient.TagValue(ExtraStorageTags.Items.DISKS_ITEM.get(value)));
+    }
+
+    Set<ItemLike> storageBlocks = new HashSet<>();
+    for (ItemStorageVariant value : ItemStorageVariant.values()) {
+      if (value == ItemStorageVariant.CREATIVE) {
+        continue;
+      }
+      storageBlocks.add(Blocks.INSTANCE.getItemStorageBlock(value));
+    }
+
+    for (var value : AdvancedItemStorageVariant.values()) {
+      var storageBlock = ESBlocks.ITEM_STORAGE.get(value);
+      StorageContainerUpgradeRecipeBuilder.shapeless(storageBlock)
+          .addDisk(Ingredient.of(storageBlocks.toArray(new ItemLike[0])))
+          .addPart(Ingredient.of(ESItems.ITEM_STORAGE_PART.get(value)))
+          .save(recipeOutput);
+
+      storageBlocks.add(storageBlock);
+    }
+  }
+
+  private void registerFluidStorageUpgrades(RecipeOutput recipeOutput) {
+    Set<ItemLike> disks = new HashSet<>();
+
+    for (var value : FluidStorageVariant.values()) {
+      if (value == FluidStorageVariant.CREATIVE) {
+        continue;
+      }
+      disks.add(com.refinedmods.refinedstorage.common.content.Items.INSTANCE.getFluidStorageDisk(value));
+    }
+
+    for (var value : AdvancedFluidStorageVariant.values()) {
+      var disk = ESItems.FLUID_DISK.get(value);
+      StorageContainerUpgradeRecipeBuilder.shapeless(disk)
+          .addDisk(Ingredient.of(disks.toArray(new ItemLike[0])))
+          .addPart(Ingredient.of(ESItems.FLUID_STORAGE_PART.get(value)))
+          .save(recipeOutput);
+      disks.add(disk);
+    }
+
+    Set<ItemLike> storageBlocks = new HashSet<>();
+    for (var value : FluidStorageVariant.values()) {
+      if (value == FluidStorageVariant.CREATIVE) {
+        continue;
+      }
+
+      storageBlocks.add(Blocks.INSTANCE.getFluidStorageBlock(value));
+    }
+
+    for (var value : AdvancedFluidStorageVariant.values()) {
+      var storageBlock = ESBlocks.FLUID_STORAGE.get(value);
+      StorageContainerUpgradeRecipeBuilder.shapeless(storageBlock)
+          .addDisk(Ingredient.of(storageBlocks.toArray(new ItemLike[0])))
+          .addPart(Ingredient.of(ESItems.FLUID_STORAGE_PART.get(value)))
+          .save(recipeOutput);
+
+      storageBlocks.add(storageBlock);
+    }
   }
 }

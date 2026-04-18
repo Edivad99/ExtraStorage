@@ -1,0 +1,24 @@
+{
+  "type": "extrastorage:upgrade_recipe",
+  "base_disk": [
+    {
+      "item": "refinedstorage:1k_storage_disk"
+    },
+    {
+      "item": "refinedstorage:64k_storage_disk"
+    },
+    {
+      "item": "refinedstorage:4k_storage_disk"
+    },
+    {
+      "item": "refinedstorage:16k_storage_disk"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "id": "extrastorage:disk_256k"
+  },
+  "storage_part": {
+    "item": "extrastorage:storagepart_256k"
+  }
+}

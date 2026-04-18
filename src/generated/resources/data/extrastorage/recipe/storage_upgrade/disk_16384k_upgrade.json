@@ -1,0 +1,33 @@
+{
+  "type": "extrastorage:upgrade_recipe",
+  "base_disk": [
+    {
+      "item": "refinedstorage:1k_storage_disk"
+    },
+    {
+      "tag": "refinedstorage:disks/items/4096k"
+    },
+    {
+      "tag": "refinedstorage:disks/items/1024k"
+    },
+    {
+      "item": "refinedstorage:64k_storage_disk"
+    },
+    {
+      "item": "refinedstorage:4k_storage_disk"
+    },
+    {
+      "item": "refinedstorage:16k_storage_disk"
+    },
+    {
+      "tag": "refinedstorage:disks/items/256k"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "id": "extrastorage:disk_16384k"
+  },
+  "storage_part": {
+    "item": "extrastorage:storagepart_16384k"
+  }
+}

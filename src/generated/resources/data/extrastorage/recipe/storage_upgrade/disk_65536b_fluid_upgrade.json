@@ -1,0 +1,27 @@
+{
+  "type": "extrastorage:upgrade_recipe",
+  "base_disk": [
+    {
+      "item": "refinedstorage:256b_fluid_storage_disk"
+    },
+    {
+      "item": "refinedstorage:1024b_fluid_storage_disk"
+    },
+    {
+      "item": "refinedstorage:64b_fluid_storage_disk"
+    },
+    {
+      "item": "refinedstorage:4096b_fluid_storage_disk"
+    },
+    {
+      "item": "extrastorage:disk_16384b_fluid"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "id": "extrastorage:disk_65536b_fluid"
+  },
+  "storage_part": {
+    "item": "extrastorage:storagepart_65536b_fluid"
+  }
+}

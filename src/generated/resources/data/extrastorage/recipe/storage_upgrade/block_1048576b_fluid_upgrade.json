@@ -1,0 +1,33 @@
+{
+  "type": "extrastorage:upgrade_recipe",
+  "base_disk": [
+    {
+      "item": "extrastorage:block_16384b_fluid"
+    },
+    {
+      "item": "refinedstorage:4096b_fluid_storage_block"
+    },
+    {
+      "item": "refinedstorage:64b_fluid_storage_block"
+    },
+    {
+      "item": "refinedstorage:256b_fluid_storage_block"
+    },
+    {
+      "item": "refinedstorage:1024b_fluid_storage_block"
+    },
+    {
+      "item": "extrastorage:block_65536b_fluid"
+    },
+    {
+      "item": "extrastorage:block_262144b_fluid"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "id": "extrastorage:block_1048576b_fluid"
+  },
+  "storage_part": {
+    "item": "extrastorage:storagepart_1048576b_fluid"
+  }
+}

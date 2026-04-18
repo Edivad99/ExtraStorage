@@ -12,10 +12,10 @@ import edivad.extrastorage.compat.top.TOPIntegration;
 import edivad.extrastorage.data.ExtraStorageBlockTagsProvider;
 import edivad.extrastorage.data.ExtraStorageItemTagsProvider;
 import edivad.extrastorage.data.ExtraStorageLanguageProvider;
-import edivad.extrastorage.data.ExtraStorageRecipeProvider;
 import edivad.extrastorage.data.loot.pack.ExtraStorageLootTableProvider;
 import edivad.extrastorage.data.models.ExtraStorageBlockModelProvider;
 import edivad.extrastorage.data.models.ExtraStorageItemModelProvider;
+import edivad.extrastorage.data.recipes.ExtraStorageRecipeProvider;
 import edivad.extrastorage.network.PacketHandler;
 import edivad.extrastorage.setup.ClientSetup;
 import edivad.extrastorage.setup.Config;
@@ -25,6 +25,7 @@ import edivad.extrastorage.setup.ESBlocks;
 import edivad.extrastorage.setup.ESContainer;
 import edivad.extrastorage.setup.ESItems;
 import edivad.extrastorage.setup.ESLootFunctions;
+import edivad.extrastorage.setup.ESRecipeSerializers;
 import edivad.extrastorage.storage.AdvancedFluidStorageVariant;
 import edivad.extrastorage.storage.AdvancedItemStorageVariant;
 import edivad.extrastorage.tools.UpgradeDestinations;
@@ -56,6 +57,7 @@ public class ExtraStorage {
     ESItems.register(modEventBus);
     ESBlockEntities.register(modEventBus);
     ESContainer.register(modEventBus);
+    ESRecipeSerializers.register(modEventBus);
     CreativeModeTabs.register(modEventBus);
     Config.registerConfig(modContainer);
 

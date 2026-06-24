@@ -1,0 +1,7 @@
+{
+  "parent": "extrastorage:item/advanced_exporter/base",
+  "textures": {
+    "border": "extrastorage:block/cable_part_border",
+    "cable": "refinedstorage:block/cable/gray"
+  }
+}

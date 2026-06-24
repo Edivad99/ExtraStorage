@@ -5,25 +5,24 @@ import com.refinedmods.refinedstorage.common.support.containermenu.PropertyTypes
 import com.refinedmods.refinedstorage.common.support.widget.FuzzyModeSideButtonWidget;
 import com.refinedmods.refinedstorage.common.support.widget.SchedulingModeSideButtonWidget;
 import edivad.extrastorage.ExtraStorage;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Inventory;
 
 public class AdvancedExporterScreen extends AbstractFilterScreen<AdvancedExporterContainerMenu> {
 
-  private static final ResourceLocation TEXTURE =
+  private static final Identifier TEXTURE =
       ExtraStorage.rl("textures/gui/advanced_exporter_importer.png");
 
   public AdvancedExporterScreen(AdvancedExporterContainerMenu menu, Inventory inventory,
       Component title) {
-    super(menu, inventory, title);
+    super(menu, inventory, title, true);
     this.inventoryLabelY = 60;
-    this.imageHeight = 211;
   }
 
   @Override
-  protected ResourceLocation getTexture() {
+  protected Identifier getTexture() {
     return TEXTURE;
   }
 
@@ -38,11 +37,11 @@ public class AdvancedExporterScreen extends AbstractFilterScreen<AdvancedExporte
   }
 
   @Override
-  protected void renderTooltip(final GuiGraphics graphics, final int x, final int y) {
-    if (renderExportingIndicators(graphics, leftPos, topPos, x, y, getMenu().getIndicators(),
+  protected void extractTooltip(final GuiGraphicsExtractor graphics, final int x, final int y) {
+    if (renderExportingIndicators(font, graphics, leftPos, topPos, x, y, getMenu().getIndicators(),
         getMenu()::getIndicator)) {
       return;
     }
-    super.renderTooltip(graphics, x, y);
+    super.extractTooltip(graphics, x, y);
   }
 }

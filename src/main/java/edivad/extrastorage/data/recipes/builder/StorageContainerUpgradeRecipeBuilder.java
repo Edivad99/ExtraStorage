@@ -3,29 +3,27 @@ package edivad.extrastorage.data.recipes.builder;
 import org.jetbrains.annotations.Nullable;
 import edivad.extrastorage.data.recipes.ESStorageContainerUpgradeRecipe;
 import net.minecraft.advancements.Criterion;
-import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.data.recipes.RecipeBuilder;
 import net.minecraft.data.recipes.RecipeOutput;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.level.ItemLike;
 
 public class StorageContainerUpgradeRecipeBuilder implements RecipeBuilder {
 
-  private final Item result;
-  private final ItemStack resultStack;
+  private final ItemStackTemplate result;
   private Ingredient baseDisk;
   private Ingredient upgradePart;
 
-  public StorageContainerUpgradeRecipeBuilder(ItemStack result) {
-    this.result = result.getItem();
-    this.resultStack = result;
+  public StorageContainerUpgradeRecipeBuilder(ItemStackTemplate result) {
+    this.result = result;
   }
 
   public static StorageContainerUpgradeRecipeBuilder shapeless(ItemLike result) {
-    return new StorageContainerUpgradeRecipeBuilder(result.asItem().getDefaultInstance());
+    return new StorageContainerUpgradeRecipeBuilder(new ItemStackTemplate(result.asItem()));
   }
 
   public StorageContainerUpgradeRecipeBuilder addDisk(Ingredient baseDisk) {
@@ -49,22 +47,16 @@ public class StorageContainerUpgradeRecipeBuilder implements RecipeBuilder {
   }
 
   @Override
-  public Item getResult() {
-    return this.result;
-  }
-
-  @Override
-  public void save(RecipeOutput recipeOutput) {
-    var location = BuiltInRegistries.ITEM.getKey(this.getResult().asItem())
+  public ResourceKey<Recipe<?>> defaultId() {
+    var id = this.result.typeHolder().unwrapKey().orElseThrow().identifier()
         .withPrefix("storage_upgrade/")
         .withSuffix("_upgrade");
-    this.save(recipeOutput, location);
+    return ResourceKey.create(Registries.RECIPE, id);
   }
 
   @Override
-  public void save(RecipeOutput recipeOutput, ResourceLocation resourceLocation) {
-    var recipe = new ESStorageContainerUpgradeRecipe(this.baseDisk, this.upgradePart,
-        this.resultStack);
-    recipeOutput.accept(resourceLocation, recipe, null);
+  public void save(RecipeOutput recipeOutput, ResourceKey<Recipe<?>> resourceKey) {
+    var recipe = new ESStorageContainerUpgradeRecipe(this.baseDisk, this.upgradePart, this.result);
+    recipeOutput.accept(resourceKey, recipe, null);
   }
 }

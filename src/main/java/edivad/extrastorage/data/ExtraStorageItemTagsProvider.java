@@ -7,17 +7,15 @@ import edivad.extrastorage.storage.AdvancedFluidStorageVariant;
 import edivad.extrastorage.storage.AdvancedItemStorageVariant;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
-import net.minecraft.data.tags.ItemTagsProvider;
 import net.minecraft.world.level.block.Block;
-import net.neoforged.neoforge.common.data.ExistingFileHelper;
+import net.neoforged.neoforge.common.data.BlockTagCopyingItemTagProvider;
 
-public class ExtraStorageItemTagsProvider extends ItemTagsProvider {
+public class ExtraStorageItemTagsProvider extends BlockTagCopyingItemTagProvider {
 
   public ExtraStorageItemTagsProvider(PackOutput packOutput,
-      CompletableFuture<HolderLookup.Provider> lookupProvider,
-      CompletableFuture<TagLookup<Block>> blockTagProvider,
-      ExistingFileHelper existingFileHelper) {
-    super(packOutput, lookupProvider, blockTagProvider, ExtraStorage.ID, existingFileHelper);
+      CompletableFuture<HolderLookup.Provider> registries,
+      CompletableFuture<TagLookup<Block>> blockTags) {
+    super(packOutput, registries, blockTags, ExtraStorage.ID);
   }
 
   @Override

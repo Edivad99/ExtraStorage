@@ -16,7 +16,6 @@ import com.refinedmods.refinedstorage.common.api.importer.ImporterTransferStrate
 import com.refinedmods.refinedstorage.common.content.ContentNames;
 import com.refinedmods.refinedstorage.common.support.AbstractCableLikeBlockEntity;
 import com.refinedmods.refinedstorage.common.support.AbstractDirectionalBlock;
-import com.refinedmods.refinedstorage.common.support.BlockEntityWithDrops;
 import com.refinedmods.refinedstorage.common.support.FilterModeSettings;
 import com.refinedmods.refinedstorage.common.support.FilterWithFuzzyMode;
 import com.refinedmods.refinedstorage.common.support.containermenu.NetworkNodeExtendedMenuProvider;
@@ -24,28 +23,28 @@ import com.refinedmods.refinedstorage.common.support.resource.ResourceContainerD
 import com.refinedmods.refinedstorage.common.support.resource.ResourceContainerImpl;
 import com.refinedmods.refinedstorage.common.upgrade.UpgradeContainer;
 import com.refinedmods.refinedstorage.common.upgrade.UpgradeDestinations;
-import com.refinedmods.refinedstorage.common.util.ContainerUtil;
 import com.refinedmods.refinedstorage.neoforge.support.render.ModelProperties;
 import edivad.extrastorage.setup.ESBlockEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.core.NonNullList;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.StreamEncoder;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.Container;
+import net.minecraft.world.Containers;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.ItemContainerContents;
 import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.neoforge.client.model.data.ModelData;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
+import net.neoforged.neoforge.model.data.ModelData;
 
 public class AdvancedImporterBlockEntity extends AbstractCableLikeBlockEntity<ImporterNetworkNode>
-    implements NetworkNodeExtendedMenuProvider<ResourceContainerData>, BlockEntityWithDrops {
+    implements NetworkNodeExtendedMenuProvider<ResourceContainerData> {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(AdvancedImporterBlockEntity.class);
   private static final String TAG_FILTER_MODE = "fim";
@@ -66,11 +65,10 @@ public class AdvancedImporterBlockEntity extends AbstractCableLikeBlockEntity<Im
     this.upgradeContainer = new UpgradeContainer(UpgradeDestinations.IMPORTER, (c, upgradeEnergyUsage) -> {
       final long baseEnergyUsage = Platform.INSTANCE.getConfig().getImporter().getEnergyUsage();
       mainNetworkNode.setEnergyUsage(baseEnergyUsage + upgradeEnergyUsage);
-      setChanged();
       if (level instanceof ServerLevel serverLevel) {
         initialize(serverLevel);
       }
-    });
+    }, this::setChanged);
     this.ticker = upgradeContainer.getTicker();
   }
 
@@ -104,38 +102,38 @@ public class AdvancedImporterBlockEntity extends AbstractCableLikeBlockEntity<Im
   }
 
   @Override
-  public void saveAdditional(final CompoundTag tag, final HolderLookup.Provider provider) {
-    super.saveAdditional(tag, provider);
-    tag.put(TAG_UPGRADES, ContainerUtil.write(upgradeContainer, provider));
+  public void saveAdditional(final ValueOutput output) {
+    super.saveAdditional(output);
+    output.store(TAG_UPGRADES, ItemContainerContents.CODEC,
+        ItemContainerContents.fromItems(upgradeContainer.getItems()));
   }
 
   @Override
-  public void loadAdditional(final CompoundTag tag, final HolderLookup.Provider provider) {
-    if (tag.contains(TAG_UPGRADES)) {
-      ContainerUtil.read(tag.getCompound(TAG_UPGRADES), upgradeContainer, provider);
+  public void loadAdditional(final ValueInput input) {
+    input.read(TAG_UPGRADES, ItemContainerContents.CODEC).ifPresent(upgradeContainer::load);
+    super.loadAdditional(input);
+  }
+
+  @Override
+  public void preRemoveSideEffects(final BlockPos pos, final BlockState state) {
+    super.preRemoveSideEffects(pos, state);
+    if (level != null) {
+      Containers.dropContents(level, pos, upgradeContainer.getDrops());
     }
-    super.loadAdditional(tag, provider);
   }
 
   @Override
-  public final NonNullList<ItemStack> getDrops() {
-    return upgradeContainer.getDrops();
+  public void writeConfiguration(final ValueOutput output) {
+    super.writeConfiguration(output);
+    output.putInt(TAG_FILTER_MODE, FilterModeSettings.getFilterMode(mainNetworkNode.getFilterMode()));
+    filter.store(output);
   }
 
   @Override
-  public void writeConfiguration(final CompoundTag tag, final HolderLookup.Provider provider) {
-    super.writeConfiguration(tag, provider);
-    tag.putInt(TAG_FILTER_MODE, FilterModeSettings.getFilterMode(mainNetworkNode.getFilterMode()));
-    filter.save(tag, provider);
-  }
-
-  @Override
-  public void readConfiguration(final CompoundTag tag, final HolderLookup.Provider provider) {
-    super.readConfiguration(tag, provider);
-    if (tag.contains(TAG_FILTER_MODE)) {
-      mainNetworkNode.setFilterMode(FilterModeSettings.getFilterMode(tag.getInt(TAG_FILTER_MODE)));
-    }
-    filter.load(tag, provider);
+  public void readConfiguration(final ValueInput input) {
+    super.readConfiguration(input);
+    input.getInt(TAG_FILTER_MODE).map(FilterModeSettings::getFilterMode).ifPresent(mainNetworkNode::setFilterMode);
+    filter.read(input);
   }
 
   void setFilters(final Set<ResourceKey> filters) {

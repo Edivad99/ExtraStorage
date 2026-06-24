@@ -10,14 +10,12 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.common.data.BlockTagsProvider;
-import net.neoforged.neoforge.common.data.ExistingFileHelper;
 
 public class ExtraStorageBlockTagsProvider extends BlockTagsProvider {
 
   public ExtraStorageBlockTagsProvider(PackOutput packOutput,
-      CompletableFuture<HolderLookup.Provider> lookupProvider,
-      ExistingFileHelper existingFileHelper) {
-    super(packOutput, lookupProvider, ExtraStorage.ID, existingFileHelper);
+      CompletableFuture<HolderLookup.Provider> registries) {
+    super(packOutput, registries, ExtraStorage.ID);
   }
 
   @Override

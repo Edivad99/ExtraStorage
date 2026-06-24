@@ -14,6 +14,7 @@ import edivad.extrastorage.setup.ESBlockEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -30,9 +31,11 @@ public class AdvancedImporterBlock extends AbstractDirectionalCableBlock impleme
       new ConcurrentHashMap<>();
   private static final AbstractBlockEntityTicker<AdvancedImporterBlockEntity> TICKER =
       new NetworkNodeBlockEntityTicker<>(ESBlockEntities.ADVANCED_IMPORTER);
+  private final Identifier identifier;
 
-  public AdvancedImporterBlock() {
-    super(SHAPE_CACHE);
+  public AdvancedImporterBlock(final Identifier identifier) {
+    super(identifier, SHAPE_CACHE);
+    this.identifier = identifier;
   }
 
   @Override
@@ -61,6 +64,6 @@ public class AdvancedImporterBlock extends AbstractDirectionalCableBlock impleme
 
   @Override
   public BaseBlockItem createBlockItem() {
-    return new NetworkNodeBlockItem(this, HELP);
+    return new NetworkNodeBlockItem(identifier, this, HELP);
   }
 }

@@ -7,8 +7,8 @@ plugins {
     id 'eclipse'
     id 'idea'
     id 'net.neoforged.moddev' version "$mod_dev_gradle"
-    id 'se.bjurr.gitchangelog.git-changelog-gradle-plugin' version '3.1.1'
-    id 'me.modmuss50.mod-publish-plugin' version '1.1.0'
+    id 'se.bjurr.gitchangelog.git-changelog-gradle-plugin' version '3.1.2'
+    id 'me.modmuss50.mod-publish-plugin' version '2.0.0'
     id 'com.diffplug.spotless' version '8.0.0'
 }
 
@@ -23,7 +23,7 @@ base.archivesName = 'ExtraStorage'
 
 java {
     toolchain {
-        languageVersion = JavaLanguageVersion.of(21)
+        languageVersion = JavaLanguageVersion.of(25)
         if (System.getProperty('idea.active')) {
             vendor = JvmVendorSpec.JETBRAINS
         }
@@ -43,15 +43,7 @@ sourceSets.main.resources {
 }
 
 neoForge {
-    enable {
-        version = project.neo_version
-        disableRecompilation = System.getenv("CI") == "true"
-    }
-
-    parchment {
-        mappingsVersion = project.parchment_mappings_version
-        minecraftVersion = project.parchment_minecraft_version
-    }
+    version = project.neo_version
 
     validateAccessTransformers = true
 
@@ -75,7 +67,7 @@ neoForge {
         }
 
         data {
-            data()
+            clientData()
             gameDirectory = project.file('runs/data')
             programArguments.addAll '--mod', 'extrastorage', '--all', '--output', file('src/generated/resources/').getAbsolutePath(), '--existing', file('src/main/resources/').getAbsolutePath()
         }
@@ -108,14 +100,14 @@ repositories {
 }
 
 dependencies {
-    compileOnly 'org.projectlombok:lombok:1.18.36'
-    annotationProcessor 'org.projectlombok:lombok:1.18.36'
+    compileOnly 'org.projectlombok:lombok:1.18.44'
+    annotationProcessor 'org.projectlombok:lombok:1.18.44'
 
     implementation "curse.maven:edivadlib-638508:$edivadlib_id"
     implementation ("com.refinedmods.refinedstorage:refinedstorage-neoforge:$rs_version") {
         transitive = false
     }
-    implementation "curse.maven:the-one-probe-245211:$top_version"
+    //implementation "curse.maven:the-one-probe-245211:$top_version"
     implementation "curse.maven:jade-api-324717:$jade_id"
 
     //implementation "tschipp.carryon:carryon-forge-$minecraft_version:$co_version")
@@ -151,14 +143,10 @@ tasks.register('generatePackageInfos') {
         pkgName = pkgName.replaceAll('/', '.')
 
         def pkgInfoText = """
-            |@FieldsAreNonnullByDefault
-            |@MethodsReturnNonnullByDefault
-            |@ParametersAreNonnullByDefault
+            |@NullMarked
             |package $pkgName;
             |
-            |import javax.annotation.ParametersAreNonnullByDefault;
-            |import net.minecraft.FieldsAreNonnullByDefault;
-            |import net.minecraft.MethodsReturnNonnullByDefault;
+            |import org.jspecify.annotations.NullMarked;
         """.stripMargin().trim()
 
         packageInfoFile.text = pkgInfoText
@@ -247,6 +235,8 @@ publishMods {
         projectId = '410168'
         accessToken = providers.environmentVariable('CURSEFORGE_TOKEN')
         minecraftVersions.add(minecraft_version)
+        client = true
+        server = true
         requires('edivadlib')
         requires('refined-storage')
     }

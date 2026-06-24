@@ -7,23 +7,22 @@ import com.refinedmods.refinedstorage.common.support.widget.FuzzyModeSideButtonW
 import com.refinedmods.refinedstorage.common.util.IdentifierUtil;
 import edivad.extrastorage.ExtraStorage;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Inventory;
 
 public class AdvancedImporterScreen extends AbstractFilterScreen<AdvancedImporterContainerMenu> {
 
-  private static final ResourceLocation TEXTURE =
+  private static final Identifier TEXTURE =
       ExtraStorage.rl("textures/gui/advanced_exporter_importer.png");
 
   public AdvancedImporterScreen(AdvancedImporterContainerMenu menu, Inventory inventory,
       Component title) {
-    super(menu, inventory, title);
+    super(menu, inventory, title, true);
     this.inventoryLabelY = 60;
-    this.imageHeight = 211;
   }
 
   @Override
-  protected ResourceLocation getTexture() {
+  protected Identifier getTexture() {
     return TEXTURE;
   }
 

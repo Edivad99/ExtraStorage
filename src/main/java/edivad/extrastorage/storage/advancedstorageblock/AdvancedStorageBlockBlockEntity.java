@@ -26,8 +26,7 @@ import com.refinedmods.refinedstorage.common.support.network.AbstractBaseNetwork
 import com.refinedmods.refinedstorage.common.support.resource.ResourceContainerData;
 import com.refinedmods.refinedstorage.common.support.resource.ResourceContainerImpl;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.core.UUIDUtil;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.StreamEncoder;
@@ -36,6 +35,8 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 
 public class AdvancedStorageBlockBlockEntity extends AbstractBaseNetworkNodeContainerBlockEntity<StorageNetworkNode>
     implements NetworkNodeExtendedMenuProvider<StorageBlockData>, StorageBlockEntity,
@@ -94,40 +95,38 @@ public class AdvancedStorageBlockBlockEntity extends AbstractBaseNetworkNodeCont
   }
 
   @Override
-  public void loadAdditional(final CompoundTag tag, final HolderLookup.Provider provider) {
-    if (tag.contains(TAG_STORAGE_ID)) {
-      setStorageId(tag.getUUID(TAG_STORAGE_ID));
-    }
-    super.loadAdditional(tag, provider);
+  public void loadAdditional(final ValueInput input) {
+    input.read(TAG_STORAGE_ID, UUIDUtil.CODEC).ifPresent(this::setStorageId);
+    super.loadAdditional(input);
   }
 
   @Override
-  public void readConfiguration(final CompoundTag tag, final HolderLookup.Provider provider) {
-    super.readConfiguration(tag, provider);
-    configContainer.load(tag);
-    filter.load(tag, provider);
+  public void readConfiguration(final ValueInput input) {
+    super.readConfiguration(input);
+    configContainer.read(input);
+    filter.read(input);
   }
 
   @Override
-  public void saveAdditional(final CompoundTag tag, final HolderLookup.Provider provider) {
-    super.saveAdditional(tag, provider);
+  public void saveAdditional(final ValueOutput output) {
+    super.saveAdditional(output);
     if (storageId != null) {
-      tag.putUUID(TAG_STORAGE_ID, storageId);
+      output.store(TAG_STORAGE_ID, UUIDUtil.CODEC, storageId);
     }
   }
 
   @Override
-  public void writeConfiguration(final CompoundTag tag, final HolderLookup.Provider provider) {
-    super.writeConfiguration(tag, provider);
-    configContainer.save(tag);
-    filter.save(tag, provider);
+  public void writeConfiguration(final ValueOutput output) {
+    super.writeConfiguration(output);
+    configContainer.store(output);
+    filter.store(output);
   }
 
   @Override
   public void setStorageId(final UUID storageId) {
     tryRemoveCurrentStorage(storageId);
     this.storageId = storageId;
-    mainNetworkNode.onStorageChanged(0);
+    mainNetworkNode.onStorageChanged();
   }
 
   private void tryRemoveCurrentStorage(final UUID newStorageId) {

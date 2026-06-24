@@ -1,0 +1,33 @@
+{
+  "criteria": {
+    "inv_changed": {
+      "conditions": {
+        "items": [
+          {
+            "items": "extrastorage:iron_crafter"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": {
+      "translate": "advancements.extrastorage.iron_crafter.desc"
+    },
+    "frame": "challenge",
+    "icon": {
+      "id": "extrastorage:iron_crafter"
+    },
+    "title": {
+      "translate": "advancements.extrastorage.iron_crafter"
+    }
+  },
+  "requirements": [
+    [
+      "inv_changed"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import com.refinedmods.refinedstorage.common.support.BaseBlockItem;
 import edivad.extrastorage.ExtraStorage;
+import edivad.extrastorage.autocrafting.advancedautocrafter.AdvancedAutocrafterBlockItem;
 import edivad.extrastorage.autocrafting.advancedautocrafter.CrafterTier;
 import edivad.extrastorage.storage.AdvancedFluidStorageVariant;
 import edivad.extrastorage.storage.AdvancedItemStorageVariant;
@@ -20,7 +21,7 @@ public class ESItems {
 
   public static final Map<AdvancedItemStorageVariant, DeferredItem<Item>> ITEM_STORAGE = new HashMap<>();
   public static final Map<AdvancedFluidStorageVariant, DeferredItem<Item>> FLUID_STORAGE = new HashMap<>();
-  public static final Map<CrafterTier, DeferredItem<BaseBlockItem>> CRAFTER = new HashMap<>();
+  public static final Map<CrafterTier, DeferredItem<AdvancedAutocrafterBlockItem>> CRAFTER = new HashMap<>();
   public static final Map<AdvancedItemStorageVariant, DeferredItem<Item>> ITEM_STORAGE_PART = new HashMap<>();
   public static final Map<AdvancedFluidStorageVariant, DeferredItem<Item>> FLUID_STORAGE_PART = new HashMap<>();
   public static final Map<AdvancedItemStorageVariant, DeferredItem<Item>> ITEM_DISK = new HashMap<>();
@@ -29,10 +30,10 @@ public class ESItems {
       DeferredRegister.createItems(ExtraStorage.ID);
   public static final DeferredItem<Item> ADVANCED_EXPORTER =
       ITEMS.register("advanced_exporter",
-          () -> new BaseBlockItem(ESBlocks.ADVANCED_EXPORTER.get(), null));
+          identifier -> new BaseBlockItem(identifier, ESBlocks.ADVANCED_EXPORTER.get()));
   public static final DeferredItem<Item> ADVANCED_IMPORTER =
       ITEMS.register("advanced_importer",
-          () -> new BaseBlockItem(ESBlocks.ADVANCED_IMPORTER.get(), null));
+          identifier -> new BaseBlockItem(identifier, ESBlocks.ADVANCED_IMPORTER.get()));
 
   public static final DeferredItem<Item> RAW_NEURAL_PROCESSOR =
       ITEMS.registerItem("raw_neural_processor", Item::new);
@@ -42,22 +43,26 @@ public class ESItems {
   static {
     for (var variant : AdvancedItemStorageVariant.values()) {
       ITEM_STORAGE.put(variant, ITEMS.register("block_" + variant.getName(),
-          () -> new AdvancedStorageBlockItem(ESBlocks.ITEM_STORAGE.get(variant).get(), variant)));
-      ITEM_STORAGE_PART.put(variant, ITEMS.registerItem("storagepart_" + variant.getName(), Item::new));
+          identifier ->
+              new AdvancedStorageBlockItem(identifier, ESBlocks.ITEM_STORAGE.get(variant).get(), variant)));
+      ITEM_STORAGE_PART.put(variant, ITEMS.registerItem(variant.getName() + "_item_storage_part", Item::new));
       ITEM_DISK.put(variant,
-          ITEMS.register("disk_" + variant.getName(), () -> new ExpandedStorageDiskItem(variant)));
+          ITEMS.register(variant.getName() + "_item_storage_disk",
+              identifier -> new ExpandedStorageDiskItem(identifier, variant)));
     }
     for (var variant : AdvancedFluidStorageVariant.values()) {
       var variantName = variant.getName() + "_fluid";
       FLUID_STORAGE.put(variant, ITEMS.register("block_" + variantName,
-          () -> new AdvancedFluidStorageBlockBlockItem(ESBlocks.FLUID_STORAGE.get(variant).get(), variant)));
-      FLUID_STORAGE_PART.put(variant, ITEMS.registerItem("storagepart_" + variantName, Item::new));
+          identifier ->
+              new AdvancedFluidStorageBlockBlockItem(identifier, ESBlocks.FLUID_STORAGE.get(variant).get(), variant)));
+      FLUID_STORAGE_PART.put(variant, ITEMS.registerItem(variantName + "_storage_part", Item::new));
       FLUID_DISK.put(variant,
-          ITEMS.register("disk_" + variantName, () -> new ExpandedStorageDiskFluid(variant)));
+          ITEMS.register(variantName + "_storage_disk",
+              identifier -> new ExpandedStorageDiskFluid(identifier, variant)));
     }
     for (var tier : CrafterTier.values()) {
-      CRAFTER.put(tier, ITEMS.register(tier.getID(),
-          () -> new BaseBlockItem(ESBlocks.CRAFTER.get(tier).get(), null)));
+      CRAFTER.put(tier, ITEMS.registerItem(tier.getID(), properties ->
+          new AdvancedAutocrafterBlockItem(ESBlocks.CRAFTER.get(tier).get(), properties)));
     }
   }
 

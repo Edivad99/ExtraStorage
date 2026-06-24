@@ -2,24 +2,12 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "a": {
-      "item": "minecraft:crafting_table"
-    },
-    "b": {
-      "item": "minecraft:quartz"
-    },
-    "c": {
-      "item": "refinedstorage:raw_advanced_processor"
-    },
-    "d": {
-      "item": "refinedstorage:raw_improved_processor"
-    },
-    "e": {
-      "tag": "c:obsidians"
-    },
-    "f": {
-      "item": "refinedstorage:processor_binding"
-    }
+    "a": "minecraft:crafting_table",
+    "b": "minecraft:quartz",
+    "c": "refinedstorage:raw_advanced_processor",
+    "d": "refinedstorage:raw_improved_processor",
+    "e": "#c:obsidians",
+    "f": "refinedstorage:processor_binding"
   },
   "pattern": [
     "cbd",
@@ -27,7 +15,6 @@
     "efe"
   ],
   "result": {
-    "count": 1,
     "id": "extrastorage:raw_neural_processor"
   }
 }

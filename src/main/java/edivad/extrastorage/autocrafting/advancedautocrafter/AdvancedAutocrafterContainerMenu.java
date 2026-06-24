@@ -25,6 +25,7 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
+import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 import net.neoforged.neoforge.network.PacketDistributor;
 
 public class AdvancedAutocrafterContainerMenu extends AbstractBaseContainerMenu {
@@ -181,7 +182,7 @@ public class AdvancedAutocrafterContainerMenu extends AbstractBaseContainerMenu 
       autocrafter.setCustomName(newName);
       detectNameChange();
     } else {
-      PacketDistributor.sendToServer(new AdvancedAutocrafterNameChangePacket(newName));
+      ClientPacketDistributor.sendToServer(new AdvancedAutocrafterNameChangePacket(newName));
     }
   }
 

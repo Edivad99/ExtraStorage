@@ -1,5 +1,5 @@
 {
   "values": [
-    "extrastorage:disk_256k"
+    "extrastorage:256k_item_storage_disk"
   ]
 }

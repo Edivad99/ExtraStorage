@@ -2,9 +2,8 @@ package edivad.extrastorage.autocrafting.advancedautocrafter;
 
 import static com.refinedmods.refinedstorage.common.util.IdentifierUtil.createTranslation;
 
-import java.util.List;
 import org.jetbrains.annotations.Nullable;
-import com.refinedmods.refinedstorage.common.content.BlockConstants;
+import com.refinedmods.refinedstorage.common.content.BlockProperties;
 import com.refinedmods.refinedstorage.common.support.AbstractBlockEntityTicker;
 import com.refinedmods.refinedstorage.common.support.AbstractDirectionalBlock;
 import com.refinedmods.refinedstorage.common.support.BaseBlockItem;
@@ -14,15 +13,11 @@ import com.refinedmods.refinedstorage.common.support.direction.DefaultDirectionT
 import com.refinedmods.refinedstorage.common.support.direction.DirectionType;
 import com.refinedmods.refinedstorage.common.support.network.NetworkNodeBlockEntityTicker;
 import edivad.extrastorage.setup.ESBlockEntities;
-import edivad.extrastorage.tools.Translations;
-import net.minecraft.ChatFormatting;
-import net.minecraft.client.gui.screens.Screen;
+import lombok.Getter;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.EntityBlock;
@@ -40,10 +35,13 @@ public class AdvancedAutocrafterBlock extends AbstractDirectionalBlock<Direction
   public static final BooleanProperty ACTIVE = BooleanProperty.create("active");
   private static final Component HELP = createTranslation("item", "autocrafter.help");
   private final AbstractBlockEntityTicker<AdvancedAutocrafterBlockEntity> ticker;
+  @Getter
   private final CrafterTier tier;
+  private final Identifier identifier;
 
-  public AdvancedAutocrafterBlock(CrafterTier tier) {
-    super(BlockConstants.PROPERTIES);
+  public AdvancedAutocrafterBlock(Identifier identifier, CrafterTier tier) {
+    super(BlockProperties.stone(identifier));
+    this.identifier = identifier;
     this.tier = tier;
     this.ticker = new NetworkNodeBlockEntityTicker<>(
         ESBlockEntities.CRAFTER.get(this.tier),
@@ -83,19 +81,6 @@ public class AdvancedAutocrafterBlock extends AbstractDirectionalBlock<Direction
 
   @Override
   public BaseBlockItem createBlockItem() {
-    return new NetworkNodeBlockItem(this, HELP);
-  }
-
-  @Override
-  public void appendHoverText(ItemStack stack, Item.TooltipContext context,
-      List<Component> tooltip, TooltipFlag tooltipFlag) {
-    if (Screen.hasShiftDown()) {
-      tooltip.add(Component.translatable(Translations.SLOT_CRAFTING, tier.getSlots())
-          .withStyle(ChatFormatting.GREEN));
-      tooltip.add(Component.translatable(Translations.BASE_SPEED, tier.getCraftingSpeed())
-          .withStyle(ChatFormatting.GREEN));
-    } else {
-      tooltip.add(Component.translatable(Translations.HOLD_SHIFT).withStyle(ChatFormatting.GRAY));
-    }
+    return new NetworkNodeBlockItem(identifier, this, HELP);
   }
 }

@@ -7,7 +7,7 @@ import com.refinedmods.refinedstorage.common.support.containermenu.ClientPropert
 import com.refinedmods.refinedstorage.common.support.widget.AbstractYesNoSideButtonWidget;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 class VisibleToTheAutocrafterManagerSideButtonWidget extends
     AbstractYesNoSideButtonWidget {
@@ -15,9 +15,9 @@ class VisibleToTheAutocrafterManagerSideButtonWidget extends
       createTranslation("gui", "autocrafter.visible_to_the_autocrafter_manager");
   private static final MutableComponent HELP =
       createTranslation("gui", "autocrafter.visible_to_the_autocrafter_manager.help");
-  private static final ResourceLocation YES =
+  private static final Identifier YES =
       createIdentifier("widget/side_button/autocrafter/visible_to_the_autocrafter_manager/yes");
-  private static final ResourceLocation NO =
+  private static final Identifier NO =
       createIdentifier("widget/side_button/autocrafter/visible_to_the_autocrafter_manager/no");
 
   VisibleToTheAutocrafterManagerSideButtonWidget(final ClientProperty<Boolean> property) {

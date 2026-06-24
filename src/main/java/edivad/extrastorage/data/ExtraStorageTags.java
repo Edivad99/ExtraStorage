@@ -6,7 +6,7 @@ import com.refinedmods.refinedstorage.common.util.IdentifierUtil;
 import edivad.extrastorage.ExtraStorage;
 import edivad.extrastorage.storage.AdvancedFluidStorageVariant;
 import edivad.extrastorage.storage.AdvancedItemStorageVariant;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
@@ -44,15 +44,15 @@ public class ExtraStorageTags {
     }
 
     private static TagKey<Block> carryOnTag(String name) {
-      return BlockTags.create(ResourceLocation.fromNamespaceAndPath("carryon", name));
+      return BlockTags.create(Identifier.fromNamespaceAndPath("carryon", name));
     }
 
     private static TagKey<Block> mekanismTag(String name) {
-      return BlockTags.create(ResourceLocation.fromNamespaceAndPath("mekanism", name));
+      return BlockTags.create(Identifier.fromNamespaceAndPath("mekanism", name));
     }
 
     private static TagKey<Block> packingTapeTag(String name) {
-      return BlockTags.create(ResourceLocation.fromNamespaceAndPath("packingtape", name));
+      return BlockTags.create(Identifier.fromNamespaceAndPath("packingtape", name));
     }
   }
 

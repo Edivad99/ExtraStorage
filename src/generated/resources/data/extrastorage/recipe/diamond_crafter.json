@@ -2,18 +2,10 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "a": {
-      "tag": "c:storage_blocks/diamond"
-    },
-    "b": {
-      "item": "extrastorage:gold_crafter"
-    },
-    "c": {
-      "item": "extrastorage:neural_processor"
-    },
-    "d": {
-      "tag": "c:chests/wooden"
-    }
+    "a": "#c:storage_blocks/diamond",
+    "b": "extrastorage:gold_crafter",
+    "c": "extrastorage:neural_processor",
+    "d": "#c:chests/wooden"
   },
   "pattern": [
     "ada",
@@ -21,7 +13,6 @@
     "a a"
   ],
   "result": {
-    "count": 1,
     "id": "extrastorage:diamond_crafter"
   }
 }

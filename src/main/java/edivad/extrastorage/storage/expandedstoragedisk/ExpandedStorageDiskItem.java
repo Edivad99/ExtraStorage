@@ -15,7 +15,10 @@ import com.refinedmods.refinedstorage.common.storage.StorageVariant;
 import com.refinedmods.refinedstorage.common.storage.UpgradeableStorageContainer;
 import edivad.extrastorage.setup.ESItems;
 import edivad.extrastorage.storage.AdvancedItemStorageVariant;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -26,9 +29,10 @@ public class ExpandedStorageDiskItem extends AbstractStorageContainerItem implem
   private final AdvancedItemStorageVariant variant;
   private final Component helpText;
 
-  public ExpandedStorageDiskItem(AdvancedItemStorageVariant variant) {
+  public ExpandedStorageDiskItem(Identifier identifier, AdvancedItemStorageVariant variant) {
     super(
-        new Item.Properties().stacksTo(1).fireResistant(),
+        new Item.Properties().stacksTo(1).fireResistant()
+            .setId(ResourceKey.create(Registries.ITEM, identifier)),
         RefinedStorageApi.INSTANCE.getStorageContainerItemHelper()
     );
     this.variant = variant;

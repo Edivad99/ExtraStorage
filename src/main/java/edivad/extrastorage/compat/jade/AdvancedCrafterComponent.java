@@ -4,7 +4,7 @@ import edivad.extrastorage.ExtraStorage;
 import edivad.extrastorage.autocrafting.advancedautocrafter.AdvancedAutocrafterBlockEntity;
 import edivad.extrastorage.tools.Translations;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import snownee.jade.api.BlockAccessor;
 import snownee.jade.api.IBlockComponentProvider;
 import snownee.jade.api.ITooltip;
@@ -17,10 +17,10 @@ public class AdvancedCrafterComponent implements IBlockComponentProvider {
       IPluginConfig iPluginConfig) {
     if (blockAccessor.getBlockEntity() instanceof AdvancedAutocrafterBlockEntity) {
       var data = blockAccessor.getServerData();
-      var patterns = data.getInt("patterns");
+      var patterns = data.getInt("patterns").orElse(0);
       //var speed = data.getInt("speed");
-      var slots = data.getInt("slots");
-      var tierSpeed = data.getInt("tier_speed");
+      var slots = data.getInt("slots").orElse(0);
+      var tierSpeed = data.getInt("tier_speed").orElse(0);
       //var nodeName = data.getString("node_name");
 
       tooltip.add(Component.translatable(Translations.OCCUPIED_SPACE,
@@ -31,7 +31,7 @@ public class AdvancedCrafterComponent implements IBlockComponentProvider {
   }
 
   @Override
-  public ResourceLocation getUid() {
+  public Identifier getUid() {
     return ExtraStorage.rl("advanced_crafter");
   }
 }

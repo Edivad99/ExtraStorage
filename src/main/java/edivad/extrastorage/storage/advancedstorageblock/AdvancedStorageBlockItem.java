@@ -14,7 +14,10 @@ import com.refinedmods.refinedstorage.common.storage.UpgradeableStorageContainer
 import com.refinedmods.refinedstorage.common.util.IdentifierUtil;
 import edivad.extrastorage.setup.ESItems;
 import edivad.extrastorage.storage.AdvancedItemStorageVariant;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.Item;
@@ -28,9 +31,11 @@ public class AdvancedStorageBlockItem extends AbstractStorageContainerBlockItem 
   private final AdvancedItemStorageVariant variant;
   private final Component helpText;
 
-  public AdvancedStorageBlockItem(AdvancedStorageBlock<?> block, AdvancedItemStorageVariant variant) {
+  public AdvancedStorageBlockItem(Identifier identifier, AdvancedStorageBlock<?> block,
+      AdvancedItemStorageVariant variant) {
     super(block,
-        new Item.Properties().stacksTo(1).fireResistant(),
+        new Item.Properties().stacksTo(1).useBlockDescriptionPrefix().fireResistant()
+            .setId(ResourceKey.create(Registries.ITEM, identifier)),
         RefinedStorageApi.INSTANCE.getStorageContainerItemHelper());
     this.variant = variant;
     this.helpText = IdentifierUtil.createTranslation("item", "storage_block.help", IdentifierUtil.format(variant.getCapacity()));

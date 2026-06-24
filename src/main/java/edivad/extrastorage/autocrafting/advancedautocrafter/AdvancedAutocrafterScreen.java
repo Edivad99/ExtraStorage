@@ -1,11 +1,13 @@
 package edivad.extrastorage.autocrafting.advancedautocrafter;
 
+import static com.refinedmods.refinedstorage.common.util.IdentifierUtil.createTranslationAsHeading;
+import static net.minecraft.client.renderer.RenderPipelines.GUI_TEXTURED;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import org.jetbrains.annotations.Nullable;
 import org.lwjgl.glfw.GLFW;
-import com.refinedmods.refinedstorage.common.Platform;
 import com.refinedmods.refinedstorage.common.api.autocrafting.PatternOutputRenderingScreen;
 import com.refinedmods.refinedstorage.common.autocrafting.PatternSlot;
 import com.refinedmods.refinedstorage.common.support.AbstractBaseScreen;
@@ -16,20 +18,24 @@ import com.refinedmods.refinedstorage.common.support.widget.TextMarquee;
 import com.refinedmods.refinedstorage.common.util.IdentifierUtil;
 import edivad.extrastorage.ExtraStorage;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
+import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
+import net.minecraft.client.gui.screens.inventory.tooltip.DefaultTooltipPositioner;
+import net.minecraft.client.input.CharacterEvent;
+import net.minecraft.client.input.KeyEvent;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
 
 public class AdvancedAutocrafterScreen extends AbstractBaseScreen<AdvancedAutocrafterContainerMenu>
     implements AdvancedAutocrafterContainerMenu.Listener, PatternOutputRenderingScreen {
 
-  private static final Component EMPTY_PATTERN_SLOT = IdentifierUtil.createTranslationAsHeading(
-      "gui", "autocrafter.empty_pattern_slot"
-  );
+  private static final List<ClientTooltipComponent> EMPTY_PATTERN_SLOT = List.of(ClientTooltipComponent.create(
+      createTranslationAsHeading("gui", "autocrafter.empty_pattern_slot").getVisualOrderText()
+  ));
 
   private static final Component CHAINED = IdentifierUtil.createTranslation("gui", "autocrafter.chained");
   private static final Component CHAINED_HELP = IdentifierUtil.createTranslation("gui", "autocrafter.chained.help");
@@ -39,7 +45,7 @@ public class AdvancedAutocrafterScreen extends AbstractBaseScreen<AdvancedAutocr
   private static final Component EDIT = IdentifierUtil.createTranslation("gui", "autocrafter.edit_name");
   private static final Component CURRENTLY_LOCKED = IdentifierUtil.createTranslation("gui", "autocrafter.currently_locked");
 
-  private static final ResourceLocation NAME_BACKGROUND = IdentifierUtil.createIdentifier("widget/autocrafter_name");
+  private static final Identifier NAME_BACKGROUND = IdentifierUtil.createIdentifier("widget/autocrafter_name");
   private static final List<String> CRAFTER_NAME_HISTORY = new ArrayList<>();
 
   private final Inventory playerInventory;
@@ -54,13 +60,12 @@ public class AdvancedAutocrafterScreen extends AbstractBaseScreen<AdvancedAutocr
   private boolean editName;
 
   private final CrafterTier tier;
-  private final ResourceLocation texture;
+  private final Identifier texture;
 
   public AdvancedAutocrafterScreen(AdvancedAutocrafterContainerMenu menu, Inventory inventory,
       Component title) {
-    super(menu, inventory, new TextMarquee(title, getTitleMaxWidth(menu)));
-    this.imageWidth = 211;
-    this.imageHeight = 173 + (menu.getTier().ordinal() * 36);
+    var height = 173 + (menu.getTier().ordinal() * 36);
+    super(menu, inventory, new TextMarquee(title, getTitleMaxWidth(menu)), 211, height);
     this.inventoryLabelY = this.imageHeight - 94;
     this.playerInventory = inventory;
     this.tier = menu.getTier();
@@ -93,17 +98,19 @@ public class AdvancedAutocrafterScreen extends AbstractBaseScreen<AdvancedAutocr
   }
 
   @Override
-  protected void renderBg(GuiGraphics graphics, final float delta, final int mouseX, final int mouseY) {
+  public void extractBackground(GuiGraphicsExtractor graphics, int mouseX, int mouseY,
+      float partialTicks) {
     int x = (this.width - this.imageWidth) / 2;
     int y = (this.height - this.imageHeight) / 2;
     if (imageHeight <= 256) {
-      graphics.blit(texture, x, y, 0, 0, imageWidth, imageHeight);
+      graphics.blit(texture, x, y, 0, 0, imageWidth, imageHeight, 256, 256);
     } else {
       graphics.blit(texture, x, y, 0, 0, imageWidth, imageHeight, 512, 512);
     }
-    this.renderResourceSlots(graphics);
+//    this.renderResourceSlots(graphics);
+    super.extractBackground(graphics, mouseX, mouseY, partialTicks);
     if (editName) {
-      graphics.blitSprite(NAME_BACKGROUND, leftPos + 7, topPos + 5, 162, 12);
+      graphics.blitSprite(GUI_TEXTURED, NAME_BACKGROUND, leftPos + 7, topPos + 5, 162, 12);
     }
   }
 
@@ -172,22 +179,22 @@ public class AdvancedAutocrafterScreen extends AbstractBaseScreen<AdvancedAutocr
   }
 
   @Override
-  public void render(final GuiGraphics graphics, final int mouseX, final int mouseY, final float partialTicks) {
-    super.render(graphics, mouseX, mouseY, partialTicks);
+  public void extractContents(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTicks) {
+    super.extractContents(graphics, mouseX, mouseY, partialTicks);
     if (nameField != null && editName) {
-      nameField.render(graphics, mouseX, mouseY, partialTicks);
+      nameField.extractRenderState(graphics, mouseX, mouseY, partialTicks);
     }
   }
 
   @Override
-  protected void renderLabels(final GuiGraphics graphics, final int mouseX, final int mouseY) {
+  protected void extractLabels(GuiGraphicsExtractor graphics, int mouseX, int mouseY) {
     if (editName) {
       renderPlayerInventoryTitle(graphics);
       return;
     }
-    super.renderLabels(graphics, mouseX, mouseY);
+    super.extractLabels(graphics, mouseX, mouseY);
     final Component title = getChainingTitle(menu);
-    graphics.drawString(font, title, getChainingTitleX(title), titleLabelY, 4210752, false);
+    graphics.text(font, title, getChainingTitleX(title), titleLabelY, 4210752, false);
   }
 
   private int getChainingTitleX(final Component title) {
@@ -195,20 +202,20 @@ public class AdvancedAutocrafterScreen extends AbstractBaseScreen<AdvancedAutocr
   }
 
   @Override
-  public boolean charTyped(final char unknown1, final int unknown2) {
-    return (nameField != null && editName && nameField.charTyped(unknown1, unknown2))
-        || super.charTyped(unknown1, unknown2);
+  public boolean charTyped(CharacterEvent event) {
+    return (nameField != null && editName && nameField.charTyped(event))
+        || super.charTyped(event);
   }
 
   @Override
-  public boolean keyPressed(final int key, final int scanCode, final int modifiers) {
+  public boolean keyPressed(KeyEvent event) {
     if (nameField != null && editName) {
-      if (nameField.isFocused() && saveOrCancel(key)) {
+      if (nameField.isFocused() && saveOrCancel(event.key())) {
         return true;
       }
-      return nameField.keyPressed(key, scanCode, modifiers);
+      return nameField.keyPressed(event);
     }
-    return super.keyPressed(key, scanCode, modifiers);
+    return super.keyPressed(event);
   }
 
   private boolean saveOrCancel(final int key) {
@@ -225,30 +232,32 @@ public class AdvancedAutocrafterScreen extends AbstractBaseScreen<AdvancedAutocr
   }
 
   @Override
-  protected void renderTooltip(final GuiGraphics graphics, final int x, final int y) {
+  protected void extractTooltip(GuiGraphicsExtractor graphics, int x, int y) {
     if (hoveredSlot instanceof PatternSlot patternSlot
         && !patternSlot.hasItem()
         && getMenu().getCarried().isEmpty()) {
-      graphics.renderTooltip(font, EMPTY_PATTERN_SLOT, x, y);
+      graphics.tooltip(font, EMPTY_PATTERN_SLOT, x, y, DefaultTooltipPositioner.INSTANCE, null);
       return;
     }
     final Component chainingTitle = getChainingTitle(getMenu());
     final int chainingTitleX = getChainingTitleX(chainingTitle);
     if (isHovering(chainingTitleX, titleLabelY, font.width(chainingTitle), font.lineHeight, x, y)) {
       final Component chainingTooltip = getChainingTooltip();
-      Platform.INSTANCE.renderTooltip(
-          graphics,
+      graphics.tooltip(
+          font,
           List.of(HelpClientTooltipComponent.createAlwaysDisplayed(chainingTooltip)),
           x,
-          y
+          y,
+          DefaultTooltipPositioner.INSTANCE,
+          null
       );
       return;
     }
-    super.renderTooltip(graphics, x, y);
+    super.extractTooltip(graphics, x, y);
   }
 
   @Override
-  protected ResourceLocation getTexture() {
+  protected Identifier getTexture() {
     return this.texture;
   }
 

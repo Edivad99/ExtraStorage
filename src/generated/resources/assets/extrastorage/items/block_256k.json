@@ -1,0 +1,6 @@
+{
+  "model": {
+    "type": "minecraft:model",
+    "model": "extrastorage:block/storage_block/256k_storage_block"
+  }
+}

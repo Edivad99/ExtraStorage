@@ -16,17 +16,17 @@ import edivad.extrastorage.setup.ESItems;
 import edivad.extrastorage.storage.AdvancedFluidStorageVariant;
 import edivad.extrastorage.storage.AdvancedItemStorageVariant;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.data.recipes.RecipeProvider;
-import net.minecraft.data.recipes.ShapedRecipeBuilder;
-import net.minecraft.data.recipes.ShapelessRecipeBuilder;
 import net.minecraft.data.recipes.SimpleCookingRecipeBuilder;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.CookingBookCategory;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
 import net.neoforged.neoforge.common.Tags;
@@ -34,48 +34,68 @@ import net.neoforged.neoforge.registries.DeferredItem;
 
 public class ExtraStorageRecipeProvider extends RecipeProvider {
 
-  public ExtraStorageRecipeProvider(PackOutput packOutput, CompletableFuture<HolderLookup.Provider> registries) {
-    super(packOutput, registries);
+  private final HolderLookup.RegistryLookup<Item> items;
+
+  public ExtraStorageRecipeProvider(HolderLookup.Provider registries, RecipeOutput output) {
+    super(registries, output);
+    this.items = registries.lookupOrThrow(Registries.ITEM);
+  }
+
+  public static class Runner extends RecipeProvider.Runner {
+
+    public Runner(PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
+      super(output, registries);
+    }
+
+    @Override
+    protected RecipeProvider createRecipeProvider(HolderLookup.Provider registries,
+        RecipeOutput output) {
+      return new ExtraStorageRecipeProvider(registries, output);
+    }
+
+    @Override
+    public String getName() {
+      return "ExtraStorageRecipeProvider";
+    }
   }
 
   @Override
-  protected void buildRecipes(RecipeOutput recipeOutput) {
-
+  protected void buildRecipes() {
     for (var type : AdvancedItemStorageVariant.values()) {
       if (type.equals(AdvancedItemStorageVariant.TIER_5)) {
         partRecipe(ESItems.ITEM_STORAGE_PART.get(type),
             com.refinedmods.refinedstorage.common.content.Items.INSTANCE.getItemStoragePart(ItemStorageVariant.SIXTY_FOUR_K),
-            recipeOutput);
+            output);
       } else {
         partRecipe(ESItems.ITEM_STORAGE_PART.get(type),
             ExtraStorageTags.Items.PARTS_ITEM.get(
                 AdvancedItemStorageVariant.values()[type.ordinal() - 1]),
-            recipeOutput);
+            output);
       }
       diskRecipe(ESItems.ITEM_DISK.get(type), ExtraStorageTags.Items.PARTS_ITEM.get(type),
-          recipeOutput);
+          output);
       storageBlockRecipe(ESItems.ITEM_STORAGE.get(type),
-          ExtraStorageTags.Items.PARTS_ITEM.get(type), recipeOutput);
+          ExtraStorageTags.Items.PARTS_ITEM.get(type), output);
     }
+
     for (var type : AdvancedFluidStorageVariant.values()) {
       if (type.equals(AdvancedFluidStorageVariant.TIER_5)) {
         partRecipe(ESItems.FLUID_STORAGE_PART.get(type),
             com.refinedmods.refinedstorage.common.content.Items.INSTANCE.getFluidStoragePart(FluidStorageVariant.FOUR_THOUSAND_NINETY_SIX_B),
-            recipeOutput);
+            output);
       } else {
         partRecipe(ESItems.FLUID_STORAGE_PART.get(type),
             ExtraStorageTags.Items.PARTS_FLUID.get(
                 AdvancedFluidStorageVariant.values()[type.ordinal() - 1]),
-            recipeOutput);
+            output);
       }
       diskRecipe(ESItems.FLUID_DISK.get(type), ExtraStorageTags.Items.PARTS_FLUID.get(type),
-          recipeOutput);
+          output);
       storageBlockRecipe(ESItems.FLUID_STORAGE.get(type),
-          ExtraStorageTags.Items.PARTS_FLUID.get(type), recipeOutput);
+          ExtraStorageTags.Items.PARTS_FLUID.get(type), output);
     }
 
-    ShapedRecipeBuilder.shaped(RecipeCategory.MISC,
-            ESItems.CRAFTER.get(CrafterTier.IRON).get())
+    shaped(RecipeCategory.MISC, ESItems.CRAFTER.get(CrafterTier.IRON).get())
         .pattern("aca")
         .pattern(" b ")
         .pattern("a a")
@@ -84,10 +104,9 @@ public class ExtraStorageRecipeProvider extends RecipeProvider {
         .define('c', Tags.Items.CHESTS_WOODEN)
         .unlockedBy(getHasName(Blocks.INSTANCE.getAutocrafter().get(DyeColor.LIGHT_BLUE)),
             has(Blocks.INSTANCE.getAutocrafter().get(DyeColor.LIGHT_BLUE)))
-        .save(recipeOutput);
+        .save(output);
 
-    ShapedRecipeBuilder.shaped(RecipeCategory.MISC,
-            ESItems.CRAFTER.get(CrafterTier.GOLD).get())
+    shaped(RecipeCategory.MISC, ESItems.CRAFTER.get(CrafterTier.GOLD).get())
         .pattern("ada")
         .pattern("cbc")
         .pattern("a a")
@@ -97,10 +116,9 @@ public class ExtraStorageRecipeProvider extends RecipeProvider {
         .define('d', Tags.Items.CHESTS_WOODEN)
         .unlockedBy(getHasName(ESItems.CRAFTER.get(CrafterTier.IRON).get()),
             has(ESItems.CRAFTER.get(CrafterTier.IRON).get()))
-        .save(recipeOutput);
+        .save(output);
 
-    ShapedRecipeBuilder.shaped(RecipeCategory.MISC,
-            ESItems.CRAFTER.get(CrafterTier.DIAMOND).get())
+    shaped(RecipeCategory.MISC, ESItems.CRAFTER.get(CrafterTier.DIAMOND).get())
         .pattern("ada")
         .pattern("cbc")
         .pattern("a a")
@@ -110,10 +128,9 @@ public class ExtraStorageRecipeProvider extends RecipeProvider {
         .define('d', Tags.Items.CHESTS_WOODEN)
         .unlockedBy(getHasName(ESItems.CRAFTER.get(CrafterTier.GOLD).get()),
             has(ESItems.CRAFTER.get(CrafterTier.GOLD).get()))
-        .save(recipeOutput);
+        .save(output);
 
-    ShapedRecipeBuilder.shaped(RecipeCategory.MISC,
-            ESItems.CRAFTER.get(CrafterTier.NETHERITE).get())
+    shaped(RecipeCategory.MISC, ESItems.CRAFTER.get(CrafterTier.NETHERITE).get())
         .pattern("ada")
         .pattern("cbc")
         .pattern("a a")
@@ -123,9 +140,9 @@ public class ExtraStorageRecipeProvider extends RecipeProvider {
         .define('d', Tags.Items.CHESTS_WOODEN)
         .unlockedBy(getHasName(ESItems.CRAFTER.get(CrafterTier.DIAMOND).get()),
             has(ESItems.CRAFTER.get(CrafterTier.DIAMOND).get()))
-        .save(recipeOutput);
+        .save(output);
 
-    ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ESItems.ADVANCED_EXPORTER.get())
+    shaped(RecipeCategory.MISC, ESItems.ADVANCED_EXPORTER.get())
         .pattern(" a ")
         .pattern("cbc")
         .pattern(" a ")
@@ -134,9 +151,9 @@ public class ExtraStorageRecipeProvider extends RecipeProvider {
         .define('c', com.refinedmods.refinedstorage.common.content.Items.INSTANCE.getProcessor(ProcessorItem.Type.IMPROVED))
         .unlockedBy(getHasName(Blocks.INSTANCE.getExporter().getDefault()),
             has(Blocks.INSTANCE.getExporter().getDefault()))
-        .save(recipeOutput);
+        .save(output);
 
-    ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ESItems.ADVANCED_IMPORTER.get())
+    shaped(RecipeCategory.MISC, ESItems.ADVANCED_IMPORTER.get())
         .pattern(" a ")
         .pattern("cbc")
         .pattern(" a ")
@@ -145,9 +162,9 @@ public class ExtraStorageRecipeProvider extends RecipeProvider {
         .define('c', com.refinedmods.refinedstorage.common.content.Items.INSTANCE.getProcessor(ProcessorItem.Type.IMPROVED))
         .unlockedBy(getHasName(Blocks.INSTANCE.getImporter().getDefault()),
             has(Blocks.INSTANCE.getImporter().getDefault()))
-        .save(recipeOutput);
+        .save(output);
 
-    ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ESItems.RAW_NEURAL_PROCESSOR.get())
+    shaped(RecipeCategory.MISC, ESItems.RAW_NEURAL_PROCESSOR.get())
         .pattern("cbd")
         .pattern("bab")
         .pattern("efe")
@@ -159,22 +176,23 @@ public class ExtraStorageRecipeProvider extends RecipeProvider {
         .define('f', com.refinedmods.refinedstorage.common.content.Items.INSTANCE.getProcessorBinding())
         .unlockedBy(getHasName(com.refinedmods.refinedstorage.common.content.Items.INSTANCE.getProcessor(ProcessorItem.Type.RAW_ADVANCED)),
             has(com.refinedmods.refinedstorage.common.content.Items.INSTANCE.getProcessor(ProcessorItem.Type.RAW_ADVANCED)))
-        .save(recipeOutput);
+        .save(output);
 
     SimpleCookingRecipeBuilder.smelting(
             Ingredient.of(ESItems.RAW_NEURAL_PROCESSOR.get()),
             RecipeCategory.MISC,
+            CookingBookCategory.MISC,
             ESItems.NEURAL_PROCESSOR.get(),
             1.25F, 200)
-        .unlockedBy("has_part", has(ESItems.RAW_NEURAL_PROCESSOR.get())).save(recipeOutput);
+        .unlockedBy("has_part", has(ESItems.RAW_NEURAL_PROCESSOR.get())).save(output);
 
-    this.registerItemStorageUpgrades(recipeOutput);
-    this.registerFluidStorageUpgrades(recipeOutput);
+    this.registerItemStorageUpgrades();
+    this.registerFluidStorageUpgrades();
   }
 
   private void partRecipe(DeferredItem<Item> result, TagKey<Item> previousPart,
       RecipeOutput consumer) {
-    ShapedRecipeBuilder.shaped(RecipeCategory.MISC, result.get())
+    shaped(RecipeCategory.MISC, result.get())
         .pattern("DID")
         .pattern("GRG")
         .pattern("DGD")
@@ -183,12 +201,12 @@ public class ExtraStorageRecipeProvider extends RecipeProvider {
         .define('I', com.refinedmods.refinedstorage.common.content.Items.INSTANCE.getQuartzEnrichedIron())
         .define('R', Items.REDSTONE)
         .unlockedBy("has_previous_part", has(previousPart))
-        .save(consumer, ExtraStorage.rl("part/" + result.getId().getPath()));
+        .save(consumer, ExtraStorage.rl("part/" + result.getId().getPath()).toString());
   }
 
   private void partRecipe(DeferredItem<Item> result, Item previousPart,
       RecipeOutput consumer) {
-    ShapedRecipeBuilder.shaped(RecipeCategory.MISC, result.get())
+    shaped(RecipeCategory.MISC, result.get())
         .pattern("DID")
         .pattern("GRG")
         .pattern("DGD")
@@ -197,12 +215,12 @@ public class ExtraStorageRecipeProvider extends RecipeProvider {
         .define('I', com.refinedmods.refinedstorage.common.content.Items.INSTANCE.getQuartzEnrichedIron())
         .define('R', Items.REDSTONE)
         .unlockedBy("has_previous_part", has(previousPart))
-        .save(consumer, ExtraStorage.rl("part/" + result.getId().getPath()));
+        .save(consumer, ExtraStorage.rl("part/" + result.getId().getPath()).toString());
   }
 
   private void diskRecipe(DeferredItem<Item> result, TagKey<Item> part,
       RecipeOutput consumer) {
-    ShapedRecipeBuilder.shaped(RecipeCategory.MISC, result.get())
+    shaped(RecipeCategory.MISC, result.get())
         .pattern("GRG")
         .pattern("RSR")
         .pattern("III")
@@ -211,18 +229,18 @@ public class ExtraStorageRecipeProvider extends RecipeProvider {
         .define('I', com.refinedmods.refinedstorage.common.content.Items.INSTANCE.getQuartzEnrichedIron())
         .define('R', Items.REDSTONE)
         .unlockedBy("has_part", has(part))
-        .save(consumer, ExtraStorage.rl("disk/shaped/" + result.getId().getPath()));
+        .save(consumer, ExtraStorage.rl("disk/shaped/" + result.getId().getPath()).toString());
 
-    ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, result.get())
+    shapeless(RecipeCategory.MISC, result.get())
         .requires(com.refinedmods.refinedstorage.common.content.Items.INSTANCE.getStorageHousing())
         .requires(part)
         .unlockedBy("has_part", has(part))
-        .save(consumer, ExtraStorage.rl("disk/shapeless/" + result.getId().getPath()));
+        .save(consumer, ExtraStorage.rl("disk/shapeless/" + result.getId().getPath()).toString());
   }
 
   private void storageBlockRecipe(DeferredItem<Item> result, TagKey<Item> part,
       RecipeOutput consumer) {
-    ShapedRecipeBuilder.shaped(RecipeCategory.MISC, result.get())
+    shaped(RecipeCategory.MISC, result.get())
         .pattern("EPE")
         .pattern("EME")
         .pattern("ERE")
@@ -231,27 +249,26 @@ public class ExtraStorageRecipeProvider extends RecipeProvider {
         .define('P', part)
         .define('E', com.refinedmods.refinedstorage.common.content.Items.INSTANCE.getQuartzEnrichedIron())
         .unlockedBy("has_part", has(part))
-        .save(consumer, ExtraStorage.rl("storage_block/" + result.getId().getPath()));
+        .save(consumer, ExtraStorage.rl("storage_block/" + result.getId().getPath()).toString());
   }
 
-  private void registerItemStorageUpgrades(RecipeOutput recipeOutput) {
-    Set<Ingredient.Value> disks = new HashSet<>();
+  private void registerItemStorageUpgrades() {
+    Set<ItemLike> disks = new HashSet<>();
 
     for (var value : ItemStorageVariant.values()) {
       if (value == ItemStorageVariant.CREATIVE) {
         continue;
       }
-      disks.add(new Ingredient.ItemValue(
-          com.refinedmods.refinedstorage.common.content.Items.INSTANCE.getItemStorageDisk(value).getDefaultInstance()));
+      disks.add(com.refinedmods.refinedstorage.common.content.Items.INSTANCE.getItemStorageDisk(value).asItem());
     }
 
     for (var value : AdvancedItemStorageVariant.values()) {
       var disk = ESItems.ITEM_DISK.get(value);
       StorageContainerUpgradeRecipeBuilder.shapeless(disk)
-          .addDisk(Ingredient.fromValues(disks.stream()))
+          .addDisk(Ingredient.of(disks.stream()))
           .addPart(Ingredient.of(ESItems.ITEM_STORAGE_PART.get(value)))
-          .save(recipeOutput);
-      disks.add(new Ingredient.TagValue(ExtraStorageTags.Items.DISKS_ITEM.get(value)));
+          .save(output);
+      disks.add(disk);
     }
 
     Set<ItemLike> storageBlocks = new HashSet<>();
@@ -267,13 +284,13 @@ public class ExtraStorageRecipeProvider extends RecipeProvider {
       StorageContainerUpgradeRecipeBuilder.shapeless(storageBlock)
           .addDisk(Ingredient.of(storageBlocks.toArray(new ItemLike[0])))
           .addPart(Ingredient.of(ESItems.ITEM_STORAGE_PART.get(value)))
-          .save(recipeOutput);
+          .save(output);
 
       storageBlocks.add(storageBlock);
     }
   }
 
-  private void registerFluidStorageUpgrades(RecipeOutput recipeOutput) {
+  private void registerFluidStorageUpgrades() {
     Set<ItemLike> disks = new HashSet<>();
 
     for (var value : FluidStorageVariant.values()) {
@@ -288,7 +305,7 @@ public class ExtraStorageRecipeProvider extends RecipeProvider {
       StorageContainerUpgradeRecipeBuilder.shapeless(disk)
           .addDisk(Ingredient.of(disks.toArray(new ItemLike[0])))
           .addPart(Ingredient.of(ESItems.FLUID_STORAGE_PART.get(value)))
-          .save(recipeOutput);
+          .save(output);
       disks.add(disk);
     }
 
@@ -306,7 +323,7 @@ public class ExtraStorageRecipeProvider extends RecipeProvider {
       StorageContainerUpgradeRecipeBuilder.shapeless(storageBlock)
           .addDisk(Ingredient.of(storageBlocks.toArray(new ItemLike[0])))
           .addPart(Ingredient.of(ESItems.FLUID_STORAGE_PART.get(value)))
-          .save(recipeOutput);
+          .save(output);
 
       storageBlocks.add(storageBlock);
     }

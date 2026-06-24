@@ -3,7 +3,6 @@ package edivad.extrastorage.setup;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-import com.refinedmods.refinedstorage.common.content.BlockConstants;
 import edivad.extrastorage.ExtraStorage;
 import edivad.extrastorage.advancedexporter.AdvancedExporterBlock;
 import edivad.extrastorage.advancedimporter.AdvancedImporterBlock;
@@ -36,18 +35,19 @@ public class ESBlocks {
   static {
     for (var type : AdvancedItemStorageVariant.values()) {
       ITEM_STORAGE.put(type,
-          BLOCKS.register("block_" + type.getName(),
-              () -> new AdvancedStorageBlock<>(BlockConstants.PROPERTIES,
+          BLOCKS.registerBlock("block_" + type.getName(),
+              properties -> new AdvancedStorageBlock<>(properties,
                   new AdvancedItemStorageBlockBlockProvider(type))));
     }
     for (var type : AdvancedFluidStorageVariant.values()) {
       FLUID_STORAGE.put(type,
-          BLOCKS.register("block_%s_fluid".formatted(type.getName()),
-              () -> new AdvancedStorageBlock<>(BlockConstants.PROPERTIES,
+          BLOCKS.registerBlock("block_%s_fluid".formatted(type.getName()),
+               properties -> new AdvancedStorageBlock<>(properties,
                   new AdvancedFluidStorageBlockProvider(type))));
     }
     for (var tier : CrafterTier.values()) {
-      CRAFTER.put(tier, BLOCKS.register(tier.getID(), () -> new AdvancedAutocrafterBlock(tier)));
+      CRAFTER.put(tier, BLOCKS.register(tier.getID(),
+          identifier -> new AdvancedAutocrafterBlock(identifier, tier)));
     }
   }
 

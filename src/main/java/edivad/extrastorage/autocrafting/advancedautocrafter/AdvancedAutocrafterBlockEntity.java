@@ -2,14 +2,16 @@ package edivad.extrastorage.autocrafting.advancedautocrafter;
 
 import static com.refinedmods.refinedstorage.common.support.AbstractDirectionalBlock.tryExtractDirection;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.UUID;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.refinedmods.refinedstorage.api.autocrafting.Pattern;
 import com.refinedmods.refinedstorage.api.autocrafting.task.ExternalPatternSink;
-import com.refinedmods.refinedstorage.api.autocrafting.task.ExternalPatternSinkKey;
+import com.refinedmods.refinedstorage.api.autocrafting.task.ExternalPatternSinkId;
 import com.refinedmods.refinedstorage.api.autocrafting.task.StepBehavior;
 import com.refinedmods.refinedstorage.api.autocrafting.task.Task;
 import com.refinedmods.refinedstorage.api.autocrafting.task.TaskImpl;
@@ -19,7 +21,6 @@ import com.refinedmods.refinedstorage.api.network.Network;
 import com.refinedmods.refinedstorage.api.network.autocrafting.AutocraftingNetworkComponent;
 import com.refinedmods.refinedstorage.api.network.autocrafting.PatternProvider;
 import com.refinedmods.refinedstorage.api.network.autocrafting.PatternProviderExternalPatternSink;
-import com.refinedmods.refinedstorage.api.network.impl.node.patternprovider.ExternalPatternSinkKeyProvider;
 import com.refinedmods.refinedstorage.api.network.impl.node.patternprovider.PatternProviderListener;
 import com.refinedmods.refinedstorage.api.network.impl.node.patternprovider.PatternProviderNetworkNode;
 import com.refinedmods.refinedstorage.api.resource.ResourceAmount;
@@ -30,42 +31,40 @@ import com.refinedmods.refinedstorage.common.api.support.network.InWorldNetworkN
 import com.refinedmods.refinedstorage.common.autocrafting.PatternInventory;
 import com.refinedmods.refinedstorage.common.autocrafting.autocrafter.AutocrafterBlockEntity;
 import com.refinedmods.refinedstorage.common.autocrafting.autocrafter.AutocrafterData;
-import com.refinedmods.refinedstorage.common.autocrafting.autocrafter.InWorldExternalPatternSinkKey;
+import com.refinedmods.refinedstorage.common.autocrafting.autocrafter.AutocrafterExternalPatternSinkDetails;
 import com.refinedmods.refinedstorage.common.autocrafting.autocrafter.LockMode;
 import com.refinedmods.refinedstorage.common.content.Items;
 import com.refinedmods.refinedstorage.common.support.AbstractDirectionalBlock;
-import com.refinedmods.refinedstorage.common.support.BlockEntityWithDrops;
 import com.refinedmods.refinedstorage.common.support.FilteredContainer;
 import com.refinedmods.refinedstorage.common.support.containermenu.ExtendedMenuProvider;
 import com.refinedmods.refinedstorage.common.support.network.AbstractBaseNetworkNodeContainerBlockEntity;
 import com.refinedmods.refinedstorage.common.upgrade.UpgradeContainer;
 import com.refinedmods.refinedstorage.common.upgrade.UpgradeDestinations;
-import com.refinedmods.refinedstorage.common.util.ContainerUtil;
 import edivad.extrastorage.setup.ESBlockEntities;
 import lombok.Getter;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
-import net.minecraft.nbt.Tag;
+import net.minecraft.core.UUIDUtil;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.StreamEncoder;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.Containers;
 import net.minecraft.world.Nameable;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.ItemContainerContents;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 
 public class AdvancedAutocrafterBlockEntity extends AbstractBaseNetworkNodeContainerBlockEntity<PatternProviderNetworkNode>
-    implements ExtendedMenuProvider<AutocrafterData>, BlockEntityWithDrops, PatternInventory.Listener,
-    StepBehavior, ExternalPatternSinkKeyProvider, PatternProviderExternalPatternSink,
+    implements ExtendedMenuProvider<AutocrafterData>, StepBehavior, PatternProviderExternalPatternSink,
     PatternProviderListener {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(AdvancedAutocrafterBlockEntity.class);
@@ -79,6 +78,7 @@ public class AdvancedAutocrafterBlockEntity extends AbstractBaseNetworkNodeConta
   private static final String TAG_VISIBLE_TO_THE_AUTOCRAFTER_MANAGER = "vaum";
   private static final String TAG_LOCKED = "locked";
   private static final String TAG_WAS_POWERED = "wp";
+  private static final String TAG_ID = "auid";
 
   private final PatternInventory patternContainer;
   @Getter
@@ -94,7 +94,9 @@ public class AdvancedAutocrafterBlockEntity extends AbstractBaseNetworkNodeConta
   @Nullable
   private PlatformPatternProviderExternalPatternSink sink;
   @Nullable
-  private ExternalPatternSinkKey sinkKey;
+  private ExternalPatternSinkId id;
+  @Nullable
+  private AutocrafterExternalPatternSinkDetails lazyDetails;
   private boolean wasPowered;
   @Getter
   private boolean locked;
@@ -111,7 +113,17 @@ public class AdvancedAutocrafterBlockEntity extends AbstractBaseNetworkNodeConta
     );
     this.tier = tier;
     this.steps = getSteps(tier, 0);
-    this.patternContainer = new PatternInventory(this.tier.getSlots(), this::getLevel);
+    this.patternContainer = new PatternInventory(this.tier.getSlots(), this::getLevel) {
+      @Override
+      public void setChanged() {
+        super.setChanged();
+        final long upgradeEnergyUsage = upgradeContainer.getEnergyUsage();
+        final long baseEnergyUsage = Platform.INSTANCE.getConfig().getAutocrafter().getEnergyUsage();
+        final long patternEnergyUsage = patternContainer.getEnergyUsage();
+        mainNetworkNode.setEnergyUsage(baseEnergyUsage + patternEnergyUsage + upgradeEnergyUsage);
+        AdvancedAutocrafterBlockEntity.this.setChanged();
+      }
+    };
     this.upgradeContainer = new UpgradeContainer(UpgradeDestinations.AUTOCRAFTER, (c, upgradeEnergyUsage) -> {
       final long baseEnergyUsage = Platform.INSTANCE.getConfig().getAutocrafter().getEnergyUsage();
       final long patternEnergyUsage = patternContainer.getEnergyUsage();
@@ -119,18 +131,10 @@ public class AdvancedAutocrafterBlockEntity extends AbstractBaseNetworkNodeConta
       final int amountOfSpeedUpgrades = c.getAmount(Items.INSTANCE.getSpeedUpgrade());
       tickRate = getTickRate(amountOfSpeedUpgrades);
       steps = getSteps(tier, amountOfSpeedUpgrades);
-      setChanged();
-    });
-    this.patternContainer.addListener(container -> {
-      final long upgradeEnergyUsage = upgradeContainer.getEnergyUsage();
-      final long baseEnergyUsage = Platform.INSTANCE.getConfig().getAutocrafter().getEnergyUsage();
-      final long patternEnergyUsage = patternContainer.getEnergyUsage();
-      mainNetworkNode.setEnergyUsage(baseEnergyUsage + patternEnergyUsage + upgradeEnergyUsage);
-      setChanged();
-    });
-    this.patternContainer.setListener(this);
+    }, this::setChanged);
+    this.patternContainer.setListener(this::onPatternChanged);
     this.mainNetworkNode.setStepBehavior(this);
-    this.mainNetworkNode.setSinkKeyProvider(this);
+    this.mainNetworkNode.setDetailsProvider(this::getOrLoadDetails);
     this.mainNetworkNode.setSink(this);
     this.mainNetworkNode.setListener(this);
     this.mainNetworkNode.onAddedIntoContainer(new AutocrafterParentContainer(this));
@@ -246,74 +250,69 @@ public class AdvancedAutocrafterBlockEntity extends AbstractBaseNetworkNodeConta
   }
 
   @Override
-  public void saveAdditional(final CompoundTag tag, final HolderLookup.Provider provider) {
-    super.saveAdditional(tag, provider);
-    tag.put(TAG_PATTERNS, ContainerUtil.write(patternContainer, provider));
-    tag.put(TAG_UPGRADES, ContainerUtil.write(upgradeContainer, provider));
-    tag.putBoolean(TAG_LOCKED, locked);
-    tag.putBoolean(TAG_WAS_POWERED, wasPowered);
-    final ListTag tasks = new ListTag();
+  public void saveAdditional(final ValueOutput output) {
+    super.saveAdditional(output);
+    output.store(TAG_PATTERNS, ItemContainerContents.CODEC,
+        ItemContainerContents.fromItems(patternContainer.getItems()));
+    output.store(TAG_UPGRADES, ItemContainerContents.CODEC,
+        ItemContainerContents.fromItems(upgradeContainer.getItems()));
+    output.store(TAG_TASKS, TaskSnapshotCodecs.LIST_CODEC, collectTaskSnapshots());
+    output.putBoolean(TAG_LOCKED, locked);
+    output.putBoolean(TAG_WAS_POWERED, wasPowered);
+    if (id != null) {
+      output.store(TAG_ID, UUIDUtil.CODEC, id.id());
+    }
+  }
+
+  private List<TaskSnapshot> collectTaskSnapshots() {
+    final List<TaskSnapshot> snapshots = new ArrayList<>();
     for (final Task task : mainNetworkNode.getTasks()) {
       if (task instanceof TaskImpl taskImpl) {
         try {
-          tasks.add(TaskSnapshotPersistence.encodeSnapshot(taskImpl.createSnapshot()));
+          snapshots.add(taskImpl.createSnapshot());
         } catch (final Exception e) {
-          LOGGER.error("Error while saving task {} {}", task.getResource(), task.getAmount(), e);
+          LOGGER.error("Error while creating snapshot for task {} {}", task.getResource(), task.getAmount(),
+              e);
         }
       }
     }
-    tag.put(TAG_TASKS, tasks);
+    return snapshots;
   }
 
   @Override
-  public void writeConfiguration(final CompoundTag tag, final HolderLookup.Provider provider) {
-    super.writeConfiguration(tag, provider);
-    tag.putInt(TAG_LOCK_MODE, LockModeSettings.getLockMode(lockMode));
-    tag.putInt(TAG_PRIORITY, mainNetworkNode.getPriority());
-    tag.putBoolean(TAG_VISIBLE_TO_THE_AUTOCRAFTER_MANAGER, visibleToTheAutocrafterManager);
+  public void writeConfiguration(final ValueOutput output) {
+    super.writeConfiguration(output);
+    output.putInt(TAG_LOCK_MODE, LockModeSettings.getLockMode(lockMode));
+    output.putInt(TAG_PRIORITY, mainNetworkNode.getPriority());
+    output.putBoolean(TAG_VISIBLE_TO_THE_AUTOCRAFTER_MANAGER, visibleToTheAutocrafterManager);
   }
 
   @Override
-  public void loadAdditional(final CompoundTag tag, final HolderLookup.Provider provider) {
-    if (tag.contains(TAG_PATTERNS)) {
-      ContainerUtil.read(tag.getCompound(TAG_PATTERNS), patternContainer, provider);
+  public void loadAdditional(final ValueInput input) {
+    input.read(TAG_PATTERNS, ItemContainerContents.CODEC)
+        .ifPresent(contents -> contents.copyInto(patternContainer.getItems()));
+    input.read(TAG_UPGRADES, ItemContainerContents.CODEC).ifPresent(upgradeContainer::load);
+    input.read(TAG_TASKS, TaskSnapshotCodecs.LIST_CODEC)
+        .ifPresent(snapshots ->
+            snapshots.forEach(snapshot -> mainNetworkNode.addTask(new TaskImpl(snapshot))));
+    this.locked = input.getBooleanOr(TAG_LOCKED, false);
+    this.wasPowered = input.getBooleanOr(TAG_WAS_POWERED, false);
+    if (level != null && !level.isClientSide()) {
+      onPatternChanged();
     }
-    if (tag.contains(TAG_UPGRADES)) {
-      ContainerUtil.read(tag.getCompound(TAG_UPGRADES), upgradeContainer, provider);
-    }
-    if (tag.contains(TAG_TASKS)) {
-      final ListTag tasks = tag.getList(TAG_TASKS, Tag.TAG_COMPOUND);
-      for (int i = 0; i < tasks.size(); ++i) {
-        final CompoundTag taskTag = tasks.getCompound(i);
-        try {
-          final TaskSnapshot snapshot = TaskSnapshotPersistence.decodeSnapshot(taskTag);
-          mainNetworkNode.addTask(new TaskImpl(snapshot));
-        } catch (final Exception e) {
-          LOGGER.error("Error while loading task, skipping", e);
-        }
-      }
-    }
-    if (tag.contains(TAG_LOCKED)) {
-      locked = tag.getBoolean(TAG_LOCKED);
-    }
-    if (tag.contains(TAG_WAS_POWERED)) {
-      wasPowered = tag.getBoolean(TAG_WAS_POWERED);
-    }
-    super.loadAdditional(tag, provider);
+    this.id = new ExternalPatternSinkId(input.read(TAG_ID, UUIDUtil.CODEC).orElseGet(UUID::randomUUID));
+    this.mainNetworkNode.setId(id);
+    super.loadAdditional(input);
   }
 
   @Override
-  public void readConfiguration(final CompoundTag tag, final HolderLookup.Provider provider) {
-    super.readConfiguration(tag, provider);
-    if (tag.contains(TAG_LOCK_MODE)) {
-      lockMode = LockModeSettings.getLockMode(tag.getInt(TAG_LOCK_MODE));
-    }
-    if (tag.contains(TAG_PRIORITY)) {
-      mainNetworkNode.setPriority(tag.getInt(TAG_PRIORITY));
-    }
-    if (tag.contains(TAG_VISIBLE_TO_THE_AUTOCRAFTER_MANAGER)) {
-      visibleToTheAutocrafterManager = tag.getBoolean(TAG_VISIBLE_TO_THE_AUTOCRAFTER_MANAGER);
-    }
+  public void readConfiguration(final ValueInput input) {
+    super.readConfiguration(input);
+    lockMode = input.getInt(TAG_LOCK_MODE)
+        .map(LockModeSettings::getLockMode)
+        .orElse(LockMode.NEVER);
+    input.getInt(TAG_PRIORITY).ifPresent(mainNetworkNode::setPriority);
+    visibleToTheAutocrafterManager = input.getBooleanOr(TAG_VISIBLE_TO_THE_AUTOCRAFTER_MANAGER, true);
   }
 
   @Override
@@ -332,16 +331,19 @@ public class AdvancedAutocrafterBlockEntity extends AbstractBaseNetworkNodeConta
   }
 
   @Override
-  public NonNullList<ItemStack> getDrops() {
-    final NonNullList<ItemStack> drops = NonNullList.create();
-    drops.addAll(upgradeContainer.getDrops());
-    for (int i = 0; i < patternContainer.getContainerSize(); ++i) {
-      drops.add(patternContainer.getItem(i));
+  public void preRemoveSideEffects(final BlockPos pos, final BlockState state) {
+    super.preRemoveSideEffects(pos, state);
+    if (level != null) {
+      final NonNullList<ItemStack> drops = NonNullList.create();
+      drops.addAll(upgradeContainer.getDrops());
+      for (int i = 0; i < patternContainer.getContainerSize(); ++i) {
+        drops.add(patternContainer.getItem(i));
+      }
+      Containers.dropContents(level, pos, drops);
     }
-    return drops;
   }
 
-  public void setCustomName(final String name) {
+  void setCustomName(final String name) {
     if (isPartOfChain()) {
       return;
     }
@@ -349,18 +351,18 @@ public class AdvancedAutocrafterBlockEntity extends AbstractBaseNetworkNodeConta
     setChanged();
   }
 
-  public void setLockMode(final LockMode lockMode) {
+  void setLockMode(final LockMode lockMode) {
     this.lockMode = lockMode;
     this.locked = false;
     this.wasPowered = false;
     setChanged();
   }
 
-  public int getPriority() {
+  int getPriority() {
     return mainNetworkNode.getPriority();
   }
 
-  public void setPriority(final int priority) {
+  void setPriority(final int priority) {
     mainNetworkNode.setPriority(priority);
     setChanged();
   }
@@ -373,11 +375,8 @@ public class AdvancedAutocrafterBlockEntity extends AbstractBaseNetworkNodeConta
   @Override
   public void setLevel(final Level level) {
     super.setLevel(level);
-    if (level.isClientSide()) {
-      return;
-    }
-    for (int i = 0; i < patternContainer.getContainerSize(); ++i) {
-      patternChanged(i);
+    if (!level.isClientSide()) {
+      onPatternChanged();
     }
   }
 
@@ -386,19 +385,24 @@ public class AdvancedAutocrafterBlockEntity extends AbstractBaseNetworkNodeConta
     super.initialize(level, direction);
     final Direction incomingDirection = direction.getOpposite();
     final BlockPos sourcePosition = worldPosition.relative(direction);
-    invalidateSinkKey();
-    this.sink = RefinedStorageApi.INSTANCE.getPatternProviderExternalPatternSinkFactory()
+    if (id == null) {
+      this.id = ExternalPatternSinkId.create();
+      this.mainNetworkNode.setId(id);
+    }
+    invalidateDetails();
+    this.sink = Platform.INSTANCE.getPatternProviderExternalPatternSinkFactory()
         .create(level, sourcePosition, incomingDirection);
   }
 
-  @Override
-  public void patternChanged(final int slot) {
+  private void onPatternChanged() {
     if (level == null) {
       return;
     }
-    final Pattern pattern = RefinedStorageApi.INSTANCE.getPattern(patternContainer.getItem(slot), level)
-        .orElse(null);
-    mainNetworkNode.setPattern(slot, pattern);
+    for (int i = 0; i < patternContainer.getContainerSize(); ++i) {
+      final Pattern pattern = RefinedStorageApi.INSTANCE.getPattern(patternContainer.getItem(i), level)
+          .orElse(null);
+      mainNetworkNode.tryUpdatePattern(i, pattern);
+    }
   }
 
   @Override
@@ -498,29 +502,42 @@ public class AdvancedAutocrafterBlockEntity extends AbstractBaseNetworkNodeConta
     return AbstractDirectionalBlock.didDirectionChange(oldBlockState, newBlockState);
   }
 
-  @Override
-  @Nullable
-  public ExternalPatternSinkKey getKey() {
-    if (sinkKey == null) {
-      tryUpdateSinkKey();
-    }
-    return sinkKey;
+  private void invalidateDetails() {
+    this.lazyDetails = null;
   }
 
-  private void tryUpdateSinkKey() {
+  @Nullable
+  private AutocrafterExternalPatternSinkDetails getOrLoadDetails() {
+    if (lazyDetails != null) {
+      return lazyDetails;
+    }
+    lazyDetails = loadDetails();
+    return lazyDetails;
+  }
+
+  @Nullable
+  private AutocrafterExternalPatternSinkDetails loadDetails() {
     if (!(level instanceof ServerLevel serverLevel)) {
-      return;
+      return null;
     }
     final Direction direction = tryExtractDirection(getBlockState());
     if (direction == null) {
-      return;
+      return null;
     }
-    final var root = getChainingRoot();
+    final AdvancedAutocrafterBlockEntity root = getChainingRoot();
     final BlockEntity connectedMachine = root.getConnectedMachine();
     if (connectedMachine == null) {
-      invalidateSinkKey();
-      return;
+      return null;
     }
+    return loadDetails(serverLevel, connectedMachine, direction);
+  }
+
+  @Nullable
+  private AutocrafterExternalPatternSinkDetails loadDetails(
+      final ServerLevel serverLevel,
+      final BlockEntity connectedMachine,
+      final Direction direction
+  ) {
     final BlockState connectedMachineState = connectedMachine.getBlockState();
     final Player fakePlayer = getFakePlayer(serverLevel);
     final ItemStack connectedMachineStack = Platform.INSTANCE.getBlockAsItemStack(
@@ -531,18 +548,17 @@ public class AdvancedAutocrafterBlockEntity extends AbstractBaseNetworkNodeConta
         connectedMachine.getBlockPos(),
         fakePlayer
     );
-    sinkKey = new InWorldExternalPatternSinkKey(getName().getString(), connectedMachineStack);
-  }
-
-  private void invalidateSinkKey() {
-    sinkKey = null;
+    if (connectedMachineStack.isEmpty()) {
+      return null;
+    }
+    return new AutocrafterExternalPatternSinkDetails(getName().getString(), connectedMachineStack);
   }
 
   @Override
-  public ExternalPatternSink.Result accept(final Collection<ResourceAmount> resources, final Action action) {
-    final var root = getChainingRoot();
+  public ExternalPatternSink.Result insertAll(final Collection<ResourceAmount> resources, final Action action) {
+    final AdvancedAutocrafterBlockEntity root = getChainingRoot();
     if (root != this) {
-      return root.accept(resources, action);
+      return root.insertAll(resources, action);
     }
     if (sink == null) {
       return ExternalPatternSink.Result.SKIPPED;
@@ -550,7 +566,7 @@ public class AdvancedAutocrafterBlockEntity extends AbstractBaseNetworkNodeConta
     if (locked) {
       return ExternalPatternSink.Result.LOCKED;
     }
-    final ExternalPatternSink.Result result = sink.accept(resources, action);
+    final ExternalPatternSink.Result result = sink.insertAll(resources, action);
     updateLockedAfterAccept(action, result);
     return result;
   }
@@ -573,7 +589,7 @@ public class AdvancedAutocrafterBlockEntity extends AbstractBaseNetworkNodeConta
 
   @Override
   public void receivedExternalIteration() {
-    final var root = getChainingRoot();
+    final AdvancedAutocrafterBlockEntity root = getChainingRoot();
     if (root != this) {
       root.receivedExternalIteration();
       return;

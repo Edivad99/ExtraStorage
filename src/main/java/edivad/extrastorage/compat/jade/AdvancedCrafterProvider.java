@@ -3,7 +3,7 @@ package edivad.extrastorage.compat.jade;
 import edivad.extrastorage.ExtraStorage;
 import edivad.extrastorage.autocrafting.advancedautocrafter.AdvancedAutocrafterBlockEntity;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import snownee.jade.api.BlockAccessor;
 import snownee.jade.api.IServerDataProvider;
 
@@ -24,7 +24,7 @@ public class AdvancedCrafterProvider implements IServerDataProvider<BlockAccesso
   }
 
   @Override
-  public ResourceLocation getUid() {
+  public Identifier getUid() {
     return ExtraStorage.rl("advanced_crafter");
   }
 }

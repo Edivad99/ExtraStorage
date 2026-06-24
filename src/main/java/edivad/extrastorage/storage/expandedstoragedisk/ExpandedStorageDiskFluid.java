@@ -15,7 +15,10 @@ import com.refinedmods.refinedstorage.common.support.resource.FluidResource;
 import com.refinedmods.refinedstorage.common.util.IdentifierUtil;
 import edivad.extrastorage.setup.ESItems;
 import edivad.extrastorage.storage.AdvancedFluidStorageVariant;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -26,9 +29,10 @@ public class ExpandedStorageDiskFluid extends AbstractStorageContainerItem imple
   private final AdvancedFluidStorageVariant variant;
   private final Component helpText;
 
-  public ExpandedStorageDiskFluid(AdvancedFluidStorageVariant variant) {
+  public ExpandedStorageDiskFluid(Identifier identifier, AdvancedFluidStorageVariant variant) {
     super(
-        new Item.Properties().stacksTo(1).fireResistant(),
+        new Item.Properties().stacksTo(1).fireResistant()
+            .setId(ResourceKey.create(Registries.ITEM, identifier)),
         RefinedStorageApi.INSTANCE.getStorageContainerItemHelper()
     );
     this.variant = variant;

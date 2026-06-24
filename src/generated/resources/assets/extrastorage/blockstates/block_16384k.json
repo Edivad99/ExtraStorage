@@ -1,7 +1,7 @@
 {
   "variants": {
     "": {
-      "model": "extrastorage:block/block_16384k"
+      "model": "extrastorage:block/storage_block/16384k_storage_block"
     }
   }
 }

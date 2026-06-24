@@ -29,34 +29,32 @@ public class ESBlockEntities {
 
   public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<AdvancedExporterBlockEntity>> ADVANCED_EXPORTER =
       BLOCK_ENTITIES.register("advanced_exporter",
-          () -> BlockEntityType.Builder.of(AdvancedExporterBlockEntity::new,
-                  ESBlocks.ADVANCED_EXPORTER.get())
-              .build(null));
+          () -> new BlockEntityType<>(AdvancedExporterBlockEntity::new,
+                  ESBlocks.ADVANCED_EXPORTER.get()));
 
   public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<AdvancedImporterBlockEntity>> ADVANCED_IMPORTER =
       BLOCK_ENTITIES.register("advanced_importer",
-          () -> BlockEntityType.Builder.of(AdvancedImporterBlockEntity::new,
-                  ESBlocks.ADVANCED_IMPORTER.get())
-              .build(null));
+          () -> new BlockEntityType<>(AdvancedImporterBlockEntity::new,
+                  ESBlocks.ADVANCED_IMPORTER.get()));
 
   static {
     for (var type : AdvancedItemStorageVariant.values()) {
       ITEM_STORAGE.put(type, BLOCK_ENTITIES.register("block_" + type.getName(),
-          () -> BlockEntityType.Builder.of((pos, state) ->
+          () -> new BlockEntityType<>((pos, state) ->
                   new AdvancedStorageBlockBlockEntity(pos, state, new AdvancedItemStorageBlockBlockProvider(type)),
-              ESBlocks.ITEM_STORAGE.get(type).get()).build(null)));
+              ESBlocks.ITEM_STORAGE.get(type).get())));
     }
     for (var type : AdvancedFluidStorageVariant.values()) {
       FLUID_STORAGE.put(type, BLOCK_ENTITIES.register("block_" + type.getName() + "_fluid",
-          () -> BlockEntityType.Builder.of((pos, state) ->
+          () -> new BlockEntityType<>((pos, state) ->
                   new AdvancedStorageBlockBlockEntity(pos, state, new AdvancedFluidStorageBlockProvider(type)),
-              ESBlocks.FLUID_STORAGE.get(type).get()).build(null)));
+              ESBlocks.FLUID_STORAGE.get(type).get())));
     }
     for (var tier : CrafterTier.values()) {
       CRAFTER.put(tier, BLOCK_ENTITIES.register(tier.getID(),
-          () -> BlockEntityType.Builder.of((pos, state) ->
+          () -> new BlockEntityType<>((pos, state) ->
                   new AdvancedAutocrafterBlockEntity(tier, pos, state),
-              ESBlocks.CRAFTER.get(tier).get()).build(null)));
+              ESBlocks.CRAFTER.get(tier).get())));
     }
   }
 

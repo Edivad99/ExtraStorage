@@ -1,0 +1,9 @@
+{
+  "variants": {
+    "": {
+      "type": "refinedstorage:cable_part",
+      "color": "gray",
+      "part_model": "extrastorage:block/advanced_exporter/base"
+    }
+  }
+}

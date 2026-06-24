@@ -8,14 +8,14 @@ import com.refinedmods.refinedstorage.common.api.support.network.AbstractNetwork
 import com.refinedmods.refinedstorage.common.content.Items;
 import com.refinedmods.refinedstorage.neoforge.api.RefinedStorageNeoForgeApi;
 import edivad.extrastorage.autocrafting.advancedautocrafter.CrafterTier;
-import edivad.extrastorage.compat.top.TOPIntegration;
 import edivad.extrastorage.data.ExtraStorageBlockTagsProvider;
 import edivad.extrastorage.data.ExtraStorageItemTagsProvider;
 import edivad.extrastorage.data.ExtraStorageLanguageProvider;
+import edivad.extrastorage.data.advancements.ExtraStorageAdvancementProvider;
 import edivad.extrastorage.data.loot.pack.ExtraStorageLootTableProvider;
 import edivad.extrastorage.data.models.ExtraStorageBlockModelProvider;
-import edivad.extrastorage.data.models.ExtraStorageItemModelProvider;
 import edivad.extrastorage.data.recipes.ExtraStorageRecipeProvider;
+import edivad.extrastorage.loottable.StorageBlockLootFunction;
 import edivad.extrastorage.network.PacketHandler;
 import edivad.extrastorage.setup.ClientSetup;
 import edivad.extrastorage.setup.Config;
@@ -24,13 +24,12 @@ import edivad.extrastorage.setup.ESBlockEntities;
 import edivad.extrastorage.setup.ESBlocks;
 import edivad.extrastorage.setup.ESContainer;
 import edivad.extrastorage.setup.ESItems;
-import edivad.extrastorage.setup.ESLootFunctions;
 import edivad.extrastorage.setup.ESRecipeSerializers;
 import edivad.extrastorage.storage.AdvancedFluidStorageVariant;
 import edivad.extrastorage.storage.AdvancedItemStorageVariant;
 import edivad.extrastorage.tools.UpgradeDestinations;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.fml.InterModComms;
@@ -72,42 +71,28 @@ public class ExtraStorage {
     modEventBus.addListener(this::registerCapabilities);
   }
 
-  public static ResourceLocation rl(String path) {
-    return ResourceLocation.fromNamespaceAndPath(ID, path);
+  public static Identifier rl(String path) {
+    return Identifier.fromNamespaceAndPath(ID, path);
   }
 
   private void onRegister(final RegisterEvent e) {
-    e.register(Registries.LOOT_FUNCTION_TYPE, helper -> ESLootFunctions.register());
+    e.register(Registries.LOOT_FUNCTION_TYPE, helper ->
+        helper.register(ExtraStorage.rl("storage_block"), StorageBlockLootFunction.FUNCTION_CODEC));
   }
 
-  private void handleGatherData(GatherDataEvent event) {
-    var generator = event.getGenerator();
-    var packOutput = generator.getPackOutput();
-    var lookupProvider = event.getLookupProvider();
-    var existingFileHelper = event.getExistingFileHelper();
-
-    var blockTags =
-        new ExtraStorageBlockTagsProvider(packOutput, lookupProvider, existingFileHelper);
-    var blockTagsLookup = blockTags.contentsGetter();
-    generator.addProvider(event.includeServer(), blockTags);
-    generator.addProvider(event.includeServer(),
-        new ExtraStorageItemTagsProvider(packOutput, lookupProvider, blockTagsLookup,
-            existingFileHelper));
-    generator.addProvider(event.includeServer(), new ExtraStorageLootTableProvider(packOutput, lookupProvider));
-    generator.addProvider(event.includeServer(), new ExtraStorageRecipeProvider(packOutput, lookupProvider));
-    generator.addProvider(event.includeServer(), new ExtraStorageLanguageProvider(packOutput));
-    /*generator.addProvider(event.includeServer(),
-        new ExtraStorageAdvancementProvider(packOutput, lookupProvider, existingFileHelper));*/
-    generator.addProvider(event.includeClient(),
-        new ExtraStorageBlockModelProvider(packOutput, existingFileHelper));
-    generator.addProvider(event.includeClient(),
-        new ExtraStorageItemModelProvider(packOutput, existingFileHelper));
+  private void handleGatherData(GatherDataEvent.Client event) {
+    event.createBlockAndItemTags(ExtraStorageBlockTagsProvider::new, ExtraStorageItemTagsProvider::new);
+    event.createProvider(ExtraStorageLootTableProvider::new);
+    event.createProvider(ExtraStorageRecipeProvider.Runner::new);
+    event.createProvider(ExtraStorageLanguageProvider::new);
+    event.createProvider(ExtraStorageAdvancementProvider::new);
+    event.createProvider(ExtraStorageBlockModelProvider::new);
   }
 
   public void handleCommonSetup(FMLCommonSetupEvent event) {
     //Integrations
     if (ModList.get().isLoaded("theoneprobe")) {
-      InterModComms.sendTo("theoneprobe", "getTheOneProbe", TOPIntegration::new);
+//      InterModComms.sendTo("theoneprobe", "getTheOneProbe", TOPIntegration::new);
     }
     if (ModList.get().isLoaded("inventorysorter")) {
       ESContainer.CRAFTER.values()

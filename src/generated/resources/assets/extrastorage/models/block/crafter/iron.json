@@ -1,0 +1,17 @@
+{
+  "parent": "refinedstorage:block/emissive_sides_cutout",
+  "textures": {
+    "cutout_east": "extrastorage:block/crafter/iron/cutouts/side_connected",
+    "cutout_north": "extrastorage:block/crafter/iron/cutouts/side_connected",
+    "cutout_south": "extrastorage:block/crafter/iron/cutouts/side_connected",
+    "cutout_up": "extrastorage:block/crafter/iron/cutouts/top_connected",
+    "cutout_west": "extrastorage:block/crafter/iron/cutouts/side_connected",
+    "down": "extrastorage:block/crafter/base/bottom",
+    "east": "extrastorage:block/crafter/base/side",
+    "north": "extrastorage:block/crafter/base/side",
+    "particle": "extrastorage:block/crafter/base/side",
+    "south": "extrastorage:block/crafter/base/side",
+    "up": "extrastorage:block/crafter/base/top",
+    "west": "extrastorage:block/crafter/base/side"
+  }
+}

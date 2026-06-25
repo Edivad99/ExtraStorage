@@ -19,6 +19,7 @@ public class AdvancedExporterScreen extends AbstractFilterScreen<AdvancedExporte
       Component title) {
     super(menu, inventory, title, true);
     this.inventoryLabelY = 60;
+    this.imageHeight = 211;
   }
 
   @Override

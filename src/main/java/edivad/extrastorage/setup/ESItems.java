@@ -62,7 +62,7 @@ public class ESItems {
     }
     for (var tier : CrafterTier.values()) {
       CRAFTER.put(tier, ITEMS.registerItem(tier.getID(), properties ->
-          new AdvancedAutocrafterBlockItem(ESBlocks.CRAFTER.get(tier).get(), properties)));
+          new AdvancedAutocrafterBlockItem(ESBlocks.CRAFTER.get(tier).get(), properties.useBlockDescriptionPrefix())));
     }
   }
 

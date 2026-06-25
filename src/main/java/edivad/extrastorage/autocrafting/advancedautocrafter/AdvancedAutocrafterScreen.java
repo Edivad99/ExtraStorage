@@ -100,17 +100,20 @@ public class AdvancedAutocrafterScreen extends AbstractBaseScreen<AdvancedAutocr
   @Override
   public void extractBackground(GuiGraphicsExtractor graphics, int mouseX, int mouseY,
       float partialTicks) {
-    int x = (this.width - this.imageWidth) / 2;
-    int y = (this.height - this.imageHeight) / 2;
-    if (imageHeight <= 256) {
-      graphics.blit(texture, x, y, 0, 0, imageWidth, imageHeight, 256, 256);
-    } else {
-      graphics.blit(texture, x, y, 0, 0, imageWidth, imageHeight, 512, 512);
-    }
-//    this.renderResourceSlots(graphics);
     super.extractBackground(graphics, mouseX, mouseY, partialTicks);
     if (editName) {
       graphics.blitSprite(GUI_TEXTURED, NAME_BACKGROUND, leftPos + 7, topPos + 5, 162, 12);
+    }
+  }
+
+  @Override
+  protected void extractDefaultBackground(GuiGraphicsExtractor graphics) {
+    int x = (this.width - this.imageWidth) / 2;
+    int y = (this.height - this.imageHeight) / 2;
+    if (imageHeight <= 256) {
+      graphics.blit(GUI_TEXTURED, getTexture(), x, y, 0, 0, imageWidth, imageHeight, 256, 256);
+    } else {
+      graphics.blit(GUI_TEXTURED, getTexture(), x, y, 0, 0, imageWidth, imageHeight, 512, 512);
     }
   }
 

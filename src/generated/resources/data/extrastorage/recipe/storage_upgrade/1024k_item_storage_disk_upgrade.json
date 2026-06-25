@@ -1,11 +1,11 @@
 {
   "type": "extrastorage:upgrade_recipe",
   "base_disk": [
-    "refinedstorage:4k_storage_disk",
-    "refinedstorage:16k_storage_disk",
     "refinedstorage:64k_storage_disk",
-    "extrastorage:256k_item_storage_disk",
-    "refinedstorage:1k_storage_disk"
+    "refinedstorage:16k_storage_disk",
+    "refinedstorage:4k_storage_disk",
+    "refinedstorage:1k_storage_disk",
+    "extrastorage:256k_item_storage_disk"
   ],
   "result": {
     "id": "extrastorage:1024k_item_storage_disk"

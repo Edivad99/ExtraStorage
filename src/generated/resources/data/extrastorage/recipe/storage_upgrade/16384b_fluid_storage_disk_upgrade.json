@@ -1,10 +1,10 @@
 {
   "type": "extrastorage:upgrade_recipe",
   "base_disk": [
-    "refinedstorage:4096b_fluid_storage_disk",
-    "refinedstorage:1024b_fluid_storage_disk",
     "refinedstorage:256b_fluid_storage_disk",
-    "refinedstorage:64b_fluid_storage_disk"
+    "refinedstorage:64b_fluid_storage_disk",
+    "refinedstorage:1024b_fluid_storage_disk",
+    "refinedstorage:4096b_fluid_storage_disk"
   ],
   "result": {
     "id": "extrastorage:16384b_fluid_storage_disk"

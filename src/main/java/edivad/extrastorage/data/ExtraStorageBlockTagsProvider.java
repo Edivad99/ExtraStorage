@@ -1,5 +1,6 @@
 package edivad.extrastorage.data;
 
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import edivad.extrastorage.ExtraStorage;
 import edivad.extrastorage.autocrafting.advancedautocrafter.CrafterTier;
@@ -44,14 +45,25 @@ public class ExtraStorageBlockTagsProvider extends BlockTagsProvider {
         .addTags(ExtraStorageTags.Blocks.ITEM_STORAGE_BLOCKS,
             ExtraStorageTags.Blocks.FLUID_STORAGE_BLOCKS);
 
-    this.tag(ExtraStorageTags.Blocks.CARRY_ON_BLACKLIST)
-        .add(ESBlocks.ADVANCED_EXPORTER.get())
-        .add(ESBlocks.ADVANCED_IMPORTER.get())
-        .addTag(ExtraStorageTags.Blocks.STORAGE_BLOCKS)
-        .addTag(ExtraStorageTags.Blocks.CRAFTER);
-    this.tag(ExtraStorageTags.Blocks.MEKANISM_BLACKLIST)
-        .addTag(ExtraStorageTags.Blocks.CARRY_ON_BLACKLIST);
-    this.tag(Tags.Blocks.RELOCATION_NOT_SUPPORTED)
-        .addTag(ExtraStorageTags.Blocks.CARRY_ON_BLACKLIST);
+    var tags = List.of(
+        Tags.Blocks.RELOCATION_NOT_SUPPORTED,
+        ExtraStorageTags.Blocks.CARRY_ON_BLACKLIST,
+        ExtraStorageTags.Blocks.MEKANISM_BLACKLIST
+    );
+    for (var tag : tags)
+    {
+      this.tag(tag)
+          .add(ESBlocks.ADVANCED_EXPORTER.get())
+          .add(ESBlocks.ADVANCED_IMPORTER.get())
+          .addTag(ExtraStorageTags.Blocks.CRAFTER);
+
+      for (var type : AdvancedItemStorageVariant.values()) {
+        this.tag(tag).add(ESBlocks.ITEM_STORAGE.get(type).get());
+      }
+
+      for (var type : AdvancedFluidStorageVariant.values()) {
+        this.tag(tag).add(ESBlocks.FLUID_STORAGE.get(type).get());
+      }
+    }
   }
 }

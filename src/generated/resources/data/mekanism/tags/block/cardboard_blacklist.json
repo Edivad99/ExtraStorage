@@ -1,5 +1,15 @@
 {
   "values": [
-    "#carryon:block_blacklist"
+    "extrastorage:advanced_exporter",
+    "extrastorage:advanced_importer",
+    "#extrastorage:crafter",
+    "extrastorage:block_256k",
+    "extrastorage:block_1024k",
+    "extrastorage:block_4096k",
+    "extrastorage:block_16384k",
+    "extrastorage:block_16384b_fluid",
+    "extrastorage:block_65536b_fluid",
+    "extrastorage:block_262144b_fluid",
+    "extrastorage:block_1048576b_fluid"
   ]
 }

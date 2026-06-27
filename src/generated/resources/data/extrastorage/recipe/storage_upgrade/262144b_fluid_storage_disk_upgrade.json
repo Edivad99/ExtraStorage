@@ -5,8 +5,8 @@
     "refinedstorage:64b_fluid_storage_disk",
     "refinedstorage:1024b_fluid_storage_disk",
     "extrastorage:16384b_fluid_storage_disk",
-    "extrastorage:65536b_fluid_storage_disk",
-    "refinedstorage:4096b_fluid_storage_disk"
+    "refinedstorage:4096b_fluid_storage_disk",
+    "extrastorage:65536b_fluid_storage_disk"
   ],
   "result": {
     "id": "extrastorage:262144b_fluid_storage_disk"

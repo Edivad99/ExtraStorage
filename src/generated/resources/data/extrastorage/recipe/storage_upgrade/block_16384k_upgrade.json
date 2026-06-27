@@ -2,25 +2,25 @@
   "type": "extrastorage:upgrade_recipe",
   "base_disk": [
     {
-      "item": "extrastorage:block_4096k"
-    },
-    {
-      "item": "extrastorage:block_1024k"
-    },
-    {
-      "item": "refinedstorage:1k_storage_block"
-    },
-    {
-      "item": "extrastorage:block_256k"
-    },
-    {
       "item": "refinedstorage:64k_storage_block"
     },
     {
       "item": "refinedstorage:16k_storage_block"
     },
     {
+      "item": "refinedstorage:1k_storage_block"
+    },
+    {
+      "item": "extrastorage:block_1024k"
+    },
+    {
       "item": "refinedstorage:4k_storage_block"
+    },
+    {
+      "item": "extrastorage:block_4096k"
+    },
+    {
+      "item": "extrastorage:block_256k"
     }
   ],
   "result": {

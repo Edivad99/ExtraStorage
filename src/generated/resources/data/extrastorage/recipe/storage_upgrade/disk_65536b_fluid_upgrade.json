@@ -5,16 +5,16 @@
       "item": "refinedstorage:256b_fluid_storage_disk"
     },
     {
-      "item": "refinedstorage:1024b_fluid_storage_disk"
+      "item": "refinedstorage:4096b_fluid_storage_disk"
+    },
+    {
+      "item": "extrastorage:disk_16384b_fluid"
     },
     {
       "item": "refinedstorage:64b_fluid_storage_disk"
     },
     {
-      "item": "refinedstorage:4096b_fluid_storage_disk"
-    },
-    {
-      "item": "extrastorage:disk_16384b_fluid"
+      "item": "refinedstorage:1024b_fluid_storage_disk"
     }
   ],
   "result": {

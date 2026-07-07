@@ -223,7 +223,7 @@ tasks.register('makeChangelog', GitChangelogTask) {
 publishMods {
     displayName = "ExtraStorage-$minecraft_version-$mod_version"
     version = mod_version
-    type = STABLE
+    type = BETA
 
     def changelogFile = file('CHANGELOG.md')
     changelog = changelogFile.exists() ? changelogFile.text : 'CHANGELOG.md not found'

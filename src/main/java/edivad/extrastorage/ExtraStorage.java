@@ -8,6 +8,7 @@ import com.refinedmods.refinedstorage.common.api.support.network.AbstractNetwork
 import com.refinedmods.refinedstorage.common.content.Items;
 import com.refinedmods.refinedstorage.neoforge.api.RefinedStorageNeoForgeApi;
 import edivad.extrastorage.autocrafting.advancedautocrafter.CrafterTier;
+import edivad.extrastorage.compat.top.TOPIntegration;
 import edivad.extrastorage.data.ExtraStorageBlockTagsProvider;
 import edivad.extrastorage.data.ExtraStorageItemTagsProvider;
 import edivad.extrastorage.data.ExtraStorageLanguageProvider;
@@ -92,7 +93,7 @@ public class ExtraStorage {
   public void handleCommonSetup(FMLCommonSetupEvent event) {
     //Integrations
     if (ModList.get().isLoaded("theoneprobe")) {
-//      InterModComms.sendTo("theoneprobe", "getTheOneProbe", TOPIntegration::new);
+      InterModComms.sendTo("theoneprobe", "getTheOneProbe", TOPIntegration::new);
     }
     if (ModList.get().isLoaded("inventorysorter")) {
       ESContainer.CRAFTER.values()

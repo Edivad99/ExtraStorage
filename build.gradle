@@ -107,7 +107,12 @@ dependencies {
     implementation ("com.refinedmods.refinedstorage:refinedstorage-neoforge:$rs_version") {
         transitive = false
     }
-    //implementation "curse.maven:the-one-probe-245211:$top_version"
+
+    // RS's API classes carry apiguardian @API annotations; without this javac emits
+    // "unknown enum constant Status.STABLE" for every one of them (transitive = false above).
+    compileOnly "org.apiguardian:apiguardian-api:1.1.2"
+
+    implementation "curse.maven:the-one-probe-245211:$top_version"
     implementation "curse.maven:jade-api-324717:$jade_id"
 
     //implementation "tschipp.carryon:carryon-forge-$minecraft_version:$co_version")

@@ -170,7 +170,7 @@ public class AdvancedAutocrafterBlockEntity extends AbstractBaseNetworkNodeConta
         continue;
       }
       final BlockEntity neighbor = level.getBlockEntity(pos);
-      if (neighbor instanceof AutocrafterBlockEntity neighborAutocrafter) {
+      if (neighbor instanceof AdvancedAutocrafterBlockEntity neighborAutocrafter) {
         final Direction neighborDirection = tryExtractDirection(neighborAutocrafter.getBlockState());
         if (neighborDirection == direction.getOpposite()) {
           return true;
@@ -225,7 +225,9 @@ public class AdvancedAutocrafterBlockEntity extends AbstractBaseNetworkNodeConta
     }
     final BlockEntity connectedMachine = getConnectedMachine();
     // We don't handle autocrafters here, as autocrafters are also nameable, and we could have infinite recursion.
-    if (connectedMachine instanceof Nameable nameable && !(connectedMachine instanceof AdvancedAutocrafterBlockEntity)) {
+    if (connectedMachine instanceof Nameable nameable
+        && !(connectedMachine instanceof AutocrafterBlockEntity)
+        && !(connectedMachine instanceof AdvancedAutocrafterBlockEntity)) {
       return nameable.getName();
     } else if (connectedMachine != null) {
       return connectedMachine.getBlockState().getBlock().getName();
